@@ -24,6 +24,8 @@
         },
         methods: {
 			init() {
+				console.log("msg from local vexflow: ", Vex.sayHello);
+
 				if (!this.container) {
 					this.container = document.getElementById('stave-wrapper');
 					// TODO CANVAS init always failed, seems we should update to latest vexflow codes to solve this issue
