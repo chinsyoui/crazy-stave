@@ -2,11 +2,15 @@
 console.log(process.env.NODE_ENV === 'development' ? 'dev' : 'prod');
 console.log("runtime env = " + uni.getSystemInfoSync().platform);
 
+console.log("uni.getSystemInfoSync() = " + JSON.stringify(uni.getSystemInfoSync()));
+
 import App from './App'
 import store from './store'
 
-// Globally register all components under views subdirectory
-import './views/globals'
+import * as global from '@/utils/global.js'
+Vue.prototype.$global = global;
+
+global.registerGlobalVueCompoments();
 
 // #ifndef VUE3
 import Vue from 'vue'

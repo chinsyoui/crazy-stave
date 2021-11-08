@@ -1,11 +1,61 @@
+// Globally register all base components for convenience, because they
+// will be used very frequently. Components are registered using the
+// PascalCased version of their file name.
+
+import Vue from 'vue'
+
+export function registerGlobalVueCompoments() {
+	// https://webpack.js.org/guides/dependency-management/#require-context
+	const requireComponent = require.context(	
+		'.', 	// look for files in the current directory
+		false,	// no subdirectories
+		/\.vue/ // all .vue files
+	);
+
+	// For each matching file name...
+	requireComponent.keys().forEach((fileName) => {
+	  const componentConfig = requireComponent(fileName)
+	  // Get the PascalCase version of the component name
+	  const componentName = fileName
+		// 去掉开头的./和文件后缀名
+		.replace(/^\.\//, '').replace(/\.\w+$/, '')
+		// SW 把文件名中的-去掉，并且把各个单词首字符大写
+		.split('-').map((kebab) => kebab.charAt(0).toUpperCase() + kebab.slice(1)).join('')
+
+	  // Globally register the component
+	  Vue.component(componentName, componentConfig.default || componentConfig)
+	});
+};
+
+export function isMiniApp() {
+	console.assert(uni);
+
+	// uniapp的platform的值: android/ios (包括PC浏览器的手机模拟器), devtools（各种小程序环境）
+	var p = uni.getSystemInfoSync().platform;
+	switch(p) {
+		case 'android':
+		case 'ios':
+			return false;
+		default:
+			return true;
+	}
+};
 
 export function isIOS() {
-	var u = navigator.userAgent;
-	var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-	return isiOS;
+	console.assert(navigator && navigator.userAgent);
+
+	if (navigator && navigator.userAgent) {
+		var u = navigator.userAgent;
+		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		return isiOS;
+	} else {
+		var v = uni.getSystemInfoSync().platform.toLowerCase();
+		return v && v.includes("ios");
+	}
 };
 
 export function requestFullScreen(element) {
+	console.assert(document.documentElement);
 	console.log("requestFullScreen");
 	
 	let method = null;
@@ -27,6 +77,7 @@ export function requestFullScreen(element) {
 };
 
 export function exitFullScreen() {
+	console.assert(document.documentElement);
 	let method = null;
 	
 	if ('exitFullscreen' in document.documentElement)
@@ -43,7 +94,8 @@ export function exitFullScreen() {
 	document.documentElement[method]();
 };
 
-function changeScreenOrientationToLandscapeByApi() {
+export function changeScreenOrientationToLandscapeByApi() {
+	console.assert(screen);
 	console.log("changeScreenOrientationToLandscapeByApi");
 
 	let method = null;
@@ -79,6 +131,9 @@ function changeScreenOrientationToLandscapeByApi() {
 // htmlElement = document.getElementById("xxx"); 
 // htmlElement = this.$el;
 export function changeScreenOrientationToLandscapeByCss(htmlElement) {
+	console.assert(window && window.orientation);
+	console.assert(htmlElement);
+
 	console.log("changeScreenOrientationToLandscapeByCss");
 
 	let width = document.documentElement.clientWidth;
@@ -110,6 +165,7 @@ export function changeScreenOrientationToLandscapeByCss(htmlElement) {
 };
 
 export function changeScreenOrientationToLandscape(_vue_this) {
+	console.assert(_vue_this);	
 	_vue_this.$nextTick(function() {
 		if (isIOS())
 			changeScreenOrientationToLandscapeByCss(_vue_this.$el);

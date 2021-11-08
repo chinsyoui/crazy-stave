@@ -55,6 +55,8 @@
 	},
 	"mp-weixin": { /* 微信小程序特有相关 */
 		"appid": "",
+		"resizable": false,
+		"pageOrientation": "landscape",
 		"setting": {
 			"urlCheck": false
 		},

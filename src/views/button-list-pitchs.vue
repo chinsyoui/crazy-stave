@@ -20,7 +20,7 @@
 
 <template>
 	<view class="button-list">
-		<block v-for="(value, index) in TextOfButtons">
+		<block v-for="(value, index) in TextOfButtons" v-bind:key="index">
 			<view class="button" hover-class="button-hover" @click="onButtonClick(ValueOfButtons[index])">
 				<view class="button-text-wrapper">
 					<text class="button-text">{{ value }}</text>

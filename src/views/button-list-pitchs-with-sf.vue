@@ -23,7 +23,7 @@
 <template>
 	<view class="button-list">
 		<view class="button-list-line1">
-			<block v-for="(value,index) in TextOfAccidentalButtons">
+			<block v-for="(value,index) in TextOfAccidentalButtons" v-bind:key="index">
 				<view class="button-accidental" hover-class="button-hover" @click="onButtonClick(ValueOfAccidentalButtons[index])">
 					<view class="button-accidental-text-wrapper">
 						<text class="button-accidental-text">{{ value }}</text>
@@ -32,7 +32,7 @@
 			</block>
 		</view>
 		<view class="button-list-line2">
-			<block v-for="(value,index) in TextOfPitchButtons">
+			<block v-for="(value,index) in TextOfPitchButtons" v-bind:key="index">
 				<view class="button-pitch" hover-class="button-hover" @click="onButtonClick(ValueOfPitchButtons[index])">
 					<view class="button-accidental-text-wrapper">
 					 	<text class="button-accidental-text">{{ value }}</text>

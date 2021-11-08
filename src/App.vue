@@ -1,11 +1,11 @@
 <script>
-	import * as SO from "utils.js";
-
 	export default {
 		mounted() {
-			if (SO.isIOS()) {
-				window.onresize = this.onResizeWindow;
-				this.onResizeWindow();
+			if (!this.$global.isMiniApp()) {
+				if (this.$global.isIOS()) {
+					window.onresize = this.onResizeWindow;
+					this.onResizeWindow();
+				}
 			}
 		},
 		onLaunch: function() {
@@ -13,15 +13,17 @@
 
 			this.$store.commit("init");
 
-			if (SO.isIOS()) {
-				this.$nextTick(function() {
-					this.onResizeWindow();
-				})
-			} else {
-				SO.changeScreenOrientationToLandscapeByApi(this);
-			}
+			if (!this.$global.isMiniApp()) {
+				if (this.$global.isIOS()) {
+					this.$nextTick(function() {
+						this.onResizeWindow();
+					})
+				} else {
+					this.$global.changeScreenOrientationToLandscapeByApi(this);
+				}
 
- 			console.log("screen oridentation = ", screen.orientation.type);
+				console.log("screen oridentation = ", screen.orientation.type);
+			}
 
 			// TODO load from storage
 		},
@@ -33,7 +35,7 @@
 		},
 		methods: {
 			onResizeWindow() {
-				SO.changeScreenOrientationToLandscapeByCss(this.$el);
+				this.$global.changeScreenOrientationToLandscapeByCss(this.$el);
 			}
 		}
 	}

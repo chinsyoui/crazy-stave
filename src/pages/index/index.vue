@@ -2,10 +2,12 @@
 	export default {
 		data() {
 			return {
-				Title: 'Welcome'
+				Title: "Welcome",
+				DebugInfo: ""
 			}
 		},
 		mounted() {
+			this.DebugInfo = this.DebugInfo + "uni.getSystemInfoSync() = " + JSON.stringify(uni.getSystemInfoSync());
 		},
 		methods: {
 			onItemClick: function() {
@@ -21,6 +23,9 @@
 		<image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
 			<text class="title">{{Title}}</text>
+		</view>
+		<view class="text-area">
+			<text class="DebugInfo">{{ DebugInfo }}</text>
 		</view>
 		
 		<match-media max-height="480" max-width="640">
@@ -56,5 +61,8 @@
 		margin-right: 10px;
 		margin-bottom: 10px;
 	}
-	
+
+	.DebugInfo {
+		overflow-wrap: break-word;
+	}
 </style>
