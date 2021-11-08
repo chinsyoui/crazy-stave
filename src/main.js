@@ -10,7 +10,7 @@ import store from './store'
 import * as global from '@/utils/global.js'
 Vue.prototype.$global = global;
 
-global.registerGlobalVueCompoments();
+global.registerGlobalVueCompoments("../views/");
 
 // #ifndef VUE3
 import Vue from 'vue'

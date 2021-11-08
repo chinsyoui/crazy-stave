@@ -4,10 +4,11 @@
 
 import Vue from 'vue'
 
-export function registerGlobalVueCompoments() {
+export function registerGlobalVueCompoments(dir) {
+	// TODO dir param not work, so we hard coded here
 	// https://webpack.js.org/guides/dependency-management/#require-context
 	const requireComponent = require.context(	
-		'.', 	// look for files in the current directory
+		"../views/", 	// look for files in this directory, can use relative directory such as "."
 		false,	// no subdirectories
 		/\.vue/ // all .vue files
 	);
