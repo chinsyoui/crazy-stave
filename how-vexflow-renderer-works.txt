@@ -1,0 +1,88 @@
+uniapp:
+-----------------------------------------
+canvasId = <Canvas> 中指定的id
+CanvasContext uni.createCanvasContext(canvasId, this);
+
+HTMLCanvasElement: DOM标准
+.width
+.heght
+.style
+.getContext("2d") : CanvasRenderingContext2D
+
+vexflow:
+-----------------------------------------
+
+class SVGContext: RenderContext;
+
+class RenderContext {
+  ... dozens of draw methods here
+  resize(width: number, height: number);
+}
+
+class CanvasContext: RenderContext {
+  context2D: CanvasRenderingContext2D;
+  sizing: { width: number; height: number };
+  
+  constructor(context2D: CanvasRenderingContext2D) {
+    this.context2D = context2D;
+    if (!context2D.canvas)
+      this.sizing = { width: 600, height: 400 };
+    else
+      this.sizing = { width: context2D.canvas.width, height: context2D.canvas.height };
+  }
+  
+  resize(width: number, height: number) {
+    HTMLCanvasElement canvasElement = this.context2D.canvas;
+
+    const devicePixelRatio = window.devicePixelRatio || 1;
+
+    // Scale the canvas size by the device pixel ratio
+    canvasElement.width = width * devicePixelRatio;
+    canvasElement.height = height * devicePixelRatio;
+    canvasElement.style.width = width + 'px';
+    canvasElement.style.height = height + 'px';
+
+    return this.scale(devicePixelRatio, devicePixelRatio);
+  }
+}
+
+class Renderer {
+	ctx: RenderContext;
+
+	isRenderContext(obj) {
+		return (obj.setShadowBlur);
+	}
+
+	getContext(): RenderContext {
+		return this.ctx;
+	}
+
+	constructor(arg0, backend: Number) {
+		if (isRenderContext(arg0))
+			this.ctx = arg0;
+		else {
+			if (backend == CANVAS) {
+			    var canvasHtmlElement = null;
+				if (arg0 is window.HTMLCanvasElement) 
+					canvasHtmlElement = arg0;
+				if (arg0 is string)
+					canvasHtmlElement = document.getElementById(arg0);
+				CanvasRenderingContext2D ctxCRC2D = canvasHtmlElement.getContext('2d');
+				this.ctx = new CanvasContext(ctxCRC2D);
+			}
+			
+			if (backend == CANVAS) {
+			    var divHtmlElement = null;
+				if (arg0 is window.HTMLDivElement) 
+					divHtmlElement = arg0;
+				if (arg0 is string)
+					divHtmlElement = document.getElementById(arg0);
+				this.ctx = new SVGContext(divHtmlElement);
+			}
+		}
+	}
+	
+	resize(w,h) {
+		this.ctx.resize(w,h);
+	}
+}

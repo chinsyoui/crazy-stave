@@ -43,17 +43,17 @@
 
 <style>
 	html {
-	  font-size: medium;
-	  border: 1px solid red;
-	  height: 100%;
+		font-size: medium;
+	  	border: 1px solid red;
+	  	height: 100%;
 	}
 
 	body {
-	  height: 100%;
+		height: 100%;
 	}
 
 	uni-app {
-	  height: 100%;
+		height: 100%;
 	}
 
 	uni-page {
@@ -89,13 +89,13 @@
 	}
 
 	uni-page-wrapper {
-	   height: 100% !important;
+		height: 100%;
 	}
 
 	uni-page-body {
 		background-color: #F5F5F5 !important;
-		min-height: 100% !important;
-		height: auto !important;
-/* 		height: 100% !important; */
+		/* min-height: 100%; */
+		/* height: auto; */
+		/* height: 100% !important; */
 	}
 </style>

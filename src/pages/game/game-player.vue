@@ -36,13 +36,6 @@
 				console.log("CurrentGame = ", this.CurrentGame);
 				console.assert(this.CGBT != BTs.Any);
 
-				// FIXME find a way to get Canvas for vexflow
-				if (!this.$global.isMiniApp())
-					this.container = document.getElementById('questions-wrapper');
-
-				console.log("mounted: questions-wrapper = ", this.container);
-				console.log("mounted: questions-wrapper size: " + this.container.offsetWidth + " x " + this.container.offsetHeight);
-
 				let musicItems = RandomGenerateMusicItems(this.CurrentGame.MusicItemsCount, this.CurrentGame.TemplateMusicItems);
 				// note: here we push all items to this.MusicItems because you cann't change vue component's reference,
 				// otherwise the 'v-bind' will be disconnected.

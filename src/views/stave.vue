@@ -2,16 +2,17 @@
 	import { MusicItem } from '../store/game-model.js'
 	import { MITs, GameTypes } from '../store/game-content.js'
 
-	import Vex from 'vexflow';
+	import Vex from '../../../vexflow/build/vexflow-debug.js';
 	const VF = Vex.Flow;
 
     export default {
+		canvasElement: null,	   // HtmlCanvasElement (id='stave-wrapper')
+		crc2d: null, 			   // CanvasRenderingContext2D (canvasElement.getContext('2d'))
+		vfRenderer: null,		   // new VF.Renderer(crc2d,)
+		vfStaveNotes: new Array(), // array of VF.StaveNote
+
 		data() {
-			return {
-				container: null,
-				renderer: null,
-				staveNotes: new Array() // array of VF.StaveNote
-			}
+			return {}
 		},
 		// 注意,keySig在调用者的html赋值时写成key-sig赋值, 在组件模板及代码里引用时用原始形式keySig
 		// 参见：Prop Casing (camelCase vs kebab-case)
@@ -26,66 +27,68 @@
 			init() {
 				console.log("msg from local vexflow: ", Vex.sayHello);
 
-				if (!this.container) {
-					this.container = document.getElementById('stave-wrapper');
-					// TODO CANVAS init always failed, seems we should update to latest vexflow codes to solve this issue
-					// this.renderer = new VF.Renderer(this.container, VF.Renderer.Backends.CANVAS);
-					this.renderer = new VF.Renderer(this.container, VF.Renderer.Backends.SVG);
-					console.assert(this.renderer, "VexFlow Renderer Init Failed");
-					console.log("Create VexFlow Renderer: ", this.renderer.constructor.name);
+				if (!this.$options.canvasElement) {
+					this.$options.canvasElement = document.getElementById('stave-wrapper').children[0];
+					console.log("HtmlCanvasElement = ", this.$options.canvasElement.__proto__);
+					this.$options.crc2d = this.$options.canvasElement.getContext("2d");
+					//this.$options.crc2d = uni.createCanvasContext('stave-wrapper',this);
+					console.log("CanvasRenderingContext2D = ", this.$options.crc2d.__proto__);
+
+					this.$options.vfRenderer = new VF.Renderer(this.$options.crc2d, VF.Renderer.Backends.CANVAS);
+					console.assert(this.$options.vfRenderer, "VexFlow Renderer Init Failed");
+					console.log(" VF.Renderer = ", this.$options.vfRenderer.__proto__);
 				}
 
-				console.log("mounted: stave-wrapper size: " + this.container.offsetWidth + " x " + this.container.offsetHeight);
+				console.assert(this.$options.canvasElement);
+				console.log("CanvasElement size: " + this.$options.canvasElement.offsetWidth + " x " + this.$options.canvasElement.offsetHeight);
 
 				console.log("stave.vue: init", this.clef, this.keysig, this.musicItems);
-				console.assert(this.container);
-
 				console.assert(this.clef == "treble" || this.clef == "bass");
 				console.assert(this.keysig);
 				console.assert(this.musicItems);
 				console.log("props:", this.clef, this.keysig, this.musicItems);
 
 				// 把MusicItems转换为StaveNotes
-				this.staveNotes.length = 0;
+				this.$options.vfStaveNotes = new Array();
 				this.convertToStaveNotes();
 
-				// render
-				let width = this.container.offsetWidth;
-				let height = this.container.offsetHeight;
-				console.log("resized: vf.render: " + width + " x " + height);
-				this.renderer.resize(width, height);
+				this.resizeCanvas();
 
-				const context = this.renderer.getContext();
-				context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+				const context = this.$options.vfRenderer.getContext();
+				console.log("VF.Renderer.getContext() = ", context.__proto__);
 
-				const stave = new VF.Stave(0, 0, width);
+				//context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+				context.font = "10px Arial";
+				context.setFillStyle("#eed");
+
+				const stave = new VF.Stave(0, 0, this.$options.canvasElement.offsetWidth);
 				stave.addClef(this.clef); // .addTimeSignature("4/4");
 				stave.setContext(context).draw();
 
-				VF.Formatter.FormatAndDraw(context, stave, this.staveNotes);
+				VF.Formatter.FormatAndDraw(context, stave, this.$options.vfStaveNotes);
 
-				// var voice = new VF.Voice({ num_beats: this.staveNotes.length, beat_value: 4});
-				// voice.addTickables(this.staveNotes);
+				// var voice = new VF.Voice({ num_beats: this.$options..vfStaveNotes.length, beat_value: 4});
+				// voice.addTickables(this.$options..vfStaveNotes);
 				// var formatter = new VF.Formatter().joinVoices([voice]).format([voice], width - 20);
 				// voice.draw(context,stave);
 
-				console.log("################");
 				console.log("render finished");
 			},
-		    // change current highlighted music item to next music item,
+
+			// change current highlighted music item to next music item,
 		    // show animations according result (whether user's answner to current question is correct or not)
 		    // @func <bool,Number>
 		    // @return bool: false means there is no next music item.
 		    next(result, new_music_item_index) {
 				console.log("Switching to next... Last Result = ", result);
-				console.assert(new_music_item_index >=0 && new_music_item_index <= this.staveNotes.length);
+				console.assert(new_music_item_index >=0 && new_music_item_index <= this.$options.vfStaveNotes.length);
 
 				let last_index = new_music_item_index - 1;
 				let new_index = new_music_item_index;
 
 				// update old note if exists
 				if (last_index >= 0) {
-					let last_stave_note = this.staveNotes[last_index];
+					let last_stave_note = this.$options.vfStaveNotes[last_index];
 					if (result)
 						last_stave_note.setStyle({ fillStyle: "gray", strokeStyle: "gray" });
 					else
@@ -95,8 +98,8 @@
 				}
 
 				// update new note if exists
-				if (new_index < this.staveNotes.length) {
-					let new_stave_note = this.staveNotes[new_index];
+				if (new_index < this.$options.vfStaveNotes.length) {
+					let new_stave_note = this.$options.vfStaveNotes[new_index];
 					new_stave_note.setStyle({ fillStyle: "red", strokeStyle: "red" });
 					new_stave_note.draw();
 					console.log(new_stave_note);
@@ -104,6 +107,21 @@
 		    },
 
 			// private methods:
+			resizeCanvas() {
+				let width = this.$options.canvasElement.offsetWidth;
+				let height = this.$options.canvasElement.offsetHeight;
+				console.log("resizing canvas to: " + width + " x " + height);
+
+				const devicePixelRatio = window.devicePixelRatio || 1;
+
+				// Scale the canvas size by the device pixel ratio
+				this.$options.canvasElement.width = width * devicePixelRatio;
+				this.$options.canvasElement.height = height * devicePixelRatio;
+				this.$options.canvasElement.style.width = width + 'px';
+				this.$options.canvasElement.style.height = height + 'px';
+
+				this.$options.crc2d.scale(devicePixelRatio, devicePixelRatio);
+			},
 
 			// add music items to vexflow's stave object
 			convertToStaveNotes() {
@@ -125,17 +143,17 @@
 									note = note.addAccidental(0, new VF.Accidental("b"));
 								if (value.includes("#"))
 									note = note.addAccidental(0, new VF.Accidental("#"));
-								this.staveNotes.push(note);
+								this.$options.vfStaveNotes.push(note);
 							}
 							break;
 						case MITs.PC: {
 								let note = new VF.StaveNote({ keys: value.split(','), clef: this.clef, duration: "q" });
-								this.staveNotes.push(note);
+								this.$options.vfStaveNotes.push(note);
 							}
 							break;
 						case MITs.AC: {
 								let note = new VF.StaveNote({ keys: value.split(','), clef: this.clef, duration: "q" });
-								this.staveNotes.push(note);
+								this.$options.vfStaveNotes.push(note);
 								console.log("not implemented yet");
 							} 
 							break;
@@ -145,7 +163,7 @@
 					}
 				}
 
-				console.log("Leave convertToStaveNotes", this.staveNotes);
+				console.log("Leave convertToStaveNotes", this.$options.vfStaveNotes);
 			}
         }
     }
@@ -154,8 +172,7 @@
 <template>
 	<view class="outer-wrapper">
 		<view class="stave-wrapper-left"/>
-		<view id="stave-wrapper" class="stave-wrapper"/>
-		<!-- <canvas id="stave-wrapper" class="stave-wrapper"/> -->
+		<canvas id="stave-wrapper" class="stave-wrapper"/>
 		<view class="stave-wrapper-right"/>
 	</view>
 </template>
