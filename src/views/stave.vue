@@ -1,8 +1,8 @@
 <script module="stave-module" lang="renderjs">
-	import { MusicItem } from '../store/game-model.js'
-	import { MITs, GameTypes } from '../store/game-content.js'
+	import { MusicItem } from '@/store/game-model.js'
+	import { MITs, GameTypes } from '@/store/game-content.js'
 
-	import Vex from '../../../vexflow/build/vexflow-debug.js';
+	import Vex from '@/utils/vexflow-debug.js';
 	const VF = Vex.Flow;
 
     export default {

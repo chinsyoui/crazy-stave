@@ -71,7 +71,7 @@ class Renderer {
 				this.ctx = new CanvasContext(ctxCRC2D);
 			}
 			
-			if (backend == CANVAS) {
+			if (backend == SVG) {
 			    var divHtmlElement = null;
 				if (arg0 is window.HTMLDivElement) 
 					divHtmlElement = arg0;
