@@ -1,4 +1,4 @@
-<script module="stave-module" lang="renderjs">
+<script>
 	import { MusicItem } from '@/store/game-model.js'
 	import { MITs, GameTypes } from '@/store/game-content.js'
 
