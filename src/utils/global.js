@@ -4,6 +4,8 @@
 
 import Vue from 'vue'
 
+// export var objects = {};
+
 export function registerGlobalVueCompoments(dir) {
 	// TODO dir param not work, so we hard coded here
 	// https://webpack.js.org/guides/dependency-management/#require-context

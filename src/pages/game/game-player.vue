@@ -1,8 +1,25 @@
 <script>
+    import stave from "@/views/stave.vue";
+    import ButtonListSyllables from "@/views/button-list-syllables.vue";
+    import ButtonListPitchs from "@/views/button-list-pitchs.vue";
+    import ButtonListDegrees from "@/views/button-list-degrees.vue";
+    import ButtonListCi from "@/views/button-list-ci.vue";
+    import ButtonListPitchsWithSf from "@/views/button-list-pitchs-with-sf.vue";
+    import ButtonListWkOnlyTcs from "@/views/button-list-wk-only-tcs.vue";
+
 	import { mapState, mapMutations, mapActions } from 'vuex'
-	import { BTs, GameProgress, RandomGenerateMusicItems } from '@/store/game-model.js'
+	import { BTs, RandomGenerateMusicItems } from '@/store/game-model.js'
 
 	export default {
+        components: {
+            stave,
+            ButtonListSyllables,
+            ButtonListPitchs,
+            ButtonListDegrees,
+            ButtonListCi,
+            ButtonListPitchsWithSf,
+            ButtonListWkOnlyTcs
+        },
 		// custom reactive fields here
 		data() {
 			return {
@@ -31,6 +48,7 @@
 				this.onEntireViewRendered();
 		  })
 		},
+
 		methods: {
 			onEntireViewRendered() {
 				console.log("CurrentGame = ", this.CurrentGame);
@@ -43,7 +61,15 @@
 				this.MusicItems.push(...musicItems);  // TODO Array.push... may have performance issues
 				console.log("random generated music items: ", this.MusicItems);
 
-				this.$refs.stave.init();
+				// if (this.$global.isMiniApp()) {
+				// 	console.log("this.selectComponent('#stave') = ", this.selectComponent("#stave"));
+				// 	// console.log(this.$global.objects["StaveVue"]);
+				// 	this.selectComponent("#stave").init();
+
+				// } else {
+                    console.log("this.$refs.stave = ", this.$refs.stave);
+                    this.$refs.stave.init();
+				// }
 
 				// start game and focus to first question
 				this.Timer = setInterval( () => { this.onTimer() }, 1000);
@@ -262,11 +288,12 @@
 /* 				width: 100%;
 				height: 100%;
 				flex-grow: 1;
- */				border: 1px solid red;
+ */				
+                border: 1px solid red;
 			}
 
 		.button-list {
-			// nothing to do now
+			/* // nothing to do now */
 		}
 
 		.outermost-bottom-bar {

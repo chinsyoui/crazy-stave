@@ -25,7 +25,7 @@
 	}
 
 		.image {
-			height: calc(0.2 * (100vw - 1rem));
+			height: calc(0.15 * (100vw - 1rem));
 			background-size: cover;			
 		}
 		

@@ -1,5 +1,4 @@
 <script>
-	// import { changeScreenOrientationToLandscape } from "../../utils.js";
 	import { mapState, mapMutations, mapActions } from 'vuex'
 
 	export default {

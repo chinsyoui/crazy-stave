@@ -1,4 +1,4 @@
-<script module="stave" lang="renderjs">
+<script module="stave-module" lang="renderjs">
 	import { MusicItem } from '../store/game-model.js'
 	import { MITs, GameTypes } from '../store/game-content.js'
 
@@ -21,7 +21,12 @@
 			keysig: String,
 			musicItems: Array
 		},
+		created() {
+			// console.warn("##################### stave created");
+			// this.$global.objects["StaveVue"] = this;
+		},
         mounted() {
+			// this.$global.objects["StaveVue"] = this;
         },
         methods: {
 			init() {
@@ -61,11 +66,11 @@
 				context.font = "10px Arial";
 				context.setFillStyle("#eed");
 
-				const stave = new VF.Stave(0, 0, this.$options.canvasElement.offsetWidth);
-				stave.addClef(this.clef); // .addTimeSignature("4/4");
-				stave.setContext(context).draw();
+				const vfStave = new VF.Stave(0, 0, this.$options.canvasElement.offsetWidth);
+				vfStave.addClef(this.clef); // .addTimeSignature("4/4");
+				vfStave.setContext(context).draw();
 
-				VF.Formatter.FormatAndDraw(context, stave, this.$options.vfStaveNotes);
+				VF.Formatter.FormatAndDraw(context, vfStave, this.$options.vfStaveNotes);
 
 				// var voice = new VF.Voice({ num_beats: this.$options..vfStaveNotes.length, beat_value: 4});
 				// voice.addTickables(this.$options..vfStaveNotes);

@@ -1,7 +1,14 @@
 <script>
-	import { mapState, mapMutations, mapActions } from 'vuex'
+    import Intro0 from "@/views/intro-0.vue";
+    import Intro1 from "@/views/intro-1.vue";
+
+    import { mapState, mapMutations, mapActions } from 'vuex'
 	
 	export default {
+        components: {
+            Intro0,
+            Intro1
+        },
 		data() {
 			return {
 				Title: 'Game-Player-Intro'
@@ -53,10 +60,10 @@
 			<text class="title">{{Title}} - {{ CurrentUser.DisplayName }} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
 		</view>
 		<block v-if="CurrentGameCollection.Id==0">
-			<intro-0/>
+			<Intro0/>
 		</block>
 		<block v-if="CurrentGameCollection.Id==10">
-			<intro-1/>
+			<Intro1/>
 		</block>
 		<block v-if="CurrentGameCollection.Id>10">
 			<text class="introduction"> TODO: Introduction Text Here</text>			
