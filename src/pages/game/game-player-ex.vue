@@ -22,6 +22,8 @@
 		vfRenderer: null,		   // new VF.Renderer(vfRenderContext)
 		vfStaveNotes: new Array(), // array of VF.StaveNote
         canvasSizing: { width: 640, height: 480 },// sizing of canvas
+        staveClef = "treble",      // default clef
+        staveKeysig: "C",          // default keysig
 		musicItems: [],            // random generated music items
 
         components: {
@@ -48,8 +50,6 @@
 			CurrentGame: state => state.CurrentGame,
 			CurrentGameProgress: state => state.CurrentGameProgress,
 			CurrentGameItemIndex: state => state.CurrentGameItemIndex,
-			StaveClef: state => state.CurrentGame.StaveClef,
-			StaveKeySig: state => state.CurrentGame.StaveKeySig,
 			CGBT: state => state.CurrentGame.Type.ButtonType,
 			TheBTs: state => BTs
 		}),
@@ -65,6 +65,9 @@
 			onEntireViewRendered() {
 				console.log("CurrentGame = ", this.CurrentGame);
 				console.assert(this.CGBT != BTs.Any);
+        
+                this.$options.staveClef = this.CurrentGame.StaveClef;
+                this.$options.staveKeysig = this.CurrentGame.StaveKeySig;
 
 				let musicItems = RandomGenerateMusicItems(this.CurrentGame.MusicItemsCount, this.CurrentGame.TemplateMusicItems);
 				this.$options.musicItems = musicItems;
@@ -184,12 +187,16 @@
 				return 0;
 			},
 
-            // stave related methods
+            /////////////////////////////////////
+            /* stave related methods following */ 
+
+            // async run canvas draw func under mp-weixin
             miniAppCanvasDraw(drawFunc) {
                 wx.createSelectorQuery().selectAll('#the-canvas').node(res => {
                     console.assert(res,"can't select canvas node, selectQuery return null");
                     console.assert(res.length, "can't select canvas node, selectQuery return empty");
-                    console.assert(res[0].node,"can't select canvas node, selectQuery return invalid");
+                    console.assert(res[0].node,"can't select canvas node, .node not found in return of selectQuery");
+
                     let node = res[0].node;
                     this.$options.canvasSizing.width = node.width;
                     this.$options.canvasSizing.height = node.height;
@@ -231,7 +238,7 @@
                     console.log("this.$options.vfRenderer = ", this.$options.vfRenderer.__proto__);
                 }
 
-				console.log(this.StaveClef, this.StaveKeysig, this.$options.musicItems);
+				console.log(this.$options.staveClef, this.$options.staveKeysig, this.$options.musicItems);
 
 				// 把MusicItems转换为StaveNotes
 				this.$options.vfStaveNotes = new Array();
@@ -244,7 +251,7 @@
 				context.font = "10px Arial"; context.setFillStyle("#eed");
 
 				const vfStave = new VF.Stave(0, 0, this.$options.canvasSizing.width);
-				vfStave.addClef(this.StaveClef); // .addTimeSignature("4/4");
+				vfStave.addClef(this.$options.staveClef); // .addTimeSignature("4/4");
 				vfStave.setContext(context).draw();
 
 				VF.Formatter.FormatAndDraw(context, vfStave, this.$options.vfStaveNotes);
@@ -329,7 +336,7 @@
 							console.assert("not implemented yet");
 							break;
 						case MITs.Note: {
-								let note = new VF.StaveNote({ keys: [ value ], clef: this.clef, duration: "q" });
+								let note = new VF.StaveNote({ keys: [ value ], clef: this.$options.staveClef, duration: "q" });
 								if (value.includes("b"))
 									note = note.addAccidental(0, new VF.Accidental("b"));
 								if (value.includes("#"))
@@ -338,12 +345,12 @@
 							}
 							break;
 						case MITs.PC: {
-								let note = new VF.StaveNote({ keys: value.split(','), clef: this.clef, duration: "q" });
+								let note = new VF.StaveNote({ keys: value.split(','), clef: this.$options.staveClef, duration: "q" });
 								this.$options.vfStaveNotes.push(note);
 							}
 							break;
 						case MITs.AC: {
-								let note = new VF.StaveNote({ keys: value.split(','), clef: this.clef, duration: "q" });
+								let note = new VF.StaveNote({ keys: value.split(','), clef: this.$options.staveClef, duration: "q" });
 								this.$options.vfStaveNotes.push(note);
 								console.log("not implemented yet");
 							} 

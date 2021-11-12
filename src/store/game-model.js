@@ -166,6 +166,8 @@ export function User(id, display_name, icon, game_collections, current_game_coll
 	this.GameCollections = game_collections;
 	this.CurrentGameCollectionId = current_game_collection_id;
 	this.GameCollectionStates = game_collection_states;
+    // patch: mp-weixin: vue template can't found 'size’ property in this.GameCollectionStates, don't know why, just fix it
+    this.GameCollectionStatesSize = this.GameCollectionStates.size;
 };
 
 export function Root(current_user_id, users) {

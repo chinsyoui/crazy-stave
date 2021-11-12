@@ -65,7 +65,8 @@ const store = createStore({
 			
 			if (!state.Root) {
 				let user = new GameModel.User(0, "缺省用户", "icon-url", PredefinedGameCollections, 0, new Map());
-				console.assert(user.GameCollections && user.GameCollections.length > 0 && user.GameCollectionStates);
+				console.assert(user.GameCollections && user.GameCollections.length > 0, "no games");
+                console.assert(user.GameCollectionStates && user.GameCollectionStates.size == 0, "game collection state not empty");
 
 				console.log('add default user', user);
 				state.Users.push(user);
@@ -115,6 +116,7 @@ const store = createStore({
 			if (!game_collection_state) {
 				game_collection_state = new GameModel.GameCollectionState(game.Id, 0, new Map());
 				game_collection_states.set(state.CurrentUser.CurrentGameCollectionId, game_collection_state);
+                state.CurrentUser.GameCollectionStatesSize = state.CurrentUser.GameCollectionStates.size;
 			}
 
 			// now update CurrentGameId anyway
@@ -208,33 +210,6 @@ const store = createStore({
 		// }
 	},
 	actions: {
-		// lazy loading openid
-		getUserOpenId: async function({
-			commit,
-			state
-		}) {
-			return await new Promise((resolve, reject) => {
-				if (state.openid) {
-					resolve(state.openid)
-				} else {
-					uni.login({
-						success: (data) => {
-							commit('login')
-							setTimeout(function() { //模拟异步请求服务器获取 openid
-								const openid = '123456789'
-								console.log('uni.request mock openid[' + openid + ']');
-								commit('setOpenid', openid)
-								resolve(openid)
-							}, 1000)
-						},
-						fail: (err) => {
-							console.log('uni.login 接口调用失败，将无法正常使用开放接口等服务', err)
-							reject(err)
-						}
-					})
-				}
-			})
-		}
 	}
 })
 

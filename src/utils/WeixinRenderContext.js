@@ -13,7 +13,7 @@ export function WeixinRenderContext(crc2d, width, height) {
      * Set all pixels to transparent black rgba(0,0,0,0).
      */
     this.clear = () => {
-        console.log("clear");
+        // console.log("clear");
         this.context2D.clearRect(0, 0, this.canvasWidth, this.canvasWeight);
     };
 
@@ -32,7 +32,7 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.setFillStyle = (style) => {
-        console.log("setFillStyle", style);
+        // console.log("setFillStyle", style);
         this.context2D.fillStyle = style;
         return this;
     };
@@ -45,19 +45,19 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
     
     this.setStrokeStyle = (style) => {
-        console.log("setStrokeStyle", style);
+        // console.log("setStrokeStyle", style);
         this.context2D.strokeStyle = style;
         return this;
     };
 
     this.setShadowColor = (color) => {
-        console.log("setShadowColor", color);
+        // console.log("setShadowColor", color);
         this.context2D.shadowColor = color;
         return this;
     };
 
     this.setShadowBlur = (blur) => {
-        console.log("setShadowBlur", blur);
+        // console.log("setShadowBlur", blur);
 
         // CanvasRenderingContext2D does not scale the shadow blur by the current
         // transform, so we have to do it manually. We assume uniform scaling
@@ -70,25 +70,25 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.setLineWidth = (width) => {
-        console.log("setLineWidth", width);
+        // console.log("setLineWidth", width);
         this.context2D.lineWidth = width;
         return this;
     };
 
     this.setLineCap = (capType) => {
-        console.log("setLineCap", capType);
+        // console.log("setLineCap", capType);
         this.context2D.lineCap = capType;
         return this;
     };
     
     this.setLineDash = (dash) => {
-        console.log("setLineDash", dash);
+        // console.log("setLineDash", dash);
         this.context2D.setLineDash(dash);
         return this;
     };
 
     this.scale = (x, y) => {
-        console.log("scale", x, y);
+        // console.log("scale", x, y);
         this.context2D.scale(x, y);
         return this;
     };
@@ -110,13 +110,13 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.rect = (x, y, width, height) => {
-        console.log("rect", x, y, width, height);
+        // console.log("rect", x, y, width, height);
         this.context2D.rect(x, y, width, height);
         return this;
     };
 
     this.fillRect = (x, y, width, height) => {
-        console.log("fillRect", x, y, width, height);
+        // console.log("fillRect", x, y, width, height);
         this.context2D.fillRect(x, y, width, height);
         return this;
     };
@@ -130,25 +130,25 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.beginPath = () => {
-        console.log("beginPath");
+        // console.log("beginPath");
         this.context2D.beginPath();
         return this;
     };
 
     this.moveTo = (x, y) => {
-        console.log("moveTo");
+        // console.log("moveTo");
         this.context2D.moveTo(x, y);
         return this;
     };
 
     this.lineTo = (x, y) => {
-        console.log("lineTo");
+        // console.log("lineTo");
         this.context2D.lineTo(x, y);
         return this;
     };
 
     this.bezierCurveTo = (cp1x, cp1y, cp2x, cp2y, x, y) => {
-        console.log("bezierCurveTo");
+        // console.log("bezierCurveTo");
         this.context2D.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
         return this;
     };
@@ -165,25 +165,25 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.fill = () => {
-        console.log("fill");
+        // console.log("fill");
         this.context2D.fill();
         return this;
     };
 
     this.stroke = () => {
-        console.log("stroke");
+        // console.log("stroke");
         this.context2D.stroke();
         return this;
     };
 
     this.closePath = () => {
-        console.log("closePath");
+        // console.log("closePath");
         this.context2D.closePath();
         return this;
     };
 
     this.measureText = (text) => {
-        console.log("measureText");
+        // console.log("measureText");
         const metrics = this.context2D.measureText(text);
         return {
             width: metrics.width,
@@ -192,19 +192,19 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.fillText = (text, x, y) => {
-        console.log("fillText");
+        // console.log("fillText");
         this.context2D.fillText(text, x, y);
         return this;
     };
 
     this.save = () => {
-        console.log("save");
+        // console.log("save");
         this.context2D.save();
         return this;
     };
 
     this.restore = () => {
-        console.log("restore");
+        // console.log("restore");
         this.context2D.restore();
         return this;
     };
@@ -226,7 +226,7 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.setFont = (family, size, weight) => {
-        console.log("setFont", family, size, weight);
+        // console.log("setFont", family, size, weight);
         this.context2D.font = (weight || '') + ' ' + size + 'pt ' + family;
         this.textHeight = (size * 4) / 3;
         return this;

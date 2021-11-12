@@ -1,5 +1,5 @@
 <script>
-	import { mapState, mapMutations, mapActions } from 'vuex'
+	import { mapState } from 'vuex'
 
 	export default {
 		data() {
@@ -89,6 +89,7 @@
 				vertical-align: middle;
 				font-size: 1em;
 				color: #8f8f94;
+                margin: 0.5em 0.5em 0.5em;
 			}
 	
 		.uni-list {
@@ -117,6 +118,7 @@
 					height: auto;
 					justify-content: space-around;
 					border: 1px solid blue;
+                    padding: 0.5em 0.5em 0.5em;
 				}
 
 					.uni-media-list-text-top {

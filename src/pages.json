@@ -15,13 +15,13 @@
 		{
 			"path": "pages/game/game-collection-list",
 			"style": {
-				"navigationBarTitleText": "疯狂五线谱-选择游戏集"
+				"navigationBarTitleText": "疯狂五线谱-选择章节"
 			}
 		},
 		{
 			"path": "pages/game/game-list",
 			"style": {
-				"navigationBarTitleText": "疯狂五线谱-选择游戏"
+				"navigationBarTitleText": "疯狂五线谱-选择练习"
 			}
 		},
 		{
@@ -33,7 +33,7 @@
 		{
 			"path": "pages/game/game-player-intro",
 			"style": {
-				"navigationBarTitleText": "疯狂五线谱-预备知识学习"
+				"navigationBarTitleText": "疯狂五线谱-知识学习"
 			}
 		},
 		{

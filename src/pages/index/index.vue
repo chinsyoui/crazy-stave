@@ -53,8 +53,8 @@
 	}
 
 	.logo {
-		max-height: 4rem;
-		max-width: 4rem;
+		max-height: 8rem;
+		max-width: 8rem;
 		background-size: cover;
 		margin-top: 10px;
 		margin-left: 10px;

@@ -1,17 +1,19 @@
 <script>
-    import Intro0 from "@/views/intro-0.vue";
-    import Intro1 from "@/views/intro-1.vue";
+    import Intro1100 from "@/views/intro-1100.vue";
+    import Intro1101 from "@/views/intro-1101.vue";
+    import Intro4100 from "@/views/intro-4100.vue";
 
-    import { mapState, mapMutations, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
 	
 	export default {
         components: {
-            Intro0,
-            Intro1
+            Intro1100,
+            Intro1101,
+            Intro4100
         },
 		data() {
 			return {
-				Title: 'Game-Player-Intro'
+				Title: '基本知识学习'
 			}
 		},
 
@@ -35,15 +37,15 @@
 				console.log("CurrentGame = ", this.CurrentGame);
 			},
 			onButtonClick: function(value) {
-				console.log(this.Title + "." + "onButtonClick: ", value);
 				this.onGameFinished();
 				this.navigateBack();
 			},
 			onBackClick: function() {
+				this.onGameFinished(); // 返回就认为学完了
 				this.navigateBack();
 			},
 			onGameFinished: function() {
-				// TODO we may update this.CurrentGameProgress if we ant
+				// TODO we may update this.CurrentGameProgress if we want
 				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 			},
 			navigateBack: function() {
@@ -59,14 +61,17 @@
 		<view class="title-wrapper" @click="onBackClick()">
 			<text class="title">{{Title}} - {{ CurrentUser.DisplayName }} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
 		</view>
-		<block v-if="CurrentGameCollection.Id==0">
-			<Intro0/>
+		<block v-if="CurrentGame.Id==1100">
+			<Intro1100/>
 		</block>
-		<block v-if="CurrentGameCollection.Id==10">
-			<Intro1/>
+		<block v-else-if="CurrentGame.Id==1101">
+			<Intro1101/>
 		</block>
-		<block v-if="CurrentGameCollection.Id>10">
-			<text class="introduction"> TODO: Introduction Text Here</text>			
+		<block v-else-if="CurrentGame.Id==4100">
+			<Intro4100/>
+		</block>
+		<block v-else>
+			<text class="introduction">TODO: Introduction Text Here</text>			
 		</block>
 		<view class="outermost-bottom-bar"/>
 	</view>

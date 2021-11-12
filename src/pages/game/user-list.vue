@@ -9,9 +9,12 @@
 		},
 		computed: mapState({
 			Users: state => state.Users,
-			CurrentUser: state => state.CurrentUser
-		}),
+			CurrentUser: state => state.CurrentUser,
+ 		}),
 		
+        mounted() {
+            console.log(this.Users[0].GameCollectionStates);
+        },
 		methods: {
 			onItemClick: function(e) {
 				console.log(this.Title + "." + "onItemClick", e);
@@ -41,7 +44,7 @@
 						<view class="uni-media-list-body">
 							<view class="uni-media-list-text-top">{{ value.DisplayName }}</view>
 							<view class="uni-media-list-text-bottom">
-								<text>{{ value.GameCollectionStates.size }} / {{ value.GameCollections.length }}</text>
+								<text>{{ value.GameCollectionStatesSize }} / {{ value.GameCollections.length }}</text>
 							</view>
 						</view>
 					</view>
@@ -74,8 +77,8 @@
 	}
 
 		.logo {
-			max-height: 4rem;
-			max-width: 4rem;
+			max-height: 8rem;
+			max-width: 8rem;
 			margin-top: 10px;
 			margin-left: 10px;
 			margin-right: 10px;
@@ -91,6 +94,7 @@
 			.title {
 				font-size: 1em;
 				color: #8f8f94;
+                margin-bottom: 10px;
 				/* border: 1px solid red; */
 			}
 	
@@ -108,6 +112,7 @@
 				/* background-color: #C0C0C0; */
 				margin-left: 1rem;
 				margin-right: 1rem;
+                padding: 0.5em 0.5em 0.5em;
 			}
 
 				.uni-media-list {
