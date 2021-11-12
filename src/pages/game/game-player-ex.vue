@@ -22,7 +22,7 @@
 		vfRenderer: null,		   // new VF.Renderer(vfRenderContext)
 		vfStaveNotes: new Array(), // array of VF.StaveNote
         canvasSizing: { width: 640, height: 480 },// sizing of canvas
-        staveClef = "treble",      // default clef
+        staveClef: "treble",       // default clef
         staveKeysig: "C",          // default keysig
 		musicItems: [],            // random generated music items
 

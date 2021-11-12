@@ -124,7 +124,7 @@
 
 					.button-pitch-text {
 						flex-wrap: nowrap;
-						font-size: 1.5em;
+						font-size: 2em;
 						overflow: hidden;
 						vertical-align: sub;
 						height: auto;
