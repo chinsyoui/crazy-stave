@@ -4,7 +4,7 @@
 	export default {
 		data() {
 			return {
-				Title: 'User-List'
+				Title: '选择一个用户开始'
 			}
 		},
 		computed: mapState({

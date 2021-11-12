@@ -64,7 +64,7 @@ const store = createStore({
 			console.log('PredefinedGameCollections = ', PredefinedGameCollections);
 			
 			if (!state.Root) {
-				let user = new GameModel.User(0, "Default User", "icon-url", PredefinedGameCollections, 0, new Map());
+				let user = new GameModel.User(0, "缺省用户", "icon-url", PredefinedGameCollections, 0, new Map());
 				console.assert(user.GameCollections && user.GameCollections.length > 0 && user.GameCollectionStates);
 
 				console.log('add default user', user);

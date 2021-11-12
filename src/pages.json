@@ -3,43 +3,43 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "Welcome"
+				"navigationBarTitleText": "欢迎来到【疯狂五线谱】"
 			}
 		},
 		{
 			"path": "pages/game/user-list",
 			"style": {
-				"navigationBarTitleText": "user list"
+				"navigationBarTitleText": "疯狂五线谱-选择用户"
 			}
 		},
 		{
 			"path": "pages/game/game-collection-list",
 			"style": {
-				"navigationBarTitleText": "game collection list"
+				"navigationBarTitleText": "疯狂五线谱-选择游戏集"
 			}
 		},
 		{
 			"path": "pages/game/game-list",
 			"style": {
-				"navigationBarTitleText": "game list"
+				"navigationBarTitleText": "疯狂五线谱-选择游戏"
 			}
 		},
 		{
 			"path": "pages/game/game-player-ex",
 			"style": {
-				"navigationBarTitleText": "game player"
+				"navigationBarTitleText": "疯狂五线谱-GO!GO!GO!"
 			}
 		},
 		{
 			"path": "pages/game/game-player-intro",
 			"style": {
-				"navigationBarTitleText": "game introduction"
+				"navigationBarTitleText": "疯狂五线谱-预备知识学习"
 			}
 		},
 		{
 			"path": "pages/game/add-new-user",
 			"style": {
-				"navigationBarTitleText": "add new user"
+				"navigationBarTitleText": "疯狂五线谱-创建新用户"
 			}
 		}
 	],
