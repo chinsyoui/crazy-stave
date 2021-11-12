@@ -7,7 +7,7 @@
 			}
 		},
 		mounted() {
-			this.DebugInfo = this.DebugInfo + "uni.getSystemInfoSync() = " + JSON.stringify(uni.getSystemInfoSync());
+			// this.DebugInfo = this.DebugInfo + "uni.getSystemInfoSync() = " + JSON.stringify(uni.getSystemInfoSync());
 		},
 		methods: {
 			onItemClick: function() {

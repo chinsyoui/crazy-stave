@@ -25,7 +25,7 @@
 			}
 		},
 		{
-			"path": "pages/game/game-player",
+			"path": "pages/game/game-player-ex",
 			"style": {
 				"navigationBarTitleText": "game player"
 			}

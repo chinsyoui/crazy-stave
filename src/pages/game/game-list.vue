@@ -23,7 +23,7 @@
 				if (game.Type.ButtonType == BTs.Any)
 					page_url = "/pages/game/game-player-intro";
 				else
-					page_url = "/pages/game/game-player";
+					page_url = "/pages/game/game-player-ex";
 				uni.reLaunch({ url: page_url });
 			},
 			onBackClick: function() {
