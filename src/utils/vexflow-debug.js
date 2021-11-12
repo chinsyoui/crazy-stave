@@ -444,7 +444,7 @@ class Accidental extends _modifier__WEBPACK_IMPORTED_MODULE_2__.Modifier {
         const fontScale = this.render_options.font_scale;
         this.glyph = new _glyph__WEBPACK_IMPORTED_MODULE_1__.Glyph(this.accidental.code, fontScale);
         this.glyph.setOriginX(1.0);
-        if (this.cautionary) {
+        if (this.cautionary) {            
             this.parenLeft = new _glyph__WEBPACK_IMPORTED_MODULE_1__.Glyph(_tables__WEBPACK_IMPORTED_MODULE_4__.Tables.accidentalCodes('{').code, fontScale);
             this.parenRight = new _glyph__WEBPACK_IMPORTED_MODULE_1__.Glyph(_tables__WEBPACK_IMPORTED_MODULE_4__.Tables.accidentalCodes('}').code, fontScale);
             this.parenLeft.setOriginX(1.0);
@@ -456,6 +456,7 @@ class Accidental extends _modifier__WEBPACK_IMPORTED_MODULE_2__.Modifier {
         if (this.cautionary) {
             const parenLeft = (0,_util__WEBPACK_IMPORTED_MODULE_6__.defined)(this.parenLeft);
             const parenRight = (0,_util__WEBPACK_IMPORTED_MODULE_6__.defined)(this.parenRight);
+            console.assert(parenLeft && parenRight);
             const parenWidth = parenLeft.getMetrics().width +
                 parenRight.getMetrics().width +
                 this.render_options.parenLeftPadding +
@@ -463,6 +464,7 @@ class Accidental extends _modifier__WEBPACK_IMPORTED_MODULE_2__.Modifier {
             return this.glyph.getMetrics().width + parenWidth;
         }
         else {
+            console.assert(this.glyph);
             return this.glyph.getMetrics().width;
         }
     }
@@ -503,6 +505,8 @@ class Accidental extends _modifier__WEBPACK_IMPORTED_MODULE_2__.Modifier {
             const parenRight = (0,_util__WEBPACK_IMPORTED_MODULE_6__.defined)(this.parenRight);
             // Render the accidental in parentheses.
             parenRight.render(ctx, accX, accY);
+            console.assert(parenRight);
+            console.assert(this.glyph);
             accX -= parenRight.getMetrics().width;
             accX -= parenRightPadding;
             accX -= this.accidental.parenRightPaddingAdjustment;
@@ -3583,6 +3587,7 @@ class ClefNote extends _note__WEBPACK_IMPORTED_MODULE_2__.Note {
         this.clef_obj = new _clef__WEBPACK_IMPORTED_MODULE_0__.Clef(type, size, annotation);
         this.clef = this.clef_obj.clef;
         this.glyph = new _glyph__WEBPACK_IMPORTED_MODULE_1__.Glyph(this.clef.code, this.clef.point);
+        console.assert(this.glyph);
         this.setWidth(this.glyph.getMetrics().width);
         // Note properties
         this.ignore_ticks = true;
@@ -3596,6 +3601,7 @@ class ClefNote extends _note__WEBPACK_IMPORTED_MODULE_2__.Note {
         this.clef_obj = new _clef__WEBPACK_IMPORTED_MODULE_0__.Clef(type, size, annotation);
         this.clef = this.clef_obj.clef;
         this.glyph = new _glyph__WEBPACK_IMPORTED_MODULE_1__.Glyph(this.clef.code, this.clef.point);
+        console.assert(this.glyph);
         this.setWidth(this.glyph.getMetrics().width);
         return this;
     }
@@ -16440,6 +16446,7 @@ const sumArray = (arr) => arr.reduce((a, b) => a + b, 0);
  * total number of ticks in voices.
  */
 function createContexts(voices, makeContext, addToContext) {
+    console.log("function createContexts",voices, makeContext, addToContext);
     const resolutionMultiplier = Formatter.getResolutionMultiplier(voices);
     // Initialize tick maps.
     const tickToContextMap = {};
@@ -16448,6 +16455,7 @@ function createContexts(voices, makeContext, addToContext) {
     // For each voice, extract notes and create a context for every
     // new tick that hasn't been seen before.
     voices.forEach((voice, voiceIndex) => {
+        console.log("voices.forEach((voice, voiceIndex) => {",voice, voiceIndex);
         // Use resolution multiplier as denominator so that no additional expansion
         // of fractional tick values is needed.
         const ticksUsed = new _fraction__WEBPACK_IMPORTED_MODULE_2__.Fraction(0, resolutionMultiplier);
@@ -16606,8 +16614,10 @@ class Formatter {
         else if (typeof params === 'boolean') {
             options.auto_beam = params;
         }
+        console.log("FormatAndDraw: ", ctx, stave, notes, params);
         // Start by creating a voice and adding all the notes to it.
         const voice = new _voice__WEBPACK_IMPORTED_MODULE_10__.Voice(_tables__WEBPACK_IMPORTED_MODULE_6__.Tables.TIME4_4).setMode(_voice__WEBPACK_IMPORTED_MODULE_10__.Voice.Mode.SOFT).addTickables(notes);
+        console.log("FormatAndDraw: voice = ", voice);
         // Then create beams, if requested.
         const beams = options.auto_beam ? _beam__WEBPACK_IMPORTED_MODULE_0__.Beam.applyAndGetBeams(voice) : [];
         // Instantiate a `Formatter` and format the notes.
@@ -16751,6 +16761,7 @@ class Formatter {
             if (!voices) {
                 throw new _util__WEBPACK_IMPORTED_MODULE_9__.RuntimeError('BadArgument', "'voices' required to run preCalculateMinTotalWidth");
             }
+            console.log("this.createTickContexts(voices) 16760", voices);
             this.createTickContexts(voices);
         }
         // eslint-disable-next-line
@@ -16768,6 +16779,7 @@ class Formatter {
             }
             // Calculate the 'width entropy' over all the Tickables.
             context.getTickables().forEach((t) => {
+                console.assert(t);
                 wsum += t.getMetrics().width;
                 dsum += t.getTicks().value();
                 widths.push(t.getMetrics().width);
@@ -16828,8 +16840,10 @@ class Formatter {
      * total number of ticks in voices.
      */
     createTickContexts(voices) {
+        console.log("createTickContexts(voices) {", voices);
         const fn = (tickable, context, voiceIndex) => context.addTickable(tickable, voiceIndex);
         const contexts = createContexts(voices, (tick) => new _tickcontext__WEBPACK_IMPORTED_MODULE_7__.TickContext(tick), fn);
+        console.log("createTickContexts(voices) returns ", contexts);
         this.tickContexts = contexts;
         const contextArray = this.tickContexts.array;
         contextArray.forEach((context) => {
@@ -16850,6 +16864,7 @@ class Formatter {
             throw new _util__WEBPACK_IMPORTED_MODULE_9__.RuntimeError('NoTickContexts', 'preFormat requires TickContexts');
         }
         const { list: contextList, map: contextMap } = contexts;
+        console.log("{ list: contextList, map: contextMap } = ", contexts);
         // Reset loss history for evaluator.
         this.lossHistory = [];
         // If voices and a stave were provided, set the Stave for each voice
@@ -16866,6 +16881,7 @@ class Formatter {
         // Pass 1: Give each note maximum width requested by context.
         contextList.forEach((tick) => {
             const context = contextMap[tick];
+            console.assert(context);
             // Make sure that all tickables in this context have calculated their
             // space requirements.
             context.preFormat();
@@ -16927,6 +16943,7 @@ class Formatter {
                                 }
                                 // Calculate the limits of the shift based on modifiers, etc.
                                 const thisTickable = voices[v];
+                                console.assert(thisTickable);
                                 const insideLeftEdge = thisTickable.getX() -
                                     (thisTickable.getMetrics().modLeftPx + thisTickable.getMetrics().leftDisplacedHeadPx);
                                 const backMetrics = backVoices[v].getMetrics();
@@ -16985,6 +17002,14 @@ class Formatter {
             });
             return lastContext.getX() - firstContext.getX();
         }
+        console.assert(firstContext);
+        console.log("1");
+        console.log("1");
+        console.log("1");
+        console.log("1");
+        console.log("1");
+        console.log("1");
+        console.assert(lastContext);
         const adjustedJustifyWidth = justifyWidth -
             lastContext.getMetrics().notePx -
             lastContext.getMetrics().totalRightPx -
@@ -17043,6 +17068,7 @@ class Formatter {
             const prevTick = contexts.list[index - 1];
             const prevContext = contexts.map[prevTick];
             const context = contexts.map[tick];
+            console.assert(prevContext && context);
             const prevMetrics = prevContext.getMetrics();
             const currMetrics = context.getMetrics();
             // Calculate X position of right edge of previous note
@@ -17073,12 +17099,14 @@ class Formatter {
         this.voices.forEach((voice) => {
             voice.getTickables().forEach((note, i, notes) => {
                 const duration = note.getTicks().clone().simplify().toString();
+                console.assert(note);
                 const metrics = note.getMetrics();
                 const formatterMetrics = note.getFormatterMetrics();
                 const leftNoteEdge = note.getX() + metrics.notePx + metrics.modRightPx + metrics.rightDisplacedHeadPx;
                 let space = 0;
                 if (i < notes.length - 1) {
                     const rightNote = notes[i + 1];
+                    console.assert(rightNote);
                     const rightMetrics = rightNote.getMetrics();
                     const rightNoteEdge = rightNote.getX() - rightMetrics.modLeftPx - rightMetrics.leftDisplacedHeadPx;
                     space = rightNoteEdge - leftNoteEdge;
@@ -17201,6 +17229,7 @@ class Formatter {
             this.voices.forEach((v) => v.setSoftmaxFactor(softmaxFactor));
         }
         this.alignRests(voices, opts.align_rests);
+        console.log("this.createTickContexts(voices);",voices);
         this.createTickContexts(voices);
         this.preFormat(justifyWidth, opts.context, voices, opts.stave);
         // Only postFormat if a stave was supplied for y value formatting
@@ -19178,6 +19207,7 @@ class Modifier extends _element__WEBPACK_IMPORTED_MODULE_0__.Element {
     alignSubNotesWithNote(subNotes, note) {
         // Shift over the tick contexts of each note
         const tickContext = note.getTickContext();
+        console.assert(tickContext);
         const metrics = tickContext.getMetrics();
         const stave = note.getStave();
         const subNoteXOffset = tickContext.getX() - metrics.modLeftPx - metrics.modRightPx + this.getSpacingFromNextModifier();
@@ -31647,6 +31677,7 @@ class Voice extends _element__WEBPACK_IMPORTED_MODULE_0__.Element {
     }
     /** Add an array of tickables to the voice. */
     addTickables(tickables) {
+        console.log("addTickables(tickables) {", tickables);
         for (let i = 0; i < tickables.length; ++i) {
             this.addTickable(tickables[i]);
         }

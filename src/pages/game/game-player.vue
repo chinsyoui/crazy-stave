@@ -68,6 +68,9 @@
 
 				// } else {
                     console.log("this.$refs.stave = ", this.$refs.stave);
+                    this.$refs.stave.clef = this.StaveClef;
+                    this.$refs.stave.keysig = this.StaveKeySig;
+                    this.$refs.stave.musicItems = this.MusicItems;
                     this.$refs.stave.init();
 				// }
 

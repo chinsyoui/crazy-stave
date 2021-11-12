@@ -5,11 +5,14 @@
 	import Vex from '@/utils/vexflow-debug.js';
 	const VF = Vex.Flow;
 
+    import { WeixinRenderContext } from '@/utils/WeixinRenderContext.js'
+
     export default {
 		canvasElement: null,	   // HtmlCanvasElement (id='stave-wrapper')
 		crc2d: null, 			   // CanvasRenderingContext2D (canvasElement.getContext('2d'))
 		vfRenderer: null,		   // new VF.Renderer(crc2d,)
 		vfStaveNotes: new Array(), // array of VF.StaveNote
+        canvasSizing: { width: 640, height: 480 },// sizing of canvas
 
 		data() {
 			return {}
@@ -22,30 +25,80 @@
 			musicItems: Array
 		},
 		created() {
-			// console.warn("##################### stave created");
-			// this.$global.objects["StaveVue"] = this;
 		},
         mounted() {
-			// this.$global.objects["StaveVue"] = this;
         },
         methods: {
 			init() {
+                console.assert(this.musicItems && this.musicItems.length);
+
 				console.log("msg from local vexflow: ", Vex.sayHello);
+				if (!this.$options.crc2d) {
+                    // weixin: NodesRef, uniapp.else: HtmlCanvasElement
+                    if (this.$global.isMiniApp()) {
+    					this.$options.canvasElement = null;
+                        //this.$options.crc2d = uni.createCanvasContext("the-canvas",this);
+                        let uniCanvasContext = uni.createCanvasContext("the-canvas",this);
+                        this.$options.crc2d = new WeixinRenderContext(uniCanvasContext, this.$options.canvasSizing.width, this.$options.canvasSizing.height);
+                        this.doNext();
 
-				if (!this.$options.canvasElement) {
-					this.$options.canvasElement = document.getElementById('stave-wrapper').children[0];
-					console.log("HtmlCanvasElement = ", this.$options.canvasElement.__proto__);
-					this.$options.crc2d = this.$options.canvasElement.getContext("2d");
-					//this.$options.crc2d = uni.createCanvasContext('stave-wrapper',this);
-					console.log("CanvasRenderingContext2D = ", this.$options.crc2d.__proto__);
+                        // this.createSelectorQuery().selectAll('#the-canvas').node(function(res){
+                        //     console.log(res.node);
+                        // }).exec();
 
-					this.$options.vfRenderer = new VF.Renderer(this.$options.crc2d, VF.Renderer.Backends.CANVAS);
-					console.assert(this.$options.vfRenderer, "VexFlow Renderer Init Failed");
-					console.log(" VF.Renderer = ", this.$options.vfRenderer.__proto__);
-				}
+                        // wx.createSelectorQuery().select('.the-canvas').node((res) => {
+                        //     console.log("SelectQuery Return = ",res);
+                        //     this.$options.canvasElement = res.node;
+                        //     //this.$options.crc2d = createWeixinRenderContext(this.$options.canvasElement.getContext("2d"),500,500);
+                        //     this.$options.crc2d = this.$options.canvasElement.getContext('2d');
+                        //     this.doNext();
+                        //     // const dpr = wx.getSystemInfoSync().pixelRatio // 获取设备的像素比，未来整体画布根据像素比扩大
+                        // }).exec();
+                    } else {
+    					this.$options.canvasElement = document.getElementById("the-canvas").children[0];
+					    this.$options.crc2d = this.$options.canvasElement.getContext("2d");
+                        this.doNext();
+                    }
+                }
+            },
+            doNext() {
+                // const dpr = wx.getSystemInfoSync().pixelRatio;
+                // wx.createSelectorQuery().selectAll('#the-canvas').node(res => {
+                //     console.log('select canvas', res);
+                //     const ctx = res[0].node.getContext('2d');
+                //     console.log('dpr = ', dpr);
+                //     res[0].node.width = 150 * dpr;
+                //     res[0].node.height = 100 * dpr;
+                //     ctx.moveTo(10, 10);
+                //     ctx.rect(10, 10, 100, 50);
+                //     ctx.lineTo(110, 60);
+                //     ctx.stroke();
+                // }).exec();
 
-				console.assert(this.$options.canvasElement);
-				console.log("CanvasElement size: " + this.$options.canvasElement.offsetWidth + " x " + this.$options.canvasElement.offsetHeight);
+                const dpr = wx.getSystemInfoSync().pixelRatio;
+                let ctx = this.$options.crc2d;
+                // res[0].node.width = 150 * dpr;
+                // res[0].node.height = 100 * dpr;
+                ctx.moveTo(10, 10);
+                ctx.lineTo(110, 60);
+                ctx.rect(10, 10, 200, 120);
+                ctx.stroke();
+
+                return;
+                //console.log("this.$options.canvasElement = ", this.$options.canvasElement);
+                //console.log("this.$options.canvasElement.__proto__ = ", this.$options.canvasElement.__proto__);
+
+                console.log("CanvasRenderingContext2D = ", this.$options.crc2d);
+                console.log("CanvasRenderingContext2D.__proto__ = ", this.$options.crc2d.__proto__);
+
+                if (!this.$options.vfRenderer) {
+                    this.$options.vfRenderer = new VF.Renderer(this.$options.crc2d, VF.Renderer.Backends.CANVAS);
+                    console.assert(this.$options.vfRenderer, "VexFlow Renderer Init Failed");
+                    console.log(" VF.Renderer = ", this.$options.vfRenderer.__proto__);
+                }
+
+				//console.assert(this.$options.canvasElement);
+				//console.log("CanvasElement size: " + this.$options.canvasElement.offsetWidth + " x " + this.$options.canvasElement.offsetHeight);
 
 				console.log("stave.vue: init", this.clef, this.keysig, this.musicItems);
 				console.assert(this.clef == "treble" || this.clef == "bass");
@@ -57,7 +110,7 @@
 				this.$options.vfStaveNotes = new Array();
 				this.convertToStaveNotes();
 
-				this.resizeCanvas();
+				// this.resizeCanvas();
 
 				const context = this.$options.vfRenderer.getContext();
 				console.log("VF.Renderer.getContext() = ", context.__proto__);
@@ -66,7 +119,7 @@
 				context.font = "10px Arial";
 				context.setFillStyle("#eed");
 
-				const vfStave = new VF.Stave(0, 0, this.$options.canvasElement.offsetWidth);
+				const vfStave = new VF.Stave(0, 0, this.$options.canvasSizing.width);
 				vfStave.addClef(this.clef); // .addTimeSignature("4/4");
 				vfStave.setContext(context).draw();
 
@@ -113,17 +166,17 @@
 
 			// private methods:
 			resizeCanvas() {
-				let width = this.$options.canvasElement.offsetWidth;
-				let height = this.$options.canvasElement.offsetHeight;
+				let width = this.$options.canvasSizing.width;
+				let height = this.$options.canvasSizing.height;
 				console.log("resizing canvas to: " + width + " x " + height);
 
 				const devicePixelRatio = window.devicePixelRatio || 1;
 
 				// Scale the canvas size by the device pixel ratio
-				this.$options.canvasElement.width = width * devicePixelRatio;
-				this.$options.canvasElement.height = height * devicePixelRatio;
-				this.$options.canvasElement.style.width = width + 'px';
-				this.$options.canvasElement.style.height = height + 'px';
+				// this.$options.canvasElement.width = width * devicePixelRatio;
+				// this.$options.canvasElement.height = height * devicePixelRatio;
+				// this.$options.canvasElement.style.width = width + 'px';
+				// this.$options.canvasElement.style.height = height + 'px';
 
 				this.$options.crc2d.scale(devicePixelRatio, devicePixelRatio);
 			},
@@ -177,7 +230,7 @@
 <template>
 	<view class="outer-wrapper">
 		<view class="stave-wrapper-left"/>
-		<canvas id="stave-wrapper" class="stave-wrapper"/>
+		<canvas type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 3px solid #CCC; width: 300px; height: 200px;"/>
 		<view class="stave-wrapper-right"/>
 	</view>
 </template>
@@ -197,11 +250,17 @@
 			height: 100%;
 		}
 
-		.stave-wrapper {
-			flex-grow: 1;
-			padding: 1px;
+		.the-stave {
+            /* display: inline-block;
+            width: 300px;
+            height: 200px; */
+            /* width: 100%;
+            height: 100%; */
+			/* flex-grow: 1;
+			padding: 10px;
 			font-size: 14px;
-			line-height: 24px;
+			line-height: 24px; */
+            /* border: 1px solid #CCC; */
 		}
 
 		.stave-wrapper-right {
