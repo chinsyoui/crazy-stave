@@ -384,7 +384,7 @@
 		<view id="questions-wrapper" class="questions-wrapper">
             <view class="outer-wrapper">
                 <view class="stave-wrapper-left"/>
-                <canvas type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 3px solid #80F040; width: 100%; height: 100%;"/>
+                <canvas type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 1px solid black; width: 100%; height: 100%;"/>
                 <view class="stave-wrapper-right"/>
             </view>
 		</view>
@@ -409,7 +409,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid red;
+		/* border: 1px solid red; */
 	}
 
 		.outermost-top-bar {
@@ -420,14 +420,14 @@
 			display: flex;
 			flex-wrap: nowrap;
 			justify-content: center;
-			border: 1px solid red;
+			/* border: 1px solid blue; */
 		}
 
 			.title {
 				text-overflow: ellipsis;
 				font-size: 1em;
 				color: #8f8f94;
-				border: 1px solid red;
+				/* border: 1px solid red; */
 			}
 
 		.introduction {
@@ -443,7 +443,7 @@
 			align-items: center;
 			height: 2rem;
 			background-color: #F0AD4E;
-			border: 1px solid red;
+			border: 1px solid #FFBD8E;
 		}
 
 			.game-progress-text-item {
@@ -455,7 +455,7 @@
 					text-overflow: ellipsis;
 					font-size: 1em;
 					color: #F1F1F1;
-					border: 1px solid red;
+					/* border: 1px solid red; */
 				}
 
 		.questions-wrapper {
@@ -464,7 +464,7 @@
 			flex-wrap: nowrap;
 			width: 100%;
 			flex-grow: 1;
-			border: 1px solid red;
+			/* border: 1px solid red; */
 		}
 
             .outer-wrapper {

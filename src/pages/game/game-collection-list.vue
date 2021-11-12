@@ -76,13 +76,13 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid red;
+		/* border: 1px solid red; */
 	}
 
 		.text-area {
 			display: flex;
 			justify-content: center;
-			border: 1px solid red;
+			/* border: 1px solid red; */
 		}
 
 			.title {
@@ -99,11 +99,11 @@
 			justify-content: center;
 			min-width: 99%;
 			overflow-x: scroll;
-			border: 1px solid red;
+			border: 1px solid blue;
 		}
 
 			.uni-list-cell {
-				background-color: #C0C0C0;
+				/* background-color: #C0C0C0; */
 				margin-left: 0.5rem;
 				margin-right: 0.5rem;
 			}
@@ -116,13 +116,13 @@
 				.uni-media-list-body {
 					height: auto;
 					justify-content: space-around;
-					border: 5px solid red;
+					border: 1px solid blue;
 				}
 
 					.uni-media-list-text-top {
 						font-size: 1em;
 						overflow: hidden;
-						border: 1px solid red;
+						/* border: 1px solid red; */
 					}
 
 					.uni-media-list-text-bottom {
@@ -130,7 +130,7 @@
 						flex-direction: row;
 						font-size: 1em;
 						justify-content: space-between;
-						border: 1px solid red;
+						/* border: 1px solid red; */
 					}
 			
 </style>

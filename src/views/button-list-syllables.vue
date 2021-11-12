@@ -40,7 +40,7 @@
 		align-items: center;
 		height: 4rem;
 		width: 100%;
-		border: 1px solid red;
+		/* border: 1px solid red; */
 	}
 
 		.button {
@@ -63,7 +63,7 @@
 				display: flex;
 				justify-content: center;
 				vertical-align: sub;
-				//border: 1px solid red;
+				/* border: 1px solid red; */
 			}
 
 				.button-text {
@@ -72,6 +72,6 @@
 					overflow: hidden;
 					vertical-align: sub;
 					height: auto;
-					//border: 1px solid blue;
+					/* border: 1px solid blue; */
 				}
 </style>

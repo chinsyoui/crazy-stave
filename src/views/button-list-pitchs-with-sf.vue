@@ -52,7 +52,7 @@
 		align-items: center;
 		height: 6rem;
 		width: 100%;
-		border: 1px solid red;
+		/* border: 1px solid red; */
 	}
 
 		.button-list-line1 {
@@ -63,7 +63,7 @@
 			align-items: center;
 			height: 2rem;
 			width: 100%;
-			border: 1px solid red;
+			/* border: 1px solid red; */
 		}
 
 			.button-accidental {
@@ -81,7 +81,7 @@
 					display: flex;
 					justify-content: center;
 					vertical-align: sub;
-					//border: 1px solid red;
+					/* border: 1px solid red; */
 				}
 
 					.button-accidental-text {
@@ -90,7 +90,7 @@
 						overflow: hidden;
 						vertical-align: sub;
 						height: auto;
-						//border: 1px solid blue;
+						/* border: 1px solid blue; */
 					}
 
 		.button-list-line2 {
@@ -101,7 +101,7 @@
 			align-items: center;
 			height: 4rem;
 			width: 100%;
-			border: 1px solid red;
+			/* border: 1px solid red; */
 		}
 
 			.button-pitch {
@@ -119,7 +119,7 @@
 					display: flex;
 					justify-content: center;
 					vertical-align: sub;
-					//border: 1px solid red;
+					/* border: 1px solid red; */
 				}
 
 					.button-pitch-text {
@@ -128,6 +128,6 @@
 						overflow: hidden;
 						vertical-align: sub;
 						height: auto;
-						//border: 1px solid blue;
+						/* border: 1px solid blue; */
 					}
 </style>

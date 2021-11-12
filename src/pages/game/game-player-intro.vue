@@ -80,25 +80,25 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid red;
+		/* border: 1px solid red; */
 	}
 
 		.outermost-top-bar {
-			height: 2rem;
+			height: 1rem;
 		}
 
 		.title-wrapper {
 			display: flex;
 			flex-wrap: nowrap;
 			justify-content: center;
-			border: 1px solid red;
+			/* border: 1px solid red; */
 		}
 
 			.title {
 				text-overflow: ellipsis;
-				font-size: 1em;
-				color: #8f8f94;
-				border: 1px solid red;
+				font-size: 1.1em;
+				color: black;
+				/* border: 1px solid red; */
 			}
 
 		.introduction {

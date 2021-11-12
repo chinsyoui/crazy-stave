@@ -12,9 +12,6 @@
 			CurrentUser: state => state.CurrentUser
 		}),
 		
-		onLoad() {
-			//changeScreenOrientationToLandscape(this);
-		},
 		methods: {
 			onItemClick: function(e) {
 				console.log(this.Title + "." + "onItemClick", e);
@@ -73,7 +70,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid red;
+		/* border: 1px solid red; */
 	}
 
 		.logo {
@@ -88,13 +85,13 @@
 		.text-area {
 			display: flex;
 			justify-content: center;
-			border: 1px solid red;
+			/* border: 1px solid gray; */
 		}
 
 			.title {
 				font-size: 1em;
 				color: #8f8f94;
-				border: 1px solid red;
+				/* border: 1px solid red; */
 			}
 	
 		.uni-list {
@@ -104,14 +101,15 @@
 			align-items: center;
 			justify-content: center;
 			overflow-x: scroll;
-			border: 1px solid red;
+			border: 1px solid blue;
 		}
 
 			.uni-list-cell {
-				background-color: #C0C0C0;
+				/* background-color: #C0C0C0; */
 				margin-left: 1rem;
 				margin-right: 1rem;
 			}
+
 				.uni-media-list {
 					display: flex;
 					flex-direction: column;
@@ -128,14 +126,14 @@
 				.uni-media-list-body {
 					height: auto;
 					justify-content: space-around;
-					border: 1px solid red;
+					/* border: 1px solid red; */
 				}
 
 					.uni-media-list-text-top {
-						//height: 4rem;
+						/* height: 4rem; */
 						font-size: 1em;
 						overflow: hidden;
-						border: 1px solid red;
+						/* border: 1px solid red; */
 					}
 
 					.uni-media-list-text-bottom {
@@ -143,7 +141,7 @@
 						flex-direction: row;
 						font-size: 1em;
 						justify-content: space-between;
-						border: 1px solid red;
+						/* border: 1px solid red; */
 					}
 			
 </style>
