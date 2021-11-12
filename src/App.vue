@@ -44,7 +44,7 @@
 <style>
 	html {
 		font-size: medium;
-	  	border: 1px solid red;
+	  	/* border: 1px solid red; */
 	  	height: 100%;
 	}
 
@@ -94,8 +94,5 @@
 
 	uni-page-body {
 		background-color: #F5F5F5 !important;
-		/* min-height: 100%; */
-		/* height: auto; */
-		/* height: 100% !important; */
 	}
 </style>

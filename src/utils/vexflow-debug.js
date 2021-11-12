@@ -17003,12 +17003,6 @@ class Formatter {
             return lastContext.getX() - firstContext.getX();
         }
         console.assert(firstContext);
-        console.log("1");
-        console.log("1");
-        console.log("1");
-        console.log("1");
-        console.log("1");
-        console.log("1");
         console.assert(lastContext);
         const adjustedJustifyWidth = justifyWidth -
             lastContext.getMetrics().notePx -

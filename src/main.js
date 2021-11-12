@@ -1,3 +1,4 @@
+if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
 
 console.log(process.env.NODE_ENV === 'development' ? 'dev' : 'prod');
 console.log("runtime env = " + uni.getSystemInfoSync().platform);
@@ -9,8 +10,6 @@ import store from './store'
 
 import * as global from '@/utils/global.js'
 Vue.prototype.$global = global;
-
-// global.registerGlobalVueCompoments("../views/");
 
 // #ifndef VUE3
 import Vue from 'vue'
