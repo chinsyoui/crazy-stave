@@ -1,3 +1,4 @@
+// 微信小程序开发工具 iOS真机调试环境下没有 console.assert, 这里造一个
 if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
 
 console.log(process.env.NODE_ENV === 'development' ? 'dev' : 'prod');

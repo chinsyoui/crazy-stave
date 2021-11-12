@@ -30,19 +30,7 @@ export function registerGlobalVueCompoments(dir) {
 	});
 };
 
-export function isMiniApp() {
-	console.assert(uni);
-
-	// uniapp的platform的值: android/ios (包括PC浏览器的手机模拟器), devtools（各种小程序环境）
-	var p = uni.getSystemInfoSync().platform;
-	switch(p) {
-		case 'android':
-		case 'ios':
-			return false;
-		default:
-			return true;
-	}
-};
+export function isMiniApp() { return (wx); };
 
 export function isIOS() {
 	console.assert(navigator && navigator.userAgent);
