@@ -595,33 +595,33 @@ export const PredefinedGameCollections = [
 	 // id, display_name, description, icon, games
 	new GC(11,"第一章","零基础入门","",
 		[   //  Game: id, type, display_name, clef, keysig, music_items_count, template_music_items
-			new Game(1100, GTs.Intro, "预备知识", "treble", "C", 0, []),
-			new Game(1101, GTs.Intro, "基本介绍：五线谱，音符，唱名，音名", "treble", "C", 0, []),
+			new Game(1100, GTs.Intro, "第一节 预备知识", "treble", "C", 0, []),
+			new Game(1101, GTs.Intro, "第二节 基本介绍：五线谱，音符，唱名，音名", "treble", "C", 0, []),
 
-			new Game(1111, GTs.NoteToPitch, "音符到音名(高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),
-			new Game(1112, GTs.NoteToPitch, "音符到音名(低音谱基本八度)", "bass", "C", 12, MIGs.NewST(O3WKs)),
-			new Game(1113, GTs.NoteToPitch, "音符到音名(高音谱高八度)", "treble", "C", 12, MIGs.NewST(O5WKs)),
-			new Game(1114, GTs.NoteToPitch, "音符到音名(低音谱低八度)", "bass", "C", 12, MIGs.NewST(O2WKs)),
+			new Game(1111, GTs.NoteToPitch, "第三节 音符到音名(高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),
+			new Game(1112, GTs.NoteToPitch, "第四节 音符到音名(低音谱基本八度)", "bass", "C", 12, MIGs.NewST(O3WKs)),
+			new Game(1113, GTs.NoteToPitch, "第五节 音符到音名(高音谱高八度)", "treble", "C", 12, MIGs.NewST(O5WKs)),
+			new Game(1114, GTs.NoteToPitch, "第六节 音符到音名(低音谱低八度)", "bass", "C", 12, MIGs.NewST(O2WKs)),
 			
-			new Game(1115, GTs.NoteToSyllable, "音符到唱名(高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),
-			new Game(1116, GTs.NoteToSyllable, "音符到唱名(低音谱基本八度)", "bass", "C", 12, MIGs.NewST(O3WKs)),
-			new Game(1117, GTs.NoteToSyllable, "音符到唱名(高音谱高八度)", "treble", "C", 12, MIGs.NewST(O5WKs)),
-			new Game(1118, GTs.NoteToSyllable, "音符到唱名(低音谱低八度)", "bass", "C", 12, MIGs.NewST(O2WKs))
+			new Game(1115, GTs.NoteToSyllable, "第七节 音符到唱名(高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),
+			new Game(1116, GTs.NoteToSyllable, "第八节 音符到唱名(低音谱基本八度)", "bass", "C", 12, MIGs.NewST(O3WKs)),
+			new Game(1117, GTs.NoteToSyllable, "第九节 音符到唱名(高音谱高八度)", "treble", "C", 12, MIGs.NewST(O5WKs)),
+			new Game(1118, GTs.NoteToSyllable, "第十节 音符到唱名(低音谱低八度)", "bass", "C", 12, MIGs.NewST(O2WKs))
 		]
 	),
 	new GC(21,"第二章","音符练习","",
 		[
-			new Game(2100, GTs.Intro, "基本介绍：快速识别音符的技巧", "treble", "C", 0, []),
+			new Game(2100, GTs.Intro, "第一节 基本介绍：快速识别音符的技巧", "treble", "C", 0, []),
 
-			new Game(2111, GTs.NoteToPitch, "音符到音名(高音谱两个八度)", "treble", "C", 24, MIGs.NewST(O45WKs)), 
-			new Game(2112, GTs.NoteToPitch, "音符到音名(低音谱两个八度)", "bass", "C", 24, MIGs.NewST(O23WKs)),
-			new Game(2113, GTs.NoteToPitch, "音符到音名(高音谱两个八度+)", "treble", "C", 24, MIGs.NewST(O45WKsEx)),
-			new Game(2114, GTs.NoteToPitch, "音符到音名(低音谱两个八度+)", "bass", "C", 24, MIGs.NewST(O23WKsEx)),
+			new Game(2111, GTs.NoteToPitch, "第二节 音符到音名(高音谱两个八度)", "treble", "C", 24, MIGs.NewST(O45WKs)), 
+			new Game(2112, GTs.NoteToPitch, "第三节 音符到音名(低音谱两个八度)", "bass", "C", 24, MIGs.NewST(O23WKs)),
+			new Game(2113, GTs.NoteToPitch, "第四节 音符到音名(高音谱两个八度+)", "treble", "C", 24, MIGs.NewST(O45WKsEx)),
+			new Game(2114, GTs.NoteToPitch, "第五节 音符到音名(低音谱两个八度+)", "bass", "C", 24, MIGs.NewST(O23WKsEx)),
 
-			new Game(2115, GTs.NoteToSyllable, "音符到唱名(高音谱两个八度)", "treble", "C", 24, MIGs.NewST(O45WKs)), 
-			new Game(2116, GTs.NoteToSyllable, "音符到唱名(低音谱两个八度)", "bass", "C", 24, MIGs.NewST(O23WKs)),
-			new Game(2117, GTs.NoteToSyllable, "音符到唱名(高音谱两个八度+)", "treble", "C", 24, MIGs.NewST(O45WKsEx)),
-			new Game(2118, GTs.NoteToSyllable, "音符到唱名(低音谱两个八度+)", "bass", "C", 24, MIGs.NewST(O23WKsEx))
+			new Game(2115, GTs.NoteToSyllable, "第六节 音符到唱名(高音谱两个八度)", "treble", "C", 24, MIGs.NewST(O45WKs)), 
+			new Game(2116, GTs.NoteToSyllable, "第七节 音符到唱名(低音谱两个八度)", "bass", "C", 24, MIGs.NewST(O23WKs)),
+			new Game(2117, GTs.NoteToSyllable, "第八节 音符到唱名(高音谱两个八度+)", "treble", "C", 24, MIGs.NewST(O45WKsEx)),
+			new Game(2118, GTs.NoteToSyllable, "第九节 音符到唱名(低音谱两个八度+)", "bass", "C", 24, MIGs.NewST(O23WKsEx))
 		]
 	),
 	new GC(31,"第三章","基本练习-升降号及调式","",
@@ -695,17 +695,17 @@ export const PredefinedGameCollections = [
 	),
 	new GC(81,"第八章","三和弦-高级练习","",
 		[
-			new Game(8100, GTs.Indroduction, "基本介绍: 和弦快速识谱技巧", "treble", "C", 0, []),
+			new Game(8100, GTs.Indroduction, "第一节 基本介绍: 和弦快速识谱技巧", "treble", "C", 0, []),
 
-			new Game(8111, GTs.CPTChordsNaming, "紧凑柱式三和弦练习(低音谱两个八度)(带升降号)", "bass", "C", 12, O23FKs),
-			new Game(8112, GTs.CATChordsNaming, "紧凑分解三和弦练习(低音谱两个八度)(带升降号)", "bass", "C", 12, O23FKs),
-			new Game(8113, GTs.OPTChordsNaming, "八度柱式三和弦练习(低音谱两个八度)(带升降号)", "bass", "C", 12, O23FKs),
-			new Game(8114, GTs.OATChordsNaming, "八度分解三和弦练习(低音谱两个八度)(带升降号)", "bass", "C", 12, O23FKs),
+			new Game(8111, GTs.CPTChordsNaming, "第二节 紧凑柱式三和弦练习(低音谱两个八度)(带升降号)", "bass", "C", 12, MIGs.NewST(O23FKs)),
+			new Game(8112, GTs.CATChordsNaming, "第三节 紧凑分解三和弦练习(低音谱两个八度)(带升降号)", "bass", "C", 12, MIGs.NewST(O23FKs)),
+			new Game(8113, GTs.OPTChordsNaming, "第四节 八度柱式三和弦练习(低音谱两个八度)(带升降号)", "bass", "C", 12, MIGs.NewST(O23FKs)),
+			new Game(8114, GTs.OATChordsNaming, "第五节 八度分解三和弦练习(低音谱两个八度)(带升降号)", "bass", "C", 12, MIGs.NewST(O23FKs)),
 
-            new Game(8115, GTs.CPTChordsNaming, "紧凑柱式三和弦练习(高音谱两个八度)(带升降号)", "treble", "C", 12, O45FKs),
-			new Game(8116, GTs.CATChordsNaming, "紧凑分解三和弦练习(高音谱两个八度)(带升降号)", "treble", "C", 12, O45FKs),
-			new Game(8117, GTs.OPTChordsNaming, "八度柱式三和弦练习(高音谱两个八度)(带升降号)", "treble", "C", 12, O45FKs),
-			new Game(8118, GTs.OATChordsNaming, "八度分解三和弦练习(高音谱两个八度)(带升降号)", "treble", "C", 12, O45FKs)
+            new Game(8115, GTs.CPTChordsNaming, "第六节 紧凑柱式三和弦练习(高音谱两个八度)(带升降号)", "treble", "C", 12, MIGs.NewST(O45FKs)),
+			new Game(8116, GTs.CATChordsNaming, "第七节 紧凑分解三和弦练习(高音谱两个八度)(带升降号)", "treble", "C", 12, MIGs.NewST(O45FKs)),
+			new Game(8117, GTs.OPTChordsNaming, "第八节 八度柱式三和弦练习(高音谱两个八度)(带升降号)", "treble", "C", 12, MIGs.NewST(O45FKs)),
+			new Game(8118, GTs.OATChordsNaming, "第九节 八度分解三和弦练习(高音谱两个八度)(带升降号)", "treble", "C", 12, MIGs.NewST(O45FKs))
 		]
 	)
 	// new GC(91,"第九章","快速基本练习","",

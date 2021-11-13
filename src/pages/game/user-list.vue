@@ -51,7 +51,7 @@
 					</view>
 				</view>
 			</block>
-			<block>
+			<!-- <block>
 				<view class="uni-list-cell" hover-class="uni-list-cell-hover" @click="onLastItemClick()">
 					<view class="uni-media-list">
 						<image class="uni-media-list-logo" src="../../static/add.jpg"/>
@@ -60,7 +60,7 @@
 						</view>
 					</view>
 				</view>			
-			</block>
+			</block> -->
 		</view>
 	</view>
 </template>

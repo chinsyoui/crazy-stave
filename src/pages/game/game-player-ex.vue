@@ -54,18 +54,24 @@
 			TheBTs: state => BTs
 		}),
 
-        mounted() {
+        onReady() {
 			// mounted does not guarantee that all child components have also been mounted，this way can make sure it.
-			this.$nextTick(function () {
+            this.$nextTick(function () {
 				this.onEntireViewRendered();
-		  })
+		    });
 		},
 
+        onUnload() {
+            console.log("onUnload", this);
+            if (this.Timer)
+                clearTimeout(this.Timer);
+            this.Timer = null;
+        },
 		methods: {
 			onEntireViewRendered() {
-				console.log("CurrentGame = ", this.CurrentGame);
+				console.info("onEntireViewRendered: CurrentGame = ", this.CurrentGame);
 				console.assert(this.CGBT != BTs.Any);
-        
+
                 this.$options.staveClef = this.CurrentGame.StaveClef;
                 this.$options.staveKeysig = this.CurrentGame.StaveKeySig;
 
@@ -73,17 +79,16 @@
 				this.$options.musicItems = musicItems;
 				console.log("random generated music items: ", this.$options.musicItems);
 
-				// if (this.$global.isMiniApp()) {
-				// 	console.log("this.selectComponent('#stave') = ", this.selectComponent("#stave"));
-				// 	// console.log(this.$global.objects["StaveVue"]);
-				// 	this.selectComponent("#stave").init();
+                const _this = this;
+                this.initStave(function() {
+                    // start game and focus to first question
+                    if (!_this.Timer)
+                        _this.Timer = setInterval( () => { _this.onTimer() }, 1000);
 
-                this.initStave();
-
-				// start game and focus to first question
-                if (!this.Timer)
-				    this.Timer = setInterval( () => { this.onTimer() }, 1000);
-				this.highlightNextMusicItem(true, this.CurrentGameItemIndex);
+			        _this.$nextTick(function () {
+                        _this.highlightNextMusicItem(true, _this.CurrentGameItemIndex);
+                    });
+                });
 			},
 
 			onButtonClick: function(value) {
@@ -196,8 +201,10 @@
             /////////////////////////////////////
             /* stave related methods following */ 
 
-            // async run canvas draw func under mp-weixin
-            miniAppCanvasDraw(drawFunc) {
+            // async run canvas draw func under mp-weixin,
+            // callback will be called after drawFunc called
+            miniAppCanvasDraw(drawFunc, callback) {
+                console.info("before wx.createSelectorQuery().selectAll('#the-canvas').node(...)");
                 wx.createSelectorQuery().selectAll('#the-canvas').node(res => {
                     console.assert(res,"can't select canvas node, selectQuery return null");
                     console.assert(res.length, "can't select canvas node, selectQuery return empty");
@@ -207,18 +214,24 @@
                     this.$options.canvasSizing.width = node.width;
                     this.$options.canvasSizing.height = node.height;
                     const crc2d = node.getContext('2d');
+                    console.assert(crc2d,"can't get crc2d from ",node);
+                    console.info("inside selectorQuery: execute drawFunc with crc2d", drawFunc);
                     drawFunc(crc2d);
+                    console.info("inside selectorQuery: execute callback", callback);
+                    if (callback) 
+                        callback();
                 }).exec();
+                console.info("after async wx.createSelectorQuery().started");
             },
 
-			initStave() {
+			initStave(callback) {
                 console.assert(this.$options.musicItems && this.$options.musicItems.length);
 
 				console.log("msg from local vexflow: ", Vex.sayHello);
 				if (!this.$options.vfRenderContext) {
                     if (this.$global.isMiniApp()) {
                         //this.miniAppCanvasDraw(this.testDrawSomething);
-                        this.miniAppCanvasDraw(this.initStavePhase2);
+                        this.miniAppCanvasDraw(this.initStavePhase2,callback);
                     } else {
                         // TODO not tested in H5 yet
     					this.$options.canvasElement = document.getElementById("the-canvas").children[0];
