@@ -24,11 +24,12 @@
 				console.log(this.Title + "." + "onItemClick", e);
 				let game_collection = e;
 				this.$store.commit('setCurrentGameCollection', game_collection);
-				uni.reLaunch({ url: '/pages/game/game-list' });
+				uni.navigateTo({ url: '/pages/game/game-list' });
 			},
 			onBackClick: function() {
 				console.log(this.Title + "." + "onBackClick");
-				uni.reLaunch({ url: '/pages/game/user-list' });
+				// uni.navigateTo({ url: '/pages/game/user-list' });
+                uni.navigateBack();
 			},
 			getGameCollectionState(game_collection_id) {
 				return this.CurrentUser.GameCollectionStates.get(game_collection_id);

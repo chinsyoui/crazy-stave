@@ -95,4 +95,8 @@
 	uni-page-body {
 		background-color: #F5F5F5 !important;
 	}
+
+    uni-list {
+        -webkit-overflow-scrolling: touch;        
+    }
 </style>

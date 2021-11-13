@@ -20,11 +20,12 @@
 				console.log(this.Title + "." + "onItemClick", e);
 				let user = e;
 				this.$store.commit('setCurrentUser', user);
-				uni.reLaunch({ url: '/pages/game/game-collection-list' });
+				uni.navigateTo({ url: '/pages/game/game-collection-list' });
 			},
 			onLastItemClick: function() {
 				console.log(this.Title + "." + "onLastItemClick");
-				uni.reLaunch({ url: '/pages/game/add-new-user' });
+				// uni.navigateTo({ url: '/pages/game/add-new-user' });
+                uni.navigateBack();
 			}			
 		}
 	}

@@ -49,7 +49,8 @@
 				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 			},
 			navigateBack: function() {
-				uni.reLaunch({ url: '/pages/game/game-list' });
+				// uni.navigateTo({ url: '/pages/game/game-list' });
+                uni.navigateBack();
 			}
 		},
 	}

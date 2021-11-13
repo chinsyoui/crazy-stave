@@ -24,11 +24,12 @@
 					page_url = "/pages/game/game-player-intro";
 				else
 					page_url = "/pages/game/game-player-ex";
-				uni.reLaunch({ url: page_url });
+				uni.navigateTo({ url: page_url });
 			},
 			onBackClick: function() {
 				console.log(this.Title + "." + "onBackClick");
-				uni.reLaunch({ url: '/pages/game/game-collection-list' });
+				// uni.navigateTo({ url: '/pages/game/game-collection-list' });
+                uni.navigateBack();
 			},
 			getGameCollectionState() {
 				return this.CurrentUser.GameCollectionStates.get(this.CurrentGameCollection.Id);

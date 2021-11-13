@@ -12,7 +12,7 @@
 		methods: {
 			onItemClick: function() {
 				console.log(this.Title + "." + "onItemClick");
-				uni.reLaunch({ url: '/pages/game/user-list' });
+				uni.navigateTo({ url: '/pages/game/user-list' });
 			}
 		}
 	}

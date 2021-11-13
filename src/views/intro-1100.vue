@@ -2,15 +2,26 @@
 
 <template>
 	<view class="container">
-		<view class="text-area">
-			<text class="text">在开始前，确保您熟悉以下知识：</text>
-		</view>
-        <uni-list>
-            <uni-list-item class="uni-list-item">  <br/></uni-list-item>
-            <uni-list-item class="uni-list-item">  <br/></uni-list-item>
-            <uni-list-item class="uni-list-item">熟悉大小写英文字母的写法和读音<br/></uni-list-item>
-            <uni-list-item class="uni-list-item">TODO<br/></uni-list-item>
-        </uni-list>
+		<text-area class="text-area">
+			<text class="text">
+                五线谱是音乐的书面语，学习音乐就要掌握这门语言。<br/>
+            </text>
+			<text class="text">
+                就像中文/英文语言一样，五线谱这门语言也是由字母，单词，短语，句子，文章这样的结构组成的。<br/>
+            </text>
+			<text class="text">
+                这个小程序可以帮助你快速学习五线谱这门语言，并且辅助你训练阅读五线谱的速度，直到能像快速阅读中文/英文文章一样的阅读五线谱。<br/>
+            </text>
+			<text class="text">
+                在开始前，确保你具备以下能力: <br/>
+            </text>
+			<text class="text">
+                 1.熟悉英文字母的写法(包括大写和小写)和读音。<br/>
+            </text>
+			<text class="text">
+                 2.TODO. <br/>
+            </text>
+		</text-area>
 	</view>
 </template>
 
@@ -22,7 +33,6 @@
 		justify-content: center;
 		align-items: center;
 		width: 100%;
-        margin-top: 2em;
 		/* border: 1px solid red; */
 	}
 
@@ -33,7 +43,9 @@
 		
 		.text-area {
 			display: flex;
+            flex-direction: column;
 			justify-content: center;
+            padding: 5em 10em 10em 5em;
 		}
 
 		.text {

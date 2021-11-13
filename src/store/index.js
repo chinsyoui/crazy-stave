@@ -64,7 +64,7 @@ const store = createStore({
 			console.log('PredefinedGameCollections = ', PredefinedGameCollections);
 			
 			if (!state.Root) {
-				let user = new GameModel.User(0, "缺省用户", "icon-url", PredefinedGameCollections, 0, new Map());
+				let user = new GameModel.User(0, "第一个用户", "icon-url", PredefinedGameCollections, 0, new Map());
 				console.assert(user.GameCollections && user.GameCollections.length > 0, "no games");
                 console.assert(user.GameCollectionStates && user.GameCollectionStates.size == 0, "game collection state not empty");
 

@@ -1,5 +1,5 @@
 <script>
-	import { mapState, mapMutations, mapActions } from 'vuex'
+	import { mapState } from 'vuex'
 
     import ButtonListSyllables from "@/views/button-list-syllables.vue";
     import ButtonListPitchs from "@/views/button-list-pitchs.vue";
@@ -8,9 +8,9 @@
     import ButtonListPitchsWithSf from "@/views/button-list-pitchs-with-sf.vue";
     import ButtonListWkOnlyTcs from "@/views/button-list-wk-only-tcs.vue";
 
-	import { MusicItem } from '@/store/game-model.js'
-	import { MITs, GameTypes } from '@/store/game-content.js'
-	import { BTs, RandomGenerateMusicItems } from '@/store/game-model.js'
+	import { MusicItem, BTs } from '@/store/game-model.js'
+	import { MITs, GenerateMusicItemsForGameInstance } from '@/store/game-content.js'
+
     import { WeixinRenderContext } from '@/utils/WeixinRenderContext.js'
 
 	import Vex from '@/utils/vexflow-debug.js';
@@ -69,7 +69,7 @@
                 this.$options.staveClef = this.CurrentGame.StaveClef;
                 this.$options.staveKeysig = this.CurrentGame.StaveKeySig;
 
-				let musicItems = RandomGenerateMusicItems(this.CurrentGame.MusicItemsCount, this.CurrentGame.TemplateMusicItems);
+				let musicItems = GenerateMusicItemsForGameInstance(this.CurrentGame.MusicItemsCount, this.CurrentGame.MusicItemsGenerator);
 				this.$options.musicItems = musicItems;
 				console.log("random generated music items: ", this.$options.musicItems);
 
@@ -81,7 +81,8 @@
                 this.initStave();
 
 				// start game and focus to first question
-				this.Timer = setInterval( () => { this.onTimer() }, 1000);
+                if (!this.Timer)
+				    this.Timer = setInterval( () => { this.onTimer() }, 1000);
 				this.highlightNextMusicItem(true, this.CurrentGameItemIndex);
 			},
 
@@ -100,7 +101,7 @@
 			},
 
 			onAnswnerSubmitted: function(answner) {
-				console.log("Your Answner " + this.CurrentGameItemIndex + " = " + answner);
+				console.log("Your Answner to Question[" + this.CurrentGameItemIndex + "] = " + answner);
 
 				// get the correct answner of current question
 				let music_item = this.$options.musicItems[this.CurrentGameItemIndex];
@@ -109,7 +110,11 @@
 				// 特殊处理: 
 				// 和弦转位基本练习按钮只包含转位0/1/2数字，不含和弦名称, 而和弦转位值被编码在答案的第一个字节
 				if (this.CGBT == BTs.CI)
-					correct_answner = music_item.TargetValue.at(0);
+					correct_answner = correct_answner[0];
+				// 特殊处理: 
+                // 双音度数判断基本练习里只包含度数，不含度数的类型(大小纯等)
+				if (this.CGBT == BTs.Degree)
+					correct_answner = correct_answner[0];
 
 				console.log("The Correct Answner " + this.CurrentGameItemIndex + " = " + correct_answner);
 
@@ -133,7 +138,7 @@
 
 				// game completed
 				if (this.Timer)
-					clearTimeout(this.Timer);
+					clearInterval(this.Timer);
 				this.Timer = null;
 
 				// compute stars
@@ -164,7 +169,8 @@
 				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 			},
 			navigateBack: function() {
-				uni.reLaunch({ url: '/pages/game/game-list' });
+				//uni.navigateTo({ url: '/pages/game/game-list' });
+                uni.navigateBack();
 			},
 			onBackClick: function() {
 				// TODO show modal dialog to let user confirm here
