@@ -8,10 +8,30 @@
 			}
 		},
 
-		computed: mapState({
-			CurrentUser: state => state.CurrentUser,
-			GameCollections: state => state.CurrentGameCollections
-		}),
+		computed: {
+			getGameCollectionState() {
+                return function(game_collection_id) {
+				    return this.CurrentUser.GameCollectionStates.get(game_collection_id);
+			    }
+            },
+			getGameCollectionStateCount() {
+                return function(game_collection_id) {
+				    let state = this.getGameCollectionState(game_collection_id);
+				    return state ? state.GameStates.size : 0;
+                }
+			},
+			getGameCollectionStateStars() {
+                return function(game_collection_id) {
+				    let state = this.getGameCollectionState(game_collection_id);
+				    return (state && state.Stars > 0) ? "★" + state.Stars : "";
+			    }
+            },
+
+            ...mapState({
+			    CurrentUser: state => state.CurrentUser,
+			    GameCollections: state => state.CurrentGameCollections
+      		})
+        },
 
 		onLoad() {
 			console.log(this.Title + "." + "onLoad");
@@ -30,17 +50,6 @@
 				console.log(this.Title + "." + "onBackClick");
 				// uni.navigateTo({ url: '/pages/game/user-list' });
                 uni.navigateBack();
-			},
-			getGameCollectionState(game_collection_id) {
-				return this.CurrentUser.GameCollectionStates.get(game_collection_id);
-			},
-			getGameCollectionStateCount(game_collection_id) {
-				let state = this.getGameCollectionState(game_collection_id);
-				return state ? state.GameStates.size : 0;
-			},
-			getGameCollectionStateStars(game_collection_id) {
-				let state = this.getGameCollectionState(game_collection_id);
-				return (state && state.Stars > 0) ? state.Stars + "★" : "";
 			}
 		}
 	}

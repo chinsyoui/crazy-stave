@@ -8,11 +8,52 @@
 				Title: 'Game-List'
 			}
 		},
-		computed: mapState({
-			CurrentUser: state => state.CurrentUser,
-			CurrentGameCollection: state => state.CurrentGameCollection,
-			Games: state => state.CurrentGames
-		}),
+		computed: {
+			getGameCollectionState() {
+                return function() {
+				    return this.CurrentUser.GameCollectionStates.get(this.CurrentGameCollection.Id);
+                }
+			},
+			getGameState() {
+                return function(game_id) {
+				    let parent = this.getGameCollectionState();
+                    if (!parent)
+                        return null;
+                    let state = parent.GameStates.get(game_id);
+                    return state;
+                }
+			},
+			getGameStateTotalPlayCount() {
+                return function(game_id) {
+                    let state = this.getGameState(game_id);
+                    return state ? state.TotalPlayCount : 0;
+                }
+			},
+			getGameStateTotalPlayDuration() {
+                return function(game_id) {
+                    let state = this.getGameState(game_id);
+                    return state ? state.TotalPlayDuration : 0;
+                }
+			},
+			getGameStateHighestScore() {
+                return function(game_id) {
+                    let state = this.getGameState(game_id);
+                    return state ? state.HighestScore : 0;
+                }
+			},
+			getGameStateStars() {
+                return function(game_id) {
+                    let state = this.getGameState(game_id);
+                    return state ? state.Stars: 0;
+                }
+			},
+
+            ...mapState({
+			    CurrentUser: state => state.CurrentUser,
+			    CurrentGameCollection: state => state.CurrentGameCollection,
+			    Games: state => state.CurrentGames
+	    	})
+        },
 		methods: {
 			onItemClick: function(e) {
 				console.log(this.Title + "." + "onItemClick", e);
@@ -29,32 +70,6 @@
 			onBackClick: function() {
 				console.log(this.Title + "." + "onBackClick");
                 uni.navigateBack();
-			},
-			getGameCollectionState() {
-				return this.CurrentUser.GameCollectionStates.get(this.CurrentGameCollection.Id);
-			},
-			getGameState(game_id) {
-				let parent = this.getGameCollectionState();
-				if (!parent)
-					return null;
-				let state = parent.GameStates.get(game_id);
-				return state;
-			},
-			getGameStateTotalPlayCount(game_id) {
-				let state = this.getGameState(game_id);
-				return state ? state.TotalPlayCount : 0;
-			},
-			getGameStateTotalPlayDuration(game_id) {
-				let state = this.getGameState(game_id);
-				return state ? state.TotalPlayDuration : 0;
-			},
-			getGameStateHighestScore(game_id) {
-				let state = this.getGameState(game_id);
-				return state ? state.HighestScore : 0;
-			},
-			getGameStateStars(game_id) {
-				let state = this.getGameState(game_id);
-				return state ? state.Stars: 0;
 			}
 		}
 	}
