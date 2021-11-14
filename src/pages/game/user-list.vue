@@ -45,7 +45,7 @@
 						<view class="uni-media-list-body">
 							<view class="uni-media-list-text-top">{{ value.DisplayName }}</view>
 							<view class="uni-media-list-text-bottom">
-								<text>{{ value.GameCollectionStatesSize }} / {{ value.GameCollections.length }}</text>
+								<text style="color: gray">{{ value.GameCollectionStatesSize }} / {{ value.GameCollections.length }}</text>
 							</view>
 						</view>
 					</view>
@@ -80,10 +80,10 @@
 		.logo {
 			max-height: 8rem;
 			max-width: 8rem;
-			margin-top: 10px;
-			margin-left: 10px;
-			margin-right: 10px;
-			margin-bottom: 10px;
+			margin-top: 0.1rem;
+			margin-left: 3rem;
+			margin-right: 3rem;
+			margin-bottom: 0.5rem;
 		}
 
 		.text-area {

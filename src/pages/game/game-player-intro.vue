@@ -46,6 +46,7 @@
 			},
 			onGameFinished: function() {
 				// TODO we may update this.CurrentGameProgress if we want
+                this.CurrentGameProgress.Stars = 1;
 				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 			},
 			navigateBack: function() {
@@ -60,7 +61,7 @@
 	<view class="content">
 		<view class="outermost-top-bar"/>
 		<view class="title-wrapper" @click="onBackClick()">
-			<text class="title">{{Title}} - {{ CurrentUser.DisplayName }} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
+			<text class="title">{{Title}} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
 		</view>
 		<block v-if="CurrentGame.Id==1100">
 			<Intro1100/>
@@ -72,7 +73,7 @@
 			<Intro4100/>
 		</block>
 		<block v-else>
-			<text class="introduction">TODO: Introduction Text Here</text>			
+			<text class="introduction">这里是一段文字</text>			
 		</block>
 		<view class="outermost-bottom-bar"/>
 	</view>
@@ -104,7 +105,6 @@
 				text-overflow: ellipsis;
 				font-size: 1.1em;
 				color: black;
-				/* border: 1px solid red; */
 			}
 
 		.introduction {

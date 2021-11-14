@@ -38,7 +38,7 @@
 		// custom reactive fields here
 		data() {
 			return {
-				Title: 'Game-Player',
+				Title: '视谱练习',
 				Timer: null,
 			}
 		},
@@ -390,7 +390,7 @@
 	<view class="content">
 		<view class="outermost-top-bar"/>
 		<view class="title-wrapper" @click="onBackClick()">
-			<text class="title">{{Title}} - {{ CurrentUser.DisplayName }} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
+			<text class="title">{{Title}} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
 		</view>
 
 		<view class="game-progress-bar" @click="onBackClick()">

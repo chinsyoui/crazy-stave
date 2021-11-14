@@ -40,7 +40,7 @@
 			},
 			getGameCollectionStateStars(game_collection_id) {
 				let state = this.getGameCollectionState(game_collection_id);
-				return state ? state.Stars: 0;
+				return (state && state.Stars > 0) ? state.Stars + "★" : "";
 			}
 		}
 	}
@@ -48,18 +48,20 @@
 
 <template>
 	<view class="content">
-		<view class="text-area" @click="onBackClick()">
+		<!-- <view class="text-area" @click="onBackClick()">
 			<text class="title">{{Title}} - {{ CurrentUser.DisplayName }}</text>
-		</view>
+		</view> -->
 		<view class="uni-list">
 			<block v-for="(value, index) in GameCollections" :key="index">
 				<view class="uni-list-cell" hover-class="uni-list-cell-hover" @click="onItemClick(value)">
 					<view class="uni-media-list">
-						<image class="uni-media-list-logo" :src="value.Icon"></image>
+						<!-- <image class="uni-media-list-logo" :src="value.Icon"></image> -->
 						<view class="uni-media-list-body">
-							<view class="uni-media-list-text-top">{{ value.DisplayName }}</view>
+							<view class="uni-media-list-text-top" style="color: blue; font: bold">{{ value.DisplayName }}</view>
+							<view class="uni-media-list-text-top">{{ value.Description }}</view>
+							<!-- <view class="uni-media-list-text-bar" style="color: gray">—————</view> -->
 							<view class="uni-media-list-text-bottom">
-								<text>{{ getGameCollectionStateCount(value.Id) }} / {{ value.Games.length }} + *{{ getGameCollectionStateStars(value.Id) }}</text>
+								<text style="color: gray">{{ getGameCollectionStateCount(value.Id) }} / {{ value.Games.length }} {{ getGameCollectionStateStars(value.Id) }}</text>
 							</view>
 						</view>
 					</view>
@@ -71,43 +73,38 @@
 
 <style>
 	.content {
-		width: 100%;
+        padding-left: 3rem;
+        padding-right: 3rem;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		/* border: 1px solid red; */
 	}
 
 		.text-area {
 			display: flex;
 			justify-content: center;
-			/* border: 1px solid red; */
 		}
 
 			.title {
 				vertical-align: middle;
 				font-size: 1em;
 				color: #8f8f94;
-                margin: 0.5em 0.5em 0.5em;
+                margin: 0.5em 0.5em 0.5em 0.5em;
 			}
 	
 		.uni-list {
 			display: flex;
 			flex-direction: column;
 			flex-wrap: wrap;
-			align-items: center;
-			justify-content: center;
-			min-width: 99%;
-			overflow-x: scroll;
-			border: 1px solid blue;
+            padding-bottom: 3rem;
+			min-width: 100%;
+            overflow-x: scroll;
 		}
 
 			.uni-list-cell {
 				/* background-color: #C0C0C0; */
-				margin-left: 0.5rem;
-				margin-right: 0.5rem;
+				margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+			    border: 1px solid blue;
 			}
 
 				.uni-media-list-logo {
@@ -118,14 +115,12 @@
 				.uni-media-list-body {
 					height: auto;
 					justify-content: space-around;
-					border: 1px solid blue;
-                    padding: 0.5em 0.5em 0.5em;
+                    padding: 0.5em 0.5em 0.5em 0.5em;
 				}
 
 					.uni-media-list-text-top {
 						font-size: 1em;
 						overflow: hidden;
-						/* border: 1px solid red; */
 					}
 
 					.uni-media-list-text-bottom {
@@ -133,7 +128,6 @@
 						flex-direction: row;
 						font-size: 1em;
 						justify-content: space-between;
-						/* border: 1px solid red; */
 					}
 			
 </style>

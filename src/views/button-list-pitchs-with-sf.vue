@@ -45,14 +45,13 @@
 
 <style scoped>
 	.button-list {
-		display: flex;
+        display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
 		justify-content: center;
 		align-items: center;
 		height: 6rem;
 		width: 100%;
-		/* border: 1px solid red; */
 	}
 
 		.button-list-line1 {
@@ -63,71 +62,61 @@
 			align-items: center;
 			height: 2rem;
 			width: 100%;
-			/* border: 1px solid red; */
 		}
 
 			.button-accidental {
-				padding-left: 1vmax;
-				padding-right: 1vmax;
-				display: block;
-				min-width: 0.25rem;
-				min-height: 1rem;
-				margin: 3px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 2.5rem;
+                height: 2rem;
+                margin: 2px;
 				background-color: #F1F1F1;
-				border: 3px solid black;
+				border: 2px solid black;
 			}
 	
 				.button-accidental-text-wrapper {
-					display: flex;
-					justify-content: center;
-					vertical-align: sub;
-					/* border: 1px solid red; */
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
 				}
 
 					.button-accidental-text {
-						flex-wrap: nowrap;
-						font-size: 1em;
-						overflow: hidden;
-						vertical-align: sub;
-						height: auto;
-						/* border: 1px solid blue; */
+                        flex-wrap: nowrap;
+                        font-size: 3em;
+                        overflow: hidden;
 					}
 
 		.button-list-line2 {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: nowrap;
-			justify-content: center;
-			align-items: center;
-			height: 4rem;
-			width: 100%;
-			/* border: 1px solid red; */
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            height: 4rem;
+            width: 100%;
 		}
 
 			.button-pitch {
-				padding-left: 1vmax;
-				padding-right: 1vmax;
-				display: block;
-				min-width: 2rem;
-				min-height: 2rem;
-				margin: 0.7rem;
-				background-color: #F1F1F1;
-				border: 3px solid black;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 4rem;
+                height: calc(4rem -3px);
+                margin: 12px;
+                background-color: #F1F1F1;
+                border: 3px solid black;
 			}
 
 				.button-pitch-text-wrapper {
-					display: flex;
-					justify-content: center;
-					vertical-align: sub;
-					/* border: 1px solid red; */
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
 				}
 
 					.button-pitch-text {
-						flex-wrap: nowrap;
-						font-size: 2em;
-						overflow: hidden;
-						vertical-align: sub;
-						height: auto;
-						/* border: 1px solid blue; */
+                        flex-wrap: nowrap;
+                        font-size: 2em;
+                        overflow: hidden;
 					}
 </style>

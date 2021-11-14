@@ -72,11 +72,12 @@ export function GameType(id, display_name, button_type) {
 //   一个谱号，一个调号，
 //   一个MusicItem的总个数，以及一个用来生成MusicItem的生成器
 // 当练习游戏开始时，将用该生成器来随机生成实际游戏中的音乐项。
-//@class <Number, GameType, String, String, String, Number, String>
-export function Game(id, type, display_name, stave_clef, stave_keysig, music_items_count, music_items_generaor) {
+//@class <Number, GameType, String, String, String, String, Number, String>
+export function Game(id, type, display_name, description, stave_clef, stave_keysig, music_items_count, music_items_generaor) {
 	this.Id = id;
 	this.Type = type;
 	this.DisplayName = display_name;
+    this.Description = description;
 	this.StaveClef = stave_clef;
 	this.StaveKeySig = stave_keysig;
 	this.MusicItemsCount = music_items_count;

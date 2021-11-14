@@ -39,38 +39,28 @@
 		align-items: center;
 		height: 4rem;
 		width: 100%;
-		/* border: 1px solid red; */
 	}
 
 		.button {
-			padding-left: 1vmax;
-			padding-right: 1vmax;
-			display: block;
-			min-width: 2rem;
-			min-height: 2rem;
-			margin: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+			width: 4rem;
+			height: 4rem;
+			margin: 10px;
 			background-color: #F1F1F1;
 			border: 3px solid black;
 		}
 
-			.button-icon {
-				width: 100%;
-				height: 100%;
-			}
-
 			.button-text-wrapper {
 				display: flex;
-				justify-content: center;
-				vertical-align: sub;
-				/* border: 1px solid red; */
+                justify-content: center;
+                align-items: center;
 			}
 
 				.button-text {
 					flex-wrap: nowrap;
-					font-size: 2em;
+					font-size: 3em;
 					overflow: hidden;
-					vertical-align: sub;
-					height: auto;
-					/* border: 1px solid blue; */
 				}
 </style>

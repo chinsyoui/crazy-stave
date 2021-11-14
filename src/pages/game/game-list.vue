@@ -28,7 +28,6 @@
 			},
 			onBackClick: function() {
 				console.log(this.Title + "." + "onBackClick");
-				// uni.navigateTo({ url: '/pages/game/game-collection-list' });
                 uni.navigateBack();
 			},
 			getGameCollectionState() {
@@ -63,18 +62,19 @@
 
 <template>
 	<view class="content">
-		<view class="text-area" @click="onBackClick()">
+		<!-- <view class="text-area" @click="onBackClick()">
 			<text class="title">{{Title}} - {{ CurrentUser.DisplayName }} - {{ CurrentGameCollection.DisplayName }}</text>
-		</view>
+		</view> -->
 		<view class="uni-list">
 			<block v-for="(value, index) in Games" :key="index">
 				<view class="uni-list-cell" hover-class="uni-list-cell-hover" @click="onItemClick(value)">
 					<view class="uni-media-list">
 						<!-- <image class="uni-media-list-logo" :src="value.Icon"></image> -->
 						<view class="uni-media-list-body">
-							<view class="uni-media-list-text-top">{{ value.DisplayName }}</view>
+							<view class="uni-media-list-text-top" style="color: blue; font: bold">{{ value.DisplayName }}</view>
+							<view class="uni-media-list-text-top">{{ value.Description }}</view>
 							<view class="uni-media-list-text-bottom">
-								<text> *{{ getGameStateStars(value.Id) }} / #{{ getGameStateTotalPlayCount(value.Id) }} / s{{ getGameStateTotalPlayDuration(value.Id) }} / {{ value.MusicItemsCount }}</text>
+								<text style="color: gray">★{{ getGameStateStars(value.Id) }} 得分#{{ getGameStateTotalPlayCount(value.Id) }} 已练习{{ getGameStateTotalPlayDuration(value.Id) }}秒</text>
 							</view>
 						</view>
 					</view>
@@ -86,20 +86,17 @@
 
 <style>
 	.content {
-		width: 100%;
+        padding-left: 3rem;
+        padding-right: 3rem;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
-		align-items: center;
-		justify-content: center;
-		/* border: 1px solid red; */
 	}
 
 		.text-area {
 			display: flex;
 			justify-content: center;
-			/* border: 1px solid red; */
 		}
 
 			.title {
@@ -111,19 +108,14 @@
 			display: flex;
 			flex-direction: column;
 			flex-wrap: wrap;
-			align-items: center;
-			justify-content: center;
+            padding-bottom: 3rem;
 			min-width: 100%;
 			overflow-x: scroll;
-			border: 1px solid blue;
 		}
 
 			.uni-list-cell{
 				/* background-color: #C0C0C0; */
-				margin-left: 0.5rem;
-				margin-right: 0.5rem;
-				margin-top: 0.5rem;
-				margin-bottom: 0.5rem;
+				margin: 0.5rem 0.5rem 0.5rem 0.5rem;
 			}
 
 				.uni-media-list-logo {
@@ -135,7 +127,7 @@
 					height: auto;
 					justify-content: space-around;
 					border: 1px solid blue;
-                    padding: 0.5em 0.5em 0.5em;
+                    padding: 0.5em 0.5em 0.5em 0.5em;
 				}
 
 					.uni-media-list-text-top {
@@ -148,7 +140,6 @@
 						flex-direction: row;
 						font-size: 1em;
 						justify-content: space-between;
-						/* border: 1px solid red; */
 					}
 
 </style>

@@ -22,7 +22,10 @@
  	<view class="container" @click="onItemClick()">
 		<image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
-			<text class="title">{{Title}}</text>
+			<text class="title" style="font: 1.1rem">
+                五线谱是音乐的语言，学习音乐就要将这门语言学习到相当于母语的熟练程度。\n
+			    本小程序可以帮助您将五线谱阅读速度快速提高到非常熟练的水平。\n
+            </text>
 		</view>
 		<view class="text-area">
 			<text class="DebugInfo">{{ DebugInfo }}</text>
@@ -32,7 +35,9 @@
 			<view>屏幕太小，无法工作</view>
 		</match-media>
  		<match-media min-height="300" orientation="landscape">
-			<view>欢迎，点击开始</view>
+			<view style="margin: 2rem 2rem">
+    			<text class="title" style="font: 1.2rem bold; color: blue">点击屏幕开始</text>
+            </view>
 		</match-media>
 		<match-media min-width="300" orientation="portrait">
 			<view>请横屏使用</view>
@@ -53,13 +58,13 @@
 	}
 
 	.logo {
-		max-height: 8rem;
-		max-width: 8rem;
+		max-height: 10rem;
+		max-width: 10rem;
 		background-size: cover;
-		margin-top: 10px;
+		margin-top: 1rem;
 		margin-left: 10px;
 		margin-right: 10px;
-		margin-bottom: 10px;
+		margin-bottom: 2rem;
 	}
 
 	.DebugInfo {
