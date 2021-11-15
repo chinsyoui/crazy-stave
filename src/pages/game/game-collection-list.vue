@@ -11,13 +11,13 @@
 		computed: {
 			getGameCollectionState() {
                 return function(game_collection_id) {
-				    return this.CurrentUser.GameCollectionStates.get(game_collection_id);
+				    return this.CurrentUser.GameCollectionStates.getMapItem(game_collection_id);
 			    }
             },
 			getGameCollectionStateCount() {
                 return function(game_collection_id) {
 				    let state = this.getGameCollectionState(game_collection_id);
-				    return state ? state.GameStates.size : 0;
+				    return state ? state.GameStates.mapItemsCount : 0;
                 }
 			},
 			getGameCollectionStateStars() {

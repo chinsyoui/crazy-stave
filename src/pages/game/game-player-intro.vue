@@ -1,7 +1,9 @@
 <script>
-    import Intro1100 from "@/views/intro-1100.vue";
-    import Intro1101 from "@/views/intro-1101.vue";
-    import Intro4100 from "@/views/intro-4100.vue";
+	import * as GameModel from '@/store/game-model.js'
+
+    import Intro1100 from "@/views/intro-1100.vue"
+    import Intro1101 from "@/views/intro-1101.vue"
+    import Intro4100 from "@/views/intro-4100.vue"
 
     import { mapState } from 'vuex'
 	
@@ -11,7 +13,8 @@
             Intro1101,
             Intro4100
         },
-		data() {
+
+        data() {
 			return {
 				Title: '基本知识学习'
 			}
@@ -32,6 +35,11 @@
 		  })
 		},
 
+        onUnload() {
+            console.log("onUnload", this);
+            this.onGameFinished();
+        },
+
 		methods: {
 			onEntireViewRendered() {
 				console.log("CurrentGame = ", this.CurrentGame);
@@ -45,8 +53,7 @@
 				this.navigateBack();
 			},
 			onGameFinished: function() {
-				// TODO we may update this.CurrentGameProgress if we want
-                this.CurrentGameProgress.Stars = 1;
+                GameModel.SetGameProgress(this.CurrentGameProgress, 1,1,0,1,10,1);
 				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 			},
 			navigateBack: function() {

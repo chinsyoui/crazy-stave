@@ -11,7 +11,7 @@
 		computed: {
 			getGameCollectionState() {
                 return function() {
-				    return this.CurrentUser.GameCollectionStates.get(this.CurrentGameCollection.Id);
+				    return this.CurrentUser.GameCollectionStates.getMapItem(this.CurrentGameCollection.Id);
                 }
 			},
 			getGameState() {
@@ -19,7 +19,7 @@
 				    let parent = this.getGameCollectionState();
                     if (!parent)
                         return null;
-                    let state = parent.GameStates.get(game_id);
+                    let state = parent.GameStates.getMapItem(game_id);
                     return state;
                 }
 			},

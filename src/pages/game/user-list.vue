@@ -1,5 +1,5 @@
 <script>
-	import { mapState, mapMutations, mapActions } from 'vuex'
+	import { mapState } from 'vuex'
 
 	export default {
 		data() {
@@ -7,6 +7,7 @@
 				Title: '选择一个用户开始'
 			}
 		},
+
 		computed: mapState({
 			Users: state => state.Users,
 			CurrentUser: state => state.CurrentUser,
@@ -15,6 +16,7 @@
         mounted() {
             console.log(this.Users[0].GameCollectionStates);
         },
+
 		methods: {
 			onItemClick: function(e) {
 				console.log(this.Title + "." + "onItemClick", e);

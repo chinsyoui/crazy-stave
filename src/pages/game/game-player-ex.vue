@@ -67,7 +67,8 @@
                 clearTimeout(this.Timer);
             this.Timer = null;
         },
-		methods: {
+
+        methods: {
 			onEntireViewRendered() {
 				console.info("onEntireViewRendered: CurrentGame = ", this.CurrentGame);
 				console.assert(this.CGBT != BTs.Any);

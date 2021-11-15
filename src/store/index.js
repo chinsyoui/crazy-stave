@@ -1,9 +1,10 @@
+import { ObjectMap } from "@/utils/ObjectMap.js"
 import * as GameModel from './game-model.js'
-import { GameBuilders } from './game-model.js'
 import { PredefinedGameCollections } from './game-content.js'
 
 // save app state to persistent storage
 function save(state) {
+    console.log("save state: ", state);
 	return; 
 	
 	console.log("save: ", state);
@@ -48,7 +49,8 @@ const store = createStore({
 
 		EOF: null
 	},
-	mutations: {
+
+    mutations: {
 		///////////////////////////////////////
 		// init app state
 		init(state) {
@@ -64,16 +66,17 @@ const store = createStore({
 			console.log('PredefinedGameCollections = ', PredefinedGameCollections);
 			
 			if (!state.Root) {
-				let user = new GameModel.User(0, "访客用户", "icon-url", PredefinedGameCollections, 0, new Map());
+				let user = new GameModel.User(0, "主用户", "icon-url", PredefinedGameCollections, 0, new ObjectMap());
 				console.assert(user.GameCollections && user.GameCollections.length > 0, "no games");
-                console.assert(user.GameCollectionStates && user.GameCollectionStates.size == 0, "game collection state not empty");
+                console.assert(user.GameCollectionStates && user.GameCollectionStates.mapItemsCount == 0, "game collection state not empty");
 
 				console.log('add default user', user);
-				state.Users.push(user);
+                Vue.set(state.Users, state.Users.length, user);
 
 				state.Root = new GameModel.Root(user.id, [ user ]);
 				state.Users = state.Root.Users;
 				state.CurrentUser = user;
+
 				save(state);
 			}
 
@@ -92,35 +95,41 @@ const store = createStore({
 		setCurrentUser(state, user) {
 			console.log('setCurrentUser', state, user);
 			console.assert(user);
+
 			state.Root.CurrentUserId = user.Id;
 			state.CurrentUser = user;
 			state.CurrentGameCollections = user.GameCollections;
-			save(state);
+
+            save(state);
 		},
-		setCurrentGameCollection(state, game_collection) {
+
+        setCurrentGameCollection(state, game_collection) {
 			console.log('setCurrentGameCollection', state, game_collection);
-			state.CurrentUser.CurrentGameCollectionId = game_collection.Id;
+
+            state.CurrentUser.CurrentGameCollectionId = game_collection.Id;
 			state.CurrentGameCollection = game_collection;
 			state.CurrentGames = game_collection.Games;
-			save(state);
+
+            save(state);
 		},
-		setCurrentGame(state, game) {
+
+        setCurrentGame(state, game) {
 			console.log('setCurrentGame', state, game);
 
-			// try update CurrentGameId in corresponding GameCollectionState
-			let game_collection_states = state.CurrentUser.GameCollectionStates;
-			console.assert(game_collection_states);
+            let gcId = state.CurrentUser.CurrentGameCollectionId;
+			let gcStates = state.CurrentUser.GameCollectionStates;
+			console.assert(gcStates);
 
 			// if game collection state not exists, create and add it
-			let game_collection_state = game_collection_states.get(state.CurrentUser.CurrentGameCollectionId);
-			if (!game_collection_state) {
-				game_collection_state = new GameModel.GameCollectionState(game.Id, 0, new Map());
-				game_collection_states.set(state.CurrentUser.CurrentGameCollectionId, game_collection_state);
-                state.CurrentUser.GameCollectionStatesSize = state.CurrentUser.GameCollectionStates.size;
+			let gcState = gcStates.getMapItem(gcId);
+			if (!gcState) {
+				gcState = new GameModel.GameCollectionState(game.Id, 0, new ObjectMap());
+				gcStates.setMapItem(gcId, gcState);
+                state.CurrentUser.GameCollectionStatesSize = gcStates.mapItemsCount;
 			}
 
 			// now update CurrentGameId anyway
-			game_collection_state.CurrentGameId = game.Id;
+			gcState.CurrentGameId = game.Id;
 
 			// update CurrentGame
 			state.CurrentGame = game;
@@ -131,7 +140,8 @@ const store = createStore({
 
 			save(state);
 		},
-		setCurrentGameItemIndex(state, index) {
+
+        setCurrentGameItemIndex(state, index) {
 			console.log('setCurrentGameItemIndex', state, index);
 			state.CurrentGameItemIndex = index;
 		},
@@ -142,21 +152,19 @@ const store = createStore({
 			// note: the following line always throw exception setAttribute with 0 blah blah
 			// uni.showToast("onGameFinished");
 
-			// update game progress to game state here
-			let game_collection_states = state.CurrentUser.GameCollectionStates;
-			console.assert(game_collection_states);
+			// update game state by this game progress
+			let gcStates = state.CurrentUser.GameCollectionStates;
+			console.assert(gcStates);
 
 			// find parent game collection state
-			let game_collection_state = game_collection_states.get(state.CurrentGameCollection.Id);
-			console.assert(game_collection_state);
+			let gcState = gcStates.getMapItem(state.CurrentGameCollection.Id);
+			console.assert(gcState);
 
-			// find game state
-			let game_state = game_collection_state.GameStates.get(state.CurrentGame.Id);
-
-			// if game state not exists, create and add it
+			// find game state, create if not found
+			let game_state = gcState.GameStates.getMapItem(state.CurrentGame.Id);
 			if (!game_state) {
 				game_state = new GameModel.GameState(0, 0, 0, 0);
-				game_collection_state.GameStates.set(state.CurrentGame.Id, game_state);
+				gcState.GameStates.setMapItem(state.CurrentGame.Id, game_state);
 			}
 
 			// update game state
@@ -167,11 +175,11 @@ const store = createStore({
 			game_state.Stars += game_progress.Stars;
 
 			// update game collection state
-			game_collection_state.Stars += game_progress.Stars;
+			gcState.Stars += game_progress.Stars;
 
 			save(state);
 		},
-		
+
 		///////////////////////////////////////
 		addUser(state, user) {
 			console.log("addUser", state, user);
@@ -204,12 +212,14 @@ const store = createStore({
 			uni.showToast("removeGame");
 		}		
 	},
-	getters: {
+
+    getters: {
 		// currentColor(state) {
 		// 	return state.colorList[state.colorIndex]
 		// }
 	},
-	actions: {
+
+    actions: {
 	}
 })
 

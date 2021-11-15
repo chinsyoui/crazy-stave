@@ -1,3 +1,4 @@
+import { ObjectMap } from "@/utils/ObjectMap.js"
 if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
 
 // user press button to choose their answner for current question,
@@ -104,10 +105,10 @@ export function GameState(total_play_count, total_play_duration, highest_score, 
 };
 
 // a game collection state.
-// @class <Number, Number, Map<Number,GameState>>
+// @class <Number, Number, ObjectMap<Number,GameState>>
 // @param current_game_id: latest/current played game's id
 // @param stars: total stars user earned in corresponding GameCollection
-// @param game_states: a map <GameId, GameState> stores played games' states
+// @param game_states: a ObjectMap <GameId, GameState> stores played games' states
 export function GameCollectionState(current_game_id, stars, game_states) {
 	this.CurrentGameId = current_game_id;
 	this.Stars = stars;
@@ -138,10 +139,10 @@ export function SetGameProgress(game_progress,
 
 // user (aka. the game player, the user that answner questions, etc).
 // each user have a unique id, a display name, a icon, its own game collections and play states.
-// @class (Number, String, String, GameCollection[], Number, Map<Number,GameCollectionState>)
+// @class (Number, String, String, GameCollection[], Number, ObjectMap<Number,GameCollectionState>)
 // @param game_collections: array of game collections for this user, include both predefined game collections and custom defined game collections
 // @param current_game_collection_id: latest/current played game collection's id
-// @param game_collection_states: a map <GameCollectionId, GameCollectionState> stores played game collections' states
+// @param game_collection_states: a ObjectMap<GameCollectionId, GameCollectionState> stores played game collections' states
 export function User(id, display_name, icon, game_collections, current_game_collection_id, game_collection_states) {
 	this.Id = id;
 	this.DisplayName = display_name;
@@ -150,7 +151,7 @@ export function User(id, display_name, icon, game_collections, current_game_coll
 	this.CurrentGameCollectionId = current_game_collection_id;
 	this.GameCollectionStates = game_collection_states;
     // patch: mp-weixin: vue template can't found 'size’ property in this.GameCollectionStates, don't know why, just fix it
-    this.GameCollectionStatesSize = this.GameCollectionStates.size;
+    this.GameCollectionStatesSize = this.GameCollectionStates.mapItemsCount;
 };
 
 export function Root(current_user_id, users) {
