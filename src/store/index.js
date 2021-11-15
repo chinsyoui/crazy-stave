@@ -4,16 +4,15 @@ import { PredefinedGameCollections } from './game-content.js'
 
 // save app state to persistent storage
 function save(state) {
-    console.log("save state: ", state);
-	return; 
-	
-	console.log("save: ", state);
-	// TODO 
-	uni.setStorageSync("Users", state.Users);
+    console.log("saving state: ", state);
+
+    uni.setStorageSync("Users", state.Users);
 	uni.setStorageSync("CurrentUserId",state.CurrentUser.Id);
-	console.log("Users", uni.getStorageSync("Users"));
+
+    console.log("Users", uni.getStorageSync("Users"));
 	console.log("CurrentUserId", uni.getStorageSync("CurrentUserId"));
-	console.log("app state saved: ", state);
+
+    console.log("app state saved: ", state);
 };
 
 // #ifndef VUE3
@@ -33,8 +32,7 @@ const store = createStore({
 ///////////////////////////////////////////////////////////////////////////
 //    plugins: [createLogger()],
 	state: {
-		Root: null,
-		Users: [], // @Array[]
+		Users: null, // @Array[]
 
 		CurrentUser: null, //@Object
 		CurrentGameCollections: null,
@@ -54,49 +52,58 @@ const store = createStore({
 		///////////////////////////////////////
 		// init app state
 		init(state) {
-			// console.log("Users", uni.getStorageSync("Users"));
-			// console.log("CurrentUserId", uni.getStorageSync("CurrentUserId"));
-
-			// state.Users = uni.getStorageSync("Users");
-			// let current_user_id = uni.getStorageSync("CurrentUserId");
-			// state.Root = new GameModel.Root(current_user_id, state.Users);
-			// state.CurrentUser = state.Users[0];
-
-			console.log('state.init', state);
-			console.log('PredefinedGameCollections = ', PredefinedGameCollections);
+			console.log("initing state", state);
+			console.log("PredefinedGameCollections: ", PredefinedGameCollections);
 			
-			if (!state.Root) {
-				let user = new GameModel.User(0, "主用户", "icon-url", PredefinedGameCollections, 0, new ObjectMap());
-				console.assert(user.GameCollections && user.GameCollections.length > 0, "no games");
-                console.assert(user.GameCollectionStates && user.GameCollectionStates.mapItemsCount == 0, "game collection state not empty");
+            let users = null;
+            let current_user_id = -1;
 
-				console.log('add default user', user);
-                Vue.set(state.Users, state.Users.length, user);
+            try {
+                current_user_id = uni.getStorageSync("CurrentUserId");
+                let _users = uni.getStorageSync("Users");
+                if (_users && _users instanceof Array && _users.length > 0) {
+                    users = new Array();
+                    _users.forEach((_user) => { 
+                        let user = GameModel.NewUserFromJo(_user);
+                        console.log("@@@@@ user = ", user);
+                        users.push(user);
+                    });
+                }
+            } catch (e) {
+                console.log("try load state from local storage failed: ", e);
+            }
 
-				state.Root = new GameModel.Root(user.id, [ user ]);
-				state.Users = state.Root.Users;
-				state.CurrentUser = user;
+            console.log("loaded Users = ", users);
+            console.log("loaded CurrentUserId = ", current_user_id);
+        
+			if (!state.users) {
+                if (users && users.length > 0 && (current_user_id >= 0)) {
+                    console.log("saved state loaded");
 
-				save(state);
+                    state.Users = users;
+                    state.CurrentUser = state.Users[0];
+                } else {
+                    console.log("init default state");
+
+                    let user = new GameModel.User(0, "主用户", "icon-url", PredefinedGameCollections, 0, new ObjectMap());
+                    console.assert(user.GameCollections && user.GameCollections.length > 0, "no games");
+                    console.assert(user.GameCollectionStates && user.GameCollectionStates.mapItemsCount == 0, "game collection state not empty");
+
+                    state.Users = [user];
+                    state.CurrentUser = user;
+
+                    save(state);
+                }
 			}
 
-			console.log('state = ', state);
+			console.log("state inited: ", state);
 		},
 
-		///////////////////////////////////////
-		// load app state from persistent storage
-		load(state) {
-			console.log("load: ", state);
-			// TODO 
-			console.log("app state loaded: ", state);
-		},
-		
 		///////////////////////////////////////
 		setCurrentUser(state, user) {
 			console.log('setCurrentUser', state, user);
 			console.assert(user);
 
-			state.Root.CurrentUserId = user.Id;
 			state.CurrentUser = user;
 			state.CurrentGameCollections = user.GameCollections;
 

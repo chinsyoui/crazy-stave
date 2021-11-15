@@ -8,8 +8,8 @@
     import ButtonListPitchsWithSf from "@/views/button-list-pitchs-with-sf.vue";
     import ButtonListWkOnlyTcs from "@/views/button-list-wk-only-tcs.vue";
 
-	import { MusicItem, BTs } from '@/store/game-model.js'
-	import { MITs, GenerateMusicItemsForGameInstance } from '@/store/game-content.js'
+	import { BTs,MITs } from '@/store/game-model.js'
+	import { GenerateMusicItemsForGameInstance } from '@/store/game-content.js'
 
     import { WeixinRenderContext } from '@/utils/WeixinRenderContext.js'
 
@@ -347,7 +347,6 @@
 
 				for(let i=0; i<this.$options.musicItems.length; i++) {
 					let music_item = this.$options.musicItems[i];
-					console.assert(music_item instanceof MusicItem);
 					let value = music_item.SourceValue;
 
 					switch(music_item.Type) {

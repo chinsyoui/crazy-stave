@@ -1,4 +1,4 @@
-import { BTs, MusicItemType as MIT, MusicItem as MI, GameType as GT, Game, GameCollection as GC, User } from './game-model.js'
+import { BTs, MITs, MusicItem as MI, GameType as GT, Game, GameCollection as GC, User } from './game-model.js'
 if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
 
 // 术语及缩写：
@@ -91,15 +91,6 @@ const PKs = {
     }
 };
 
-// @enum <Id,Name>
-export const MITs = {
-	Syllable: new MIT(2,"SyllableName"),// 唱名
-	Pitch:  new MIT(3,"PitchName"),		// 音名
-	Note: new MIT(4,"Note"),			// one stave note
-	PC: new MIT(5,"PillarChord"),		// multiple stave note in a pillar chord
-	AC: new MIT(6,"ArpeggioChord")		// multiple stave note in arpeggio chord, optionally under one beam line
-};
-
 // @func return integer in [min, max)
 function RandomInt(min, max) {
     min = Math.ceil(min);
@@ -142,14 +133,13 @@ const MICs = {
 // random generate count music items with specified template music items.
 // @class <Props,MusicItemCreator>
 // MIG = MusicItemsGenerator
-function MIG(props,creator) {
+function MIG(props,creator_func_name) {
     this.props = props;
-    this.create = () => { return creator(this.props); };
+    this.creator_func_name = creator_func_name; // () => { return creator(this.props); };
 };
 
 const MIGs = {
-    New: function(props, creator) { return new MIG(props, creator); },
-    NewST: function(props) { return new MIG(props, MICs.ByST); },
+    NewST: function(props) { return new MIG(props, "ByST"); },
     ///////////////////////////////////////////////////////////
     //G1: new MIG([], MICs.ByST),
     // TODO
@@ -162,7 +152,7 @@ const MIGs = {
 export function GenerateMusicItemsForGameInstance(count, generator) {
     let items = new Array(count);
     for(var i=0; i<count; i++)
-        items[i] = generator.create();
+        items[i] = MICs[generator.creator_func_name](generator.props);
     return items;
 };
   
@@ -641,9 +631,9 @@ export const PredefinedGameCollections = [
 			new Game(4100, GTs.Intro, "第一节 知识学习", "认识度数", "treble", "C", 0, []),
 
 			new Game(4111, GTs.DoubleNoteDegree, "第二节 练习", "双音度数识别(高音谱两个八度)", "treble", "C", 12,
-                new MIG({ MaxNote: "C/6", BaseNotes: GenerateNotes("C/4","C/6",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, MICs.ByDegree)),
+                new MIG({ MaxNote: "C/6", BaseNotes: GenerateNotes("C/4","C/6",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, "ByDegree")),
 			new Game(4112, GTs.DoubleNoteDegree, "第三节 练习", "双音度数识别(低音谱两个八度)", "bass", "C", 12,
-                new MIG({ MaxNote: "E/4", BaseNotes: GenerateNotes("C/2","C/4",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, MICs.ByDegree))
+                new MIG({ MaxNote: "E/4", BaseNotes: GenerateNotes("C/2","C/4",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, "ByDegree"))
 		]
 	),
 	new GC(51,"第五章","基本练习：三和弦及转位","",

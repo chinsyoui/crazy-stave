@@ -1,6 +1,15 @@
 import { ObjectMap } from "@/utils/ObjectMap.js"
 if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
 
+// MIT = Music Item Type
+export const MITs = {
+	Syllable: 2,    // 唱名
+	Pitch: 3,	    // 音名
+	Note: 4,        // one stave note
+	PC: 5,          // multiple stave note in a pillar chord
+	AC: 6           // multiple stave note in arpeggio chord, optionally under one beam line
+};
+
 // user press button to choose their answner for current question,
 // there are many different type of button sets, buttons in each set are same type,
 // @enum ButtonType = Number
@@ -31,22 +40,10 @@ export const BTs = {
 	EOF: 99
 };
 
-// let gt1 = new GameType();
-// if (gt1 instanceof GameType)
-
-// a music item is one question displayed that require user to answner,
-// user answner this question by press one button among a list of displayed buttons.
-// music item have many types, each type has a unique id and a name.
-//@class <Number, String>
-export function MusicItemType(id, name) {
-	this.Id = id;
-	this.Name = name;
-};
-
 // a music item is a question that user can answner.
 // each music item has a type, source value is displayed to user,
 // target is used to match the answner, which is hidden to user.
-//@class <MusicItemType, String, String>
+//@class <Number, String, String>
 export function MusicItem(type, source_value, target_value) {
 	this.Type = type;
 	this.SourceValue = source_value;
@@ -154,7 +151,14 @@ export function User(id, display_name, icon, game_collections, current_game_coll
     this.GameCollectionStatesSize = this.GameCollectionStates.mapItemsCount;
 };
 
-export function Root(current_user_id, users) {
-	this.CurrentUserId = current_user_id;
-	this.Users = users;
+export function NewUserFromJo(jo) {
+    let gcStates = new ObjectMap();
+    gcStates.loadFromJo(jo.GameCollectionStates, (value) => {
+        let game_states = new ObjectMap();
+        game_states.loadFromJo(value.GameStates, null);
+        let gcState = new GameCollectionState(value.CurrentGameId,value.Stars,game_states);
+        return gcState;
+    });
+    let user = new User(jo.Id,jo.DisplayName,jo.Icon,jo.GameCollections,jo.CurrentGameCollectionId,gcStates);
+    return user;
 };
