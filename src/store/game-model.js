@@ -40,7 +40,6 @@ export const BTs = {
 export function MusicItemType(id, name) {
 	this.Id = id;
 	this.Name = name;
-    return this;
 };
 
 // a music item is a question that user can answner.
@@ -51,7 +50,6 @@ export function MusicItem(type, source_value, target_value) {
 	this.Type = type;
 	this.SourceValue = source_value;
 	this.TargetValue = target_value;
-    return this;
 };
 
 // a game is one collection of simillar questions (music items),
@@ -63,7 +61,6 @@ export function GameType(id, display_name, button_type) {
 	this.Id = id;
 	this.DisplayName = display_name;
 	this.ButtonType = button_type;
-    return this;
 };
 
 // 一个五线谱练习游戏，有:
@@ -82,7 +79,6 @@ export function Game(id, type, display_name, description, stave_clef, stave_keys
 	this.StaveKeySig = stave_keysig;
 	this.MusicItemsCount = music_items_count;
 	this.MusicItemsGenerator = music_items_generaor;
-    return this;
 };
 
 // a game collection contains a set of games, 
@@ -94,7 +90,6 @@ export function GameCollection(id, display_name, description, icon, games) {
 	this.Description = description;
 	this.Icon = icon;
 	this.Games = games;
-    return this;
 };
 
 // a game state stores one user's play statistics and state for one game.
@@ -106,7 +101,6 @@ export function GameState(total_play_count, total_play_duration, highest_score, 
 	this.TotalPlayDuration = total_play_duration;
 	this.HighestScore = highest_score;
 	this.Stars = stars;
-    return this;
 };
 
 // a game collection state.
@@ -118,7 +112,6 @@ export function GameCollectionState(current_game_id, stars, game_states) {
 	this.CurrentGameId = current_game_id;
 	this.Stars = stars;
 	this.GameStates = game_states;
-    return this;
 };
 
 // game progess store current playing game's progress,
@@ -131,10 +124,9 @@ export function GameProgress(total_item_count, completed_item_count, error_item_
 	this.ElapsedSeconds = elapsed_seconds;
 	this.Score = score;
 	this.Stars = stars;
-    return this;
 };
 
-export function SetGameProgress(game_progress, 
+export function SetGameProgress(game_progress,
 	total_item_count, completed_item_count, error_item_count, elapsed_seconds, score, stars) {
 	game_progress.TotalItemCount = total_item_count;
 	game_progress.CompletedItemCount = completed_item_count;
@@ -142,7 +134,7 @@ export function SetGameProgress(game_progress,
 	game_progress.ElapsedSeconds = elapsed_seconds;
 	game_progress.Score = score;
 	game_progress.Stars = stars;
-}
+};
 
 // user (aka. the game player, the user that answner questions, etc).
 // each user have a unique id, a display name, a icon, its own game collections and play states.
@@ -159,11 +151,9 @@ export function User(id, display_name, icon, game_collections, current_game_coll
 	this.GameCollectionStates = game_collection_states;
     // patch: mp-weixin: vue template can't found 'size’ property in this.GameCollectionStates, don't know why, just fix it
     this.GameCollectionStatesSize = this.GameCollectionStates.size;
-    return this;
 };
 
 export function Root(current_user_id, users) {
 	this.CurrentUserId = current_user_id;
 	this.Users = users;
-    return this;
-}
+};

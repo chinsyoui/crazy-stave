@@ -1,5 +1,5 @@
 <script>
-	import { mapState, mapMutations, mapActions } from 'vuex'
+	import { mapState } from 'vuex'
 	import { BTs } from '../../store/game-model.js'
 
 	export default {

@@ -145,7 +145,6 @@ const MICs = {
 function MIG(props,creator) {
     this.props = props;
     this.create = () => { return creator(this.props); };
-    return this;
 };
 
 const MIGs = {
