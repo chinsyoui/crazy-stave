@@ -32,7 +32,7 @@
 			// mounted does not guarantee that all child components have also been mounted，this way can make sure it.
 			this.$nextTick(function () {
 				this.onEntireViewRendered();
-		  })
+            });
 		},
 
         onUnload() {
@@ -41,21 +41,25 @@
         },
 
 		methods: {
-			onEntireViewRendered() {
+			onEntireViewRendered: function() {
 				console.log("CurrentGame = ", this.CurrentGame);
 			},
+
 			onButtonClick: function(value) {
 				this.onGameFinished();
 				this.navigateBack();
 			},
+
 			onBackClick: function() {
 				this.onGameFinished(); // 返回就认为学完了
 				this.navigateBack();
 			},
-			onGameFinished: function() {
+
+            onGameFinished: function() {
                 GameModel.SetGameProgress(this.CurrentGameProgress, 1,1,0,1,10,1);
 				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 			},
+
 			navigateBack: function() {
 				// uni.navigateTo({ url: '/pages/game/game-list' });
                 uni.navigateBack();

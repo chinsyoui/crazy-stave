@@ -1,5 +1,3 @@
-import RenderContext from '@/utils/vexflow-debug.js'
-
 // CanvasRenderingContext2D crc2d
 export function WeixinRenderContext(crc2d, width, height) {
     console.assert(crc2d);
@@ -254,6 +252,4 @@ export function WeixinRenderContext(crc2d, width, height) {
     this.getFont = () => {
         return this.context2D.font;
     };
-
-    return this;
-}
+};

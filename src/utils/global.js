@@ -2,48 +2,46 @@
 // will be used very frequently. Components are registered using the
 // PascalCased version of their file name.
 
-import Vue from 'vue'
+// import Vue from 'vue'
 
-// export var objects = {};
+// export function registerGlobalVueCompoments(dir) {
+// 	// TODO dir param not work, so we hard coded here
+// 	// https://webpack.js.org/guides/dependency-management/#require-context
+// 	const requireComponent = require.context(	
+// 		"../views/", 	// look for files in this directory, can use relative directory such as "."
+// 		false,	// no subdirectories
+// 		/\.vue/ // all .vue files
+// 	);
 
-export function registerGlobalVueCompoments(dir) {
-	// TODO dir param not work, so we hard coded here
-	// https://webpack.js.org/guides/dependency-management/#require-context
-	const requireComponent = require.context(	
-		"../views/", 	// look for files in this directory, can use relative directory such as "."
-		false,	// no subdirectories
-		/\.vue/ // all .vue files
-	);
+// 	// For each matching file name...
+// 	requireComponent.keys().forEach((fileName) => {
+// 	  const componentConfig = requireComponent(fileName)
+// 	  // Get the PascalCase version of the component name
+// 	  const componentName = fileName
+// 		// 去掉开头的./和文件后缀名
+// 		.replace(/^\.\//, '').replace(/\.\w+$/, '')
+// 		// SW 把文件名中的-去掉，并且把各个单词首字符大写
+// 		.split('-').map((kebab) => kebab.charAt(0).toUpperCase() + kebab.slice(1)).join('')
 
-	// For each matching file name...
-	requireComponent.keys().forEach((fileName) => {
-	  const componentConfig = requireComponent(fileName)
-	  // Get the PascalCase version of the component name
-	  const componentName = fileName
-		// 去掉开头的./和文件后缀名
-		.replace(/^\.\//, '').replace(/\.\w+$/, '')
-		// SW 把文件名中的-去掉，并且把各个单词首字符大写
-		.split('-').map((kebab) => kebab.charAt(0).toUpperCase() + kebab.slice(1)).join('')
-
-	  // Globally register the component
-	  Vue.component(componentName, componentConfig.default || componentConfig)
-	});
-};
+// 	  // Globally register the component
+// 	  Vue.component(componentName, componentConfig.default || componentConfig)
+// 	});
+// };
 
 export function isMiniApp() { return (wx); };
 
-export function isIOS() {
-	console.assert(navigator && navigator.userAgent);
+// export function isIOS() {
+// 	console.assert(navigator && navigator.userAgent);
 
-	if (navigator && navigator.userAgent) {
-		var u = navigator.userAgent;
-		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-		return isiOS;
-	} else {
-		var v = uni.getSystemInfoSync().platform.toLowerCase();
-		return v && v.includes("ios");
-	}
-};
+// 	if (navigator && navigator.userAgent) {
+// 		var u = navigator.userAgent;
+// 		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+// 		return isiOS;
+// 	} else {
+// 		var v = uni.getSystemInfoSync().platform.toLowerCase();
+// 		return v && v.includes("ios");
+// 	}
+// };
 
 export function requestFullScreen(element) {
 	console.assert(document.documentElement);
