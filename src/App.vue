@@ -99,4 +99,8 @@
     uni-list {
         -webkit-overflow-scrolling: touch;        
     }
+
+    uni-modal .uni-modal__bd{      
+        white-space: pre-wrap;      
+    }       
 </style>
