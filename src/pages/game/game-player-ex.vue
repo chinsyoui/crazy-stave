@@ -25,6 +25,7 @@
         staveClef: "treble",       // default clef
         staveKeysig: "C",          // default keysig
 		musicItems: [],            // random generated music items
+		timer: null,               // timer for elapsed seconds 
 
         components: {
             ButtonListSyllables,
@@ -38,8 +39,7 @@
 		// custom reactive fields here
 		data() {
 			return {
-				Title: '视谱练习',
-				Timer: null,
+				Title: '视谱练习'
 			}
 		},
 
@@ -63,9 +63,9 @@
 
         onUnload() {
             console.log("onUnload", this);
-            if (this.Timer)
-                clearTimeout(this.Timer);
-            this.Timer = null;
+            if (this.$options.timer)
+                clearTimeout(this.$options.timer);
+            this.$options.timer = null;
         },
 
         methods: {
@@ -83,8 +83,8 @@
                 const _this = this;
                 this.initStave(function() {
                     // start game and focus to first question
-                    if (!_this.Timer)
-                        _this.Timer = setInterval( () => { _this.onTimer() }, 1000);
+                    if (!_this.$options.timer)
+                        _this.$options.timer = setInterval( () => { _this.onTimer() }, 1000);
 
 			        _this.$nextTick(function () {
                         _this.highlightNextMusicItem(true, _this.CurrentGameItemIndex);
@@ -143,9 +143,9 @@
 					return;
 
 				// game completed
-				if (this.Timer)
-					clearInterval(this.Timer);
-				this.Timer = null;
+				if (this.$options.timer)
+					clearInterval(this.$options.timer);
+				this.$options.timer = null;
 
 				// compute stars
 				this.CurrentGameProgress.Stars = this.computeGameStars(this.CurrentGameProgress);
@@ -154,7 +154,7 @@
 				console.log("show game score dialog");
 				let msg = "用时" + this.CurrentGameProgress.ElapsedSeconds + "秒" +
 						  ", 错误: " + this.CurrentGameProgress.ErrorItemCount +
-						  ", 得分: " + this.CurrentGameProgress.Score +
+						  "\n得分: " + this.CurrentGameProgress.Score +
 						  ", 星星: " + this.CurrentGameProgress.Stars;
 
 				const parent = this;
@@ -181,9 +181,9 @@
 			onBackClick: function() {
 				// TODO show modal dialog to let user confirm here
 				// game stopped
-				if (this.Timer)
-					clearTimeout(this.Timer);
-				this.Timer = null;
+				if (this.$options.timer)
+					clearTimeout(this.$options.timer);
+				this.$options.timer = null;
 				this.navigateBack();
 			},
 			computeGameStars(game_progress) {

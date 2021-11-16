@@ -28,6 +28,7 @@ export function ObjectMap() {
         else {
             if (!this.hasOwnProperty(realKey))
                 this.mapItemsCount++;
+            //this[realKey] = value;
             Vue.set(this,realKey,value);
         }
     };
@@ -41,26 +42,26 @@ export function ObjectMap() {
     };
 
     this.getKeysFromJo = function(jo) {
-        console.log("!!!!!!!!", jo);
+        //console.log("!!!!!!!!", jo);
         let keys = [];
         for (const [key, value] of Object.entries(jo)) {
-            console.log("!!!!!!!!", key, value);
+            //console.log("!!!!!!!!", key, value);
             if (key.startsWith("omi-")) {
                 let rawkey = key.substr(4);
                 keys.push(rawkey);
             }
         }
-        console.log("!!!!!!!!", keys);
+        //console.log("!!!!!!!!", keys);
         return keys;
     };
 
     // load items from a json object.
     // can optionally convert item value by using valueParser before add item to map.
     this.loadFromJo = function(jo, valueParser) {
-        console.log("loadFromJo", jo, valueParser);
+        //console.log("loadFromJo", jo, valueParser);
 
         for (const [key, value] of Object.entries(jo)) {
-            console.log("!!!!!!!!", key, value);
+            //console.log("!!!!!!!!", key, value);
             if (key.startsWith("omi-")) {
                 let rawkey = key.substr(4);
                 this.setMapItem(rawkey, valueParser ? valueParser(jo[key]) : jo[key]);
