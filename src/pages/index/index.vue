@@ -1,9 +1,12 @@
 <script>
-	export default {
+    import ModalDlg from "@/views/modal-dlg.vue"
+
+    export default {
 		data() {
 			return {
 				Title: "Welcome",
-				DebugInfo: ""
+				DebugInfo: "",
+                ShowModalDlg: false
 			}
 		},
 		mounted() {

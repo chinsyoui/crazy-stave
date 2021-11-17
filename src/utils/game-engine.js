@@ -1,4 +1,4 @@
-import { BTs,MITs } from '@/store/game-model.js'
+import { BTs, MITs } from '@/store/game-model.js'
 import { GenerateMusicItemsForGameInstance } from '@/store/game-content.js'
 
 import { WeixinRenderContext } from '@/utils/WeixinRenderContext.js'
@@ -56,15 +56,17 @@ return {
             // start game and focus to first question
             _this.startTimer(timer_func);
             vue_this.$nextTick(function () {
-                _this.highlightNextMusicItem(true, _this.ctx.current_question_index);
+                _this.toggleMusicItem(-1,true,0);
             });
         });
     },
 
     // return true if game finished
     onAnswnerButtonClicked: function(vue_this, button_type, answner, game_progress) {
+        console.log("onAnswnerButtonClicked ===", this.ctx.current_question_index, game_progress.TotalItemCount);
+
         // game already finished, maybe user click too quickly
-        if (this.ctx.current_question_index >= game_progress.TotalItemCount - 1)
+        if (this.ctx.current_question_index > game_progress.TotalItemCount - 1)
             return undefined;
 
         console.assert(answner);
@@ -100,16 +102,16 @@ return {
         game_progress.ErrorItemCount += (result ? 0 : 1);
         game_progress.Score += (result ? 10 : 0);
 
-        // switch to next question
+        // switch question: mark old item reuslt, highlight new item if exists
+        this.toggleMusicItem(this.ctx.current_question_index, result, this.ctx.current_question_index + 1);
         this.ctx.current_question_index ++;
         vue_this.$store.commit('setCurrentGameItemIndex', this.ctx.current_question_index);
-        this.highlightNextMusicItem(result, this.ctx.current_question_index);
 
         // check if all questions answnered
-        var eof = (this.ctx.current_question_index == game_progress.TotalItemCount - 1);
+        var eof = (this.ctx.current_question_index == game_progress.TotalItemCount);
         if (!eof)
             return false;
-        
+            
         // game finished
         this.stopTimer();
         // compute final stars
@@ -223,10 +225,10 @@ return {
 
     // change current highlighted music item to next music item,
     // show animations according result (whether user's answner to current question is correct or not)
-    // @func <bool,Number>
-    // @return bool: false means there is no next music item.
-    highlightNextMusicItem: function(result, new_music_item_index) {
-        let params = { result : result, new_music_item_index : new_music_item_index };
+    // @func <Number,bool,Number>
+    // note: new_music_item_index may be out of range
+    toggleMusicItem: function(old_item_index, old_item_result, new_item_index) {
+        let params = { old_item_index : old_item_index, old_item_result : old_item_result, new_item_index : new_item_index };
         this.miniAppCanvasDraw(this, this.tickDrawFunc, params, null, null);
     },
 
@@ -234,16 +236,13 @@ return {
         _this.ctx.vfRenderer.ctx.context2D = crc2d;
         const context = _this.ctx.vfRenderer.getContext();
 
-        console.log("Switching to next... Last Result = ", params.result);
-        console.assert(params.new_music_item_index >=0 && params.new_music_item_index <= _this.ctx.vfStaveNotes.length);
-
-        let last_index = params.new_music_item_index - 1;
-        let new_index = params.new_music_item_index;
+        console.log("Switching to next... Last Result = ", params.old_item_result);
+        console.assert(params.new_item_index >=0 && params.new_item_index <= _this.ctx.vfStaveNotes.length);
 
         // update old note if exists
-        if (last_index >= 0) {
-            let last_stave_note = _this.ctx.vfStaveNotes[last_index];
-            if (params.result)
+        if (params.old_item_index >= 0) {
+            let last_stave_note = _this.ctx.vfStaveNotes[params.old_item_index];
+            if (params.old_item_result)
                 last_stave_note.setStyle({ fillStyle: "gray", strokeStyle: "gray" });
             else
                 last_stave_note.setStyle({ fillStyle: "yellow", strokeStyle: "yellow" });
@@ -252,8 +251,8 @@ return {
         }
 
         // update new note if exists
-        if (new_index < _this.ctx.vfStaveNotes.length) {
-            let new_stave_note = _this.ctx.vfStaveNotes[new_index];
+        if (params.new_item_index < _this.ctx.vfStaveNotes.length) {
+            let new_stave_note = _this.ctx.vfStaveNotes[params.new_item_index];
             new_stave_note.setStyle({ fillStyle: "red", strokeStyle: "red" });
             new_stave_note.setContext(context).draw();
             console.log(new_stave_note);

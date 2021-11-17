@@ -1,6 +1,6 @@
 <script>
 	import { mapState } from 'vuex'
-	import { BTs } from '../../store/game-model.js'
+	import { BTs } from '@/store/game-model.js'
 
 	export default {
 		data() {
@@ -51,14 +51,15 @@
             ...mapState({
 			    CurrentUser: state => state.CurrentUser,
 			    CurrentGameCollection: state => state.CurrentGameCollection,
-			    Games: state => state.CurrentGames
+			    Games: state => state.CurrentGameCollection.Games
 	    	})
         },
 		methods: {
-			onItemClick: function(e) {
-				console.log(this.Title + "." + "onItemClick", e);
-				let game = e;
-				this.$store.commit('setCurrentGame', game);
+			onItemClick: function(pair) { // game, index
+				console.log(this.Title + "." + "onItemClick", pair);
+                let game = pair.value; let index = pair.index;
+
+				this.$store.commit('setCurrentGame', { game : game, index : index } );
 
 				let page_url = "";
 				if (game.Type.ButtonType == BTs.Any)
@@ -67,6 +68,7 @@
 					page_url = "/pages/game/game-player-ex";
 				uni.navigateTo({ url: page_url });
 			},
+
 			onBackClick: function() {
 				console.log(this.Title + "." + "onBackClick");
                 uni.navigateBack();
@@ -82,11 +84,11 @@
 		</view> -->
 		<view class="uni-list">
 			<block v-for="(value, index) in Games" :key="index">
-				<view class="uni-list-cell" hover-class="uni-list-cell-hover" @click="onItemClick(value)">
+				<view class="uni-list-cell" hover-class="uni-list-cell-hover" @click="onItemClick({value,index})">
 					<view class="uni-media-list">
 						<!-- <image class="uni-media-list-logo" :src="value.Icon"></image> -->
 						<view class="uni-media-list-body">
-							<view class="uni-media-list-text-top" style="color: blue; font: bold">{{ value.DisplayName }}</view>
+							<view class="uni-media-list-text-top" style="color: blue; font: bold">{{index}} = {{ value.DisplayName }}</view>
 							<view class="uni-media-list-text-top">{{ value.Description }}</view>
 							<view class="uni-media-list-text-bottom">
 								<text style="color: gray">★{{ getGameStateStars(value.Id) }} 得分#{{ getGameStateTotalPlayCount(value.Id) }} 已练习{{ getGameStateTotalPlayDuration(value.Id) }}秒</text>

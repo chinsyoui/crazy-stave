@@ -1,5 +1,6 @@
 import { ObjectMap } from "@/utils/ObjectMap.js"
 import * as GameModel from './game-model.js'
+import { BTs } from '@/store/game-model.js'
 import { PredefinedGameCollections } from './game-content.js'
 
 // save app state to persistent storage
@@ -38,9 +39,9 @@ const store = createStore({
 		CurrentGameCollections: null,
 
 		CurrentGameCollection: null, //@Object
-		CurrentGames: null,
 
 		CurrentGame: null, //@Object
+        CurrentGameIndex: 0, // Number
 
 		CurrentGameProgress: new GameModel.GameProgress(0, 0, 0, 0, 0, 0),
 		CurrentGameItemIndex: 0,
@@ -115,13 +116,14 @@ const store = createStore({
 
             state.CurrentUser.CurrentGameCollectionId = game_collection.Id;
 			state.CurrentGameCollection = game_collection;
-			state.CurrentGames = game_collection.Games;
 
             save(state);
 		},
 
-        setCurrentGame(state, game) {
-			console.log('setCurrentGame', state, game);
+        // params = { game, index }
+        setCurrentGame(state, params) {
+            let game = params.game; let index = params.index;
+			console.log('setCurrentGame', state, game, index);
 
             let gcId = state.CurrentUser.CurrentGameCollectionId;
 			let gcStates = state.CurrentUser.GameCollectionStates;
@@ -140,6 +142,7 @@ const store = createStore({
 
 			// update CurrentGame
 			state.CurrentGame = game;
+            state.CurrentGameIndex = index;
 
 			// make sure game progress is reset to default
 			GameModel.SetGameProgress(state.CurrentGameProgress, state.CurrentGame.MusicItemsCount, 0, 0, 0, 0, 0);
@@ -217,7 +220,19 @@ const store = createStore({
 			console.log("removeGame", state, game);
 			// TODO
 			uni.showToast("removeGame");
-		}		
+		},
+        
+        // close current game and navigate to next game in current game collection.
+        // return false if no game in current game collection.
+        // must called inside a game page.
+        redirectToGamePage(state, game) {
+            let page_url = "";
+            if (game.Type.ButtonType == BTs.Any)
+                page_url = "/pages/game/game-player-intro";
+            else
+                page_url = "/pages/game/game-player-ex";
+            uni.redirectTo({ url: page_url });
+        }        
 	},
 
     getters: {
@@ -227,6 +242,31 @@ const store = createStore({
 	},
 
     actions: {
+        // close current game and navigate to next game in current game collection.
+        // return false if no game in current game collection.
+        // must called inside a game page.
+        navigateToNextGame: function(context) {
+            let state = context.state;
+            console.log("navigateToNextGame", state);
+
+            let nextIndex = state.CurrentGameIndex + 1;
+            if (nextIndex >= state.CurrentGameCollection.Games.length)
+                return false;
+
+            let nextGame = state.CurrentGameCollection.Games[nextIndex];
+            context.commit('setCurrentGame', { game: nextGame, index: nextIndex} );
+            context.commit('redirectToGamePage', nextGame);
+        },
+
+        // replay current game again
+        // must called inside a game page.
+        replayCurrentGame: function(context) {
+            let state = context.state;
+            console.log("replayCurrentGame", state);
+
+            context.commit('setCurrentGame', { game: state.CurrentGame, index : state.CurrentGameIndex });
+            context.commit('redirectToGamePage', state.CurrentGame);
+        }
 	}
 })
 

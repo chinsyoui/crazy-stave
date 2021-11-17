@@ -5,6 +5,7 @@
     import ButtonListCi from "@/views/button-list-ci.vue"
     import ButtonListPitchsWithSf from "@/views/button-list-pitchs-with-sf.vue"
     import ButtonListWkOnlyTcs from "@/views/button-list-wk-only-tcs.vue"
+    import ModalDlg from "@/views/modal-dlg.vue"
 
 	import { mapState } from 'vuex'
 	import { BTs } from '@/store/game-model.js'
@@ -14,6 +15,7 @@
         ge: null,
 
         components: {
+            ModalDlg,
             ButtonListSyllables,
             ButtonListPitchs,
             ButtonListDegrees,
@@ -24,8 +26,9 @@
 
 		// custom reactive fields here
 		data() {
-			return {
-				Title: '视谱练习'
+			return {                
+				Title: '视谱练习',
+                ShowModalDlg: false
 			}
 		},
 
@@ -59,46 +62,60 @@
                 this.$options.ge.initGame(this, this.CurrentGame, this.onTimer);
 			},
 
+			onTimer: function() {
+				this.CurrentGameProgress.ElapsedSeconds ++;
+			},
+
 			onButtonClick: function(value) {
                 let eof = this.$options.ge.onAnswnerButtonClicked(this, this.CGBT, value, this.CurrentGameProgress);
                 if (eof) {
                     // game finished, record final progress
     				this.$store.commit('onGameFinished', this.CurrentGameProgress);
                     // show game reusult to user and ask user what to do next
-                    this.showGameResultDialog(this.onGameResultDlgCallback);
+                    this.showGameResultDialog();
                 }
 			},
 
             showGameResultDialog: function(callback) {
-				console.log("show game result dialog");
-				let msg = "用时" + this.CurrentGameProgress.ElapsedSeconds + "秒" +
-						  ", 错误: " + this.CurrentGameProgress.ErrorItemCount +
-						  "\n得分: " + this.CurrentGameProgress.Score +
-						  ", 星星: " + this.CurrentGameProgress.Stars;
+                this.ShowModalDlg = true;
 
-				uni.showModal({ title: "游戏结束", content: msg, showCancel: false, confirmText: "下一关" ,
-					complete: function (res) { callback(res); }
-				});
+				// console.log("show game result dialog");
+				// let msg = "用时" + this.CurrentGameProgress.ElapsedSeconds + "秒" +
+				// 		  ", 错误: " + this.CurrentGameProgress.ErrorItemCount +
+				// 		  "\n得分: " + this.CurrentGameProgress.Score +
+				// 		  ", 星星: " + this.CurrentGameProgress.Stars;
+
+				// uni.showModal({ title: "游戏结束", content: msg, showCancel: false, confirmText: "下一关" ,
+				// 	complete: function (res) { callback(res); }
+				// });
 			},
 
-            onGameResultDlgCallback: function(ret) {
-                console.log("game result dialog closed");
-                this.navigateBack();
+            onModalDlgClick: function(e) {
+				console.log("onModalDlgClick", e);
+                this.ShowModalDlg = false;
+
+                switch(e) {
+                    case "back":
+        				this.navigateBack();
+                        break;
+                    case "again":
+                        this.$store.dispatch("replayCurrentGame");
+                        break;
+                    case "next":
+                        this.$store.dispatch("navigateToNextGame");
+                        break;
+                }
             },
-
-			onTimer: function() {
-				this.CurrentGameProgress.ElapsedSeconds ++;
-			},
-
-            navigateBack: function() {
-				//uni.navigateTo({ url: '/pages/game/game-list' });
-                uni.navigateBack();
-			},
 
             onBackClick: function() {
 				// game stopped
                 this.$options.ge.stopTimer();
 				this.navigateBack();
+			},
+
+            navigateBack: function() {
+				//uni.navigateTo({ url: '/pages/game/game-list' });
+                uni.navigateBack();
 			}
 
 			// resizeCanvas: function() {
@@ -122,6 +139,8 @@
 
 <template>
 	<view class="content">
+        <ModalDlg v-if="ShowModalDlg" @click="onModalDlgClick"/>
+
 		<view class="outermost-top-bar"/>
 		<view class="title-wrapper" @click="onBackClick()">
 			<text class="title">{{Title}} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
