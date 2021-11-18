@@ -3,7 +3,14 @@
 
     import Intro1100 from "@/views/intro-1100.vue"
     import Intro1101 from "@/views/intro-1101.vue"
+    import Intro1102 from "@/views/intro-1102.vue"
+    import Intro1103 from "@/views/intro-1103.vue"
+    import Intro1104 from "@/views/intro-1104.vue"
+    import Intro2100 from "@/views/intro-2100.vue"
+    import Intro3100 from "@/views/intro-3100.vue"
+    import Intro3101 from "@/views/intro-3101.vue"
     import Intro4100 from "@/views/intro-4100.vue"
+    import Intro5100 from "@/views/intro-5100.vue"
 
     import { mapState } from 'vuex'
 	
@@ -11,7 +18,14 @@
         components: {
             Intro1100,
             Intro1101,
-            Intro4100
+            Intro1102,
+            Intro1103,
+            Intro1104,
+            Intro2100,
+            Intro3100,
+            Intro3101,
+            Intro4100,
+            Intro5100
         },
 
         data() {
@@ -80,11 +94,32 @@
 		<block v-else-if="CurrentGame.Id==1101">
 			<Intro1101/>
 		</block>
+		<block v-else-if="CurrentGame.Id==1102">
+			<Intro1102/>
+		</block>
+		<block v-else-if="CurrentGame.Id==1103">
+			<Intro1103/>
+		</block>
+		<block v-else-if="CurrentGame.Id==1104">
+			<Intro1104/>
+		</block>
+		<block v-else-if="CurrentGame.Id==2100">
+			<Intro2100/>
+		</block>
+		<block v-else-if="CurrentGame.Id==3100">
+			<Intro3100/>
+		</block>
+		<block v-else-if="CurrentGame.Id==3101">
+			<Intro3101/>
+		</block>
 		<block v-else-if="CurrentGame.Id==4100">
 			<Intro4100/>
 		</block>
+		<block v-else-if="CurrentGame.Id==5100">
+			<Intro5100/>
+		</block>
 		<block v-else>
-			<text class="introduction">这里是一段文字</text>			
+			<text class="introduction">敬请期待</text>
 		</block>
 		<view class="outermost-bottom-bar">
             <view class="button" v-on:click.stop="onButtonClick('next')">
@@ -119,7 +154,7 @@
 			.title {
 				text-overflow: ellipsis;
 				font-size: 1.1em;
-				color: black;
+				color: blue;
 			}
 
 		.introduction {

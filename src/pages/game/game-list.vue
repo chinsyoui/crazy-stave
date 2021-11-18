@@ -88,7 +88,7 @@
 					<view class="uni-media-list">
 						<!-- <image class="uni-media-list-logo" :src="value.Icon"></image> -->
 						<view class="uni-media-list-body">
-							<view class="uni-media-list-text-top" style="color: blue; font: bold">{{index}} = {{ value.DisplayName }}</view>
+							<view class="uni-media-list-text-top" style="color: blue; font: bold">{{ value.DisplayName }}</view>
 							<view class="uni-media-list-text-top">{{ value.Description }}</view>
 							<view class="uni-media-list-text-bottom">
 								<text style="color: gray">★{{ getGameStateStars(value.Id) }} 得分#{{ getGameStateTotalPlayCount(value.Id) }} 已练习{{ getGameStateTotalPlayDuration(value.Id) }}秒</text>

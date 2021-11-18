@@ -2,11 +2,9 @@
 
 <template>
 	<view class="container">
-		<image class="image" src="../static/images/88-piano-keys.png" style="width: 90%"></image>
+		<!-- <image class="image" src="../static/images/notes.jpg"  style="width: 40%"></image> -->
 		<view class="text-area">
-			<text class="text">
-                标准的钢琴有88个键，可以如图所示分成若干组（从左到右编号为0~9组）。\n每个完整的组键的数量及布局都一样：每组有12个键(7个白键，5个黑键)。\n每个键(黑或白)都是一个固定的音。其中每组中的白键为7个基本音，黑键为5个变化音。
-            </text>
+			<text class="text">三和弦就是三个呈一三五度关系的音的组合。\n三个音从下往上按一三五排列就叫原位。\n把根音换成其八度音，就叫第一转位。\n继续把三度音换成其八度音，就叫第二转位。</text>
 		</view>
 	</view>
 </template>
@@ -15,11 +13,10 @@
 	.container {
 		display: flex;
 		flex-direction: column;
-        padding: 1em 3em 3em 3em;
-		flex-wrap: nowrap;
+        padding: 1em 3em 1em 3em;
 		justify-content: center;
 		align-items: center;
-		width: 100%;
+		/* width: 100%; */
 		/* border: 1px solid red; */
 	}
 
