@@ -24,8 +24,7 @@
 		computed: mapState({
 			CurrentUser: state => state.CurrentUser,
 			CurrentGameCollection: state => state.CurrentGameCollection,
-			CurrentGame: state => state.CurrentGame,
-			CurrentGameProgress: state => state.CurrentGameProgress
+			CurrentGame: state => state.CurrentGame
 		}),
 
         mounted() {
@@ -40,6 +39,8 @@
             this.onGameFinished();
         },
 
+        gameFinished: false,
+
 		methods: {
 			onEntireViewRendered: function() {
 				console.log("CurrentGame = ", this.CurrentGame);
@@ -47,24 +48,23 @@
 
 			onButtonClick: function(value) {
 				this.onGameFinished();
-				this.navigateBack();
+                this.$store.dispatch("navigateToNextGame");
 			},
 
 			onBackClick: function() {
 				this.onGameFinished(); // 返回就认为学完了
-				this.navigateBack();
+                uni.navigateBack();
 			},
 
             onGameFinished: function() {
-                GameModel.SetGameProgress(this.CurrentGameProgress, 1,1,0,1,10,1);
-				this.$store.commit('onGameFinished', this.CurrentGameProgress);
-			},
+                if (this.$options.gameFinished)
+                    return;
+                this.$options.gameFinished = true;
 
-			navigateBack: function() {
-				// uni.navigateTo({ url: '/pages/game/game-list' });
-                uni.navigateBack();
+                let gp = new GameModel.GameProgress(1,1,0,1,10,1);
+				this.$store.commit('onGameFinished', gp);
 			}
-		},
+		}
 	}
 </script>
 
@@ -86,7 +86,11 @@
 		<block v-else>
 			<text class="introduction">这里是一段文字</text>			
 		</block>
-		<view class="outermost-bottom-bar"/>
+		<view class="outermost-bottom-bar">
+            <view class="button" v-on:click.stop="onButtonClick('next')">
+                <text class="button-text">下一节</text>
+            </view>
+        </view>
 	</view>
 </template>
 
@@ -124,6 +128,16 @@
 		}
 
 		.outermost-bottom-bar {
+            display: flex;
+            flex-direction:row-reverse;
 			height: 2rem;
+            width: 100%;
 		}
+
+            .button {
+                font-size: 1.5em;
+                padding-right: 3em;
+                padding-bottom: 1em;
+            }
+
 </style>

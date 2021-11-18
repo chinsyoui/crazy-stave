@@ -28,19 +28,25 @@
 		data() {
 			return {                
 				Title: '视谱练习',
-                ShowModalDlg: false
+
+                ShowModalDlg: false,
+                GameResultText: "",
+                GameResultDlgButtons: []
 			}
 		},
 
 		// mapped reactive fields here
-		computed: mapState({
-			CurrentUser: state => state.CurrentUser,
-			CurrentGameCollection: state => state.CurrentGameCollection,
-			CurrentGame: state => state.CurrentGame,
-			CurrentGameProgress: state => state.CurrentGameProgress,
-			CGBT: state => state.CurrentGame.Type.ButtonType,
-			TheBTs: state => BTs
-		}),
+		computed: {
+            ...mapState({
+                CurrentUser: state => state.CurrentUser,
+                CurrentGameCollection: state => state.CurrentGameCollection,
+                CurrentGame: state => state.CurrentGame,
+                CurrentGameIndex: state => state.CurrentGameIndex,
+                CurrentGameProgress: state => state.CurrentGameProgress,
+                CGBT: state => state.CurrentGame.Type.ButtonType,
+                TheBTs: state => BTs
+    		})
+        },
 
         onReady() {
             this.$options.ge = new GameEngine();
@@ -71,23 +77,23 @@
                 if (eof) {
                     // game finished, record final progress
     				this.$store.commit('onGameFinished', this.CurrentGameProgress);
+
                     // show game reusult to user and ask user what to do next
+    				let msg = "用时" + this.CurrentGameProgress.ElapsedSeconds + "秒" + ", 错误: " + this.CurrentGameProgress.ErrorItemCount +
+						  "\n得分: " + this.CurrentGameProgress.Score + ", 星星: " + this.CurrentGameProgress.Stars;
+                    this.GameResultText = msg;
+
+                    if (this.CurrentGameIndex >= this.CurrentGameCollection.Games.length-1) 
+                        this.GameResultDlgButtons = [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"} ];
+                    else
+                        this.GameResultDlgButtons = [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"}, { Text : "下一个", Value: "next"} ];
+
                     this.showGameResultDialog();
                 }
 			},
 
-            showGameResultDialog: function(callback) {
+            showGameResultDialog: function() {
                 this.ShowModalDlg = true;
-
-				// console.log("show game result dialog");
-				// let msg = "用时" + this.CurrentGameProgress.ElapsedSeconds + "秒" +
-				// 		  ", 错误: " + this.CurrentGameProgress.ErrorItemCount +
-				// 		  "\n得分: " + this.CurrentGameProgress.Score +
-				// 		  ", 星星: " + this.CurrentGameProgress.Stars;
-
-				// uni.showModal({ title: "游戏结束", content: msg, showCancel: false, confirmText: "下一关" ,
-				// 	complete: function (res) { callback(res); }
-				// });
 			},
 
             onModalDlgClick: function(e) {
@@ -139,7 +145,10 @@
 
 <template>
 	<view class="content">
-        <ModalDlg v-if="ShowModalDlg" @click="onModalDlgClick"/>
+        <ModalDlg v-if="ShowModalDlg" @click="onModalDlgClick" v-bind:buttons="GameResultDlgButtons">
+            <template v-slot:title>练习结束</template>
+            <template v-slot:body>{{ GameResultText }}</template>
+        </ModalDlg>
 
 		<view class="outermost-top-bar"/>
 		<view class="title-wrapper" @click="onBackClick()">
@@ -163,7 +172,7 @@
 		<view id="questions-wrapper" class="questions-wrapper">
             <view class="outer-wrapper">
                 <view class="stave-wrapper-left"/>
-                <canvas type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 1px solid black; width: 100%; height: 100%;"/>
+                <canvas z-index="-1" type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 1px solid black; width: 100%; height: 100%;"/>
                 <view class="stave-wrapper-right"/>
             </view>
 		</view>

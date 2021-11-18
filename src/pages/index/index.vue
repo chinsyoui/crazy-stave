@@ -2,6 +2,9 @@
     import ModalDlg from "@/views/modal-dlg.vue"
 
     export default {
+        components: {
+            ModalDlg
+        },
 		data() {
 			return {
 				Title: "Welcome",
@@ -9,20 +12,41 @@
                 ShowModalDlg: false
 			}
 		},
+        computed: {
+            OneButtons: function() {
+                return [ { Text : "确认", Value: "OK"} ]
+            },
+            TwoButtons: function() {
+                return [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"} ]
+            },
+            ThreeButtons: function() {
+                return [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"}, { Text : "下一个", Value: "next"} ]
+            }
+        },
 		mounted() {
 			// this.DebugInfo = this.DebugInfo + "uni.getSystemInfoSync() = " + JSON.stringify(uni.getSystemInfoSync());
 		},
 		methods: {
 			onItemClick: function() {
-				console.log(this.Title + "." + "onItemClick");
-				uni.navigateTo({ url: '/pages/game/user-list' });
-			}
+                console.log(this.Title + "." + "onItemClick");
+                uni.navigateTo({ url: '/pages/game/user-list' });
+                //this.ShowModalDlg = true;
+			},
+            onModalDlgClick: function(e) {
+				console.log("onModalDlgClick", e);
+                this.ShowModalDlg = false;
+            }
 		}
 	}
 </script>
 
 <template>
  	<view class="container" @click="onItemClick()">
+        <ModalDlg v-if="ShowModalDlg" @click="onModalDlgClick" v-bind:buttons="TwoButtons">
+            <template v-slot:title>New Title</template>
+            <template v-slot:body>New Body</template>
+        </ModalDlg>
+
 		<image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
 			<text class="title" style="font: 1.1rem">

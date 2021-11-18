@@ -120,6 +120,7 @@ const store = createStore({
             save(state);
 		},
 
+        // vuex mutations only support one additional parameter.
         // params = { game, index }
         setCurrentGame(state, params) {
             let game = params.game; let index = params.index;
@@ -145,7 +146,10 @@ const store = createStore({
             state.CurrentGameIndex = index;
 
 			// make sure game progress is reset to default
-			GameModel.SetGameProgress(state.CurrentGameProgress, state.CurrentGame.MusicItemsCount, 0, 0, 0, 0, 0);
+			console.log('#####', state, game.MusicItemsCount);
+			console.log('#####', state.CurrentGameProgress.TotalItemCount);
+			GameModel.SetGameProgress(state.CurrentGameProgress, game.MusicItemsCount, 0, 0, 0, 0, 0);
+			console.log('#####', state.CurrentGameProgress.TotalItemCount);
 			state.CurrentGameItemIndex = 0;
 
 			save(state);

@@ -1,10 +1,11 @@
 <script>
     export default {
 		data() {
-			return {
-			}
+			return {}
 		},
-		props: [],
+		props: {
+            buttons: Array // [ { Text : "Text", Value: "value"} ]
+        },
         mounted() {
         },
         methods: {
@@ -18,7 +19,7 @@
 
 <template>
       <transition name="modal">
-        <div class="modal-mask" v-on:click.stop="">
+        <div class="modal-mask" v-on:click.stop=""><!-- 缺省阻止点击任何地方 -->
           <div class="modal-wrapper">
             <div class="modal-container">
               <div class="modal-title">
@@ -28,23 +29,13 @@
                 <slot name="body">default body</slot>
               </div>
               <div class="modal-buttons">
-                <!-- <slot name="buttons"> -->
-                <view class="button" v-on:click.stop="onButtonClick('back')">
-                    <view class="button-text-wrapper">
-                        <text class="button-text">返回</text>
+                <block v-for="(value,index) in buttons" v-bind:key="index">
+                    <view class="button" v-on:click.stop="onButtonClick(value.Value)">
+                        <view class="button-text-wrapper">
+                            <text class="button-text">{{value.Text}}</text>
+                        </view>
                     </view>
-                </view>
-                <view class="button" v-on:click.stop="onButtonClick('again')">
-                    <view class="button-text-wrapper">
-                        <text class="button-text">再来一遍</text>
-                    </view>
-                </view>
-                <view class="button" v-on:click.stop="onButtonClick('next')">
-                    <view class="button-text-wrapper">
-                        <text class="button-text">下一个</text>
-                    </view>
-                </view>
-                <!-- </slot> -->
+                </block>
               </div>
             </div>
           </div>
@@ -85,13 +76,13 @@
 
     .modal-title {
         text-align: center;
-        font-size: 1.5em;
+        font-size: 2em;
         margin-top: 0;
         color: #42b983;
     }
 
     .modal-body {
-        font-size: 1em;
+        font-size: 1.5em;
         margin: 20px 0;
     }
 
@@ -107,9 +98,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-			/* width: 10rem;
-			height: 3rem; */
 			margin: 10px;
+            min-width: 6em;
 			background-color: #F1F1F1;
 			border: 1px solid black;
 		}
@@ -121,7 +111,7 @@
 			}
 
 				.button-text {
-                    padding: 0.1em;
+                    padding: 0.2em;
 					flex-wrap: nowrap;
                     white-space: nowrap;
 					font-size: 1.5em;
