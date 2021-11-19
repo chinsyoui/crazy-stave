@@ -7,7 +7,7 @@ import { WeixinRenderContext } from '@/utils/WeixinRenderContext.js'
 // seems it's caused by the regex strings, now disabled
 import { isMiniApp } from '@/utils/global.js'
 
-import Vex from '@/utils/vexflow-debug.js'
+import Vex from '@/utils/vexflow.js'
 const VF = Vex.Flow;
 
 export function GameEngine() {
