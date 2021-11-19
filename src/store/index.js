@@ -5,15 +5,15 @@ import { PredefinedGameCollections } from './game-content.js'
 
 // save app state to persistent storage
 function save(state) {
-    console.log("saving state: ", state);
+    //console.log("saving state: ", state);
 
     uni.setStorageSync("Users", state.Users);
 	uni.setStorageSync("CurrentUserId",state.CurrentUser.Id);
 
-    console.log("Users", uni.getStorageSync("Users"));
-	console.log("CurrentUserId", uni.getStorageSync("CurrentUserId"));
+    //console.log("Users", uni.getStorageSync("Users"));
+	//console.log("CurrentUserId", uni.getStorageSync("CurrentUserId"));
 
-    console.log("app state saved: ", state);
+    //console.log("app state saved: ", state);
 };
 
 // #ifndef VUE3
@@ -54,7 +54,7 @@ const store = createStore({
 		// init app state
 		init(state) {
 			console.log("initing state", state);
-			console.log("PredefinedGameCollections: ", PredefinedGameCollections);
+			//console.log("PredefinedGameCollections: ", PredefinedGameCollections);
 			
             let users = null;
             let current_user_id = -1;
@@ -66,7 +66,7 @@ const store = createStore({
                     users = new Array();
                     _users.forEach((_user) => { 
                         let user = GameModel.NewUserFromJo(_user);
-                        console.log("@@@@@ user = ", user);
+                        //console.log("@@@@@ user = ", user);
                         users.push(user);
                     });
                 }
@@ -80,6 +80,9 @@ const store = createStore({
 			if (!state.users) {
                 if (users && users.length > 0 && (current_user_id >= 0)) {
                     console.log("saved state loaded");
+
+                    // overwrite with built-in game collections, because we're frenquently updating.
+                    users[0].GameCollections = PredefinedGameCollections;
 
                     state.Users = users;
                     state.CurrentUser = state.Users[0];
@@ -146,17 +149,14 @@ const store = createStore({
             state.CurrentGameIndex = index;
 
 			// make sure game progress is reset to default
-			console.log('#####', state, game.MusicItemsCount);
-			console.log('#####', state.CurrentGameProgress.TotalItemCount);
 			GameModel.SetGameProgress(state.CurrentGameProgress, game.MusicItemsCount, 0, 0, 0, 0, 0);
-			console.log('#####', state.CurrentGameProgress.TotalItemCount);
 			state.CurrentGameItemIndex = 0;
 
 			save(state);
 		},
 
         setCurrentGameItemIndex(state, index) {
-			console.log('setCurrentGameItemIndex', state, index);
+			//console.log('setCurrentGameItemIndex', state, index);
 			state.CurrentGameItemIndex = index;
 		},
 
