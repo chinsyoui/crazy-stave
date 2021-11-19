@@ -72,22 +72,30 @@
 				this.CurrentGameProgress.ElapsedSeconds ++;
 			},
 
+            getGameResultDisplayString: function(gp) {
+                let msg = "\n得分: " + gp.Score + " (用时" + gp.ElapsedSeconds + "秒, 错误 " + gp.ErrorItemCount + "个)";
+                switch(gp.Stars) {
+                    case 1:
+                        return "加油: ★   "+ msg;
+                    case 2:
+                        return "不错: ★★  " + msg;
+                    case 3:
+                        return "完美: ★★★ " + msg;
+                    default:
+                        return "请继续努力 " + msg;
+                }
+            },
 			onButtonClick: function(value) {
                 let eof = this.$options.ge.onAnswnerButtonClicked(this, this.CGBT, value, this.CurrentGameProgress);
                 if (eof) {
                     // game finished, record final progress
     				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 
-                    // show game reusult to user and ask user what to do next
-    				let msg = "用时" + this.CurrentGameProgress.ElapsedSeconds + "秒" + ", 错误: " + this.CurrentGameProgress.ErrorItemCount +
-						  "\n得分: " + this.CurrentGameProgress.Score + ", 星星: " + this.CurrentGameProgress.Stars;
-                    this.GameResultText = msg;
-
+                    this.GameResultText = this.getGameResultDisplayString(this.CurrentGameProgress);
                     if (this.CurrentGameIndex >= this.CurrentGameCollection.Games.length-1) 
                         this.GameResultDlgButtons = [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"} ];
                     else
                         this.GameResultDlgButtons = [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"}, { Text : "下一个", Value: "next"} ];
-
                     this.showGameResultDialog();
                 }
 			},
