@@ -11,7 +11,7 @@
         },
         methods: {
 			onButtonClick(value) {
-				console.log("onButtonClick", value);
+				//console.log("onButtonClick", value);
 				this.$emit("buttonClick", value);
 			}
         }

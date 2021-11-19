@@ -109,7 +109,7 @@ const MICs = {
     // ByDegree = by random generate notes from a base notes and random degrees
     // Props = { MaxNote: "C/6", BaseNotes: String[], Degrees: ["2m","3M","5p","8p"] }
     ByDegree : function(props) {
-        console.log("ByDegree: ",props);
+        //console.log("ByDegree: ",props);
         let maxAN = PKs.NoteToAN(props.MaxNote);
         while(true) {
             let lowerNote = props.BaseNotes[RandomInt(0,props.BaseNotes.length)];
@@ -120,9 +120,9 @@ const MICs = {
 
             if (upperNoteAN <= maxAN) {
                 let upperNote = PKs.ANtoNote(upperNoteAN,"#");
-                console.log(lowerNote,degree," => ",lowerNoteAN,distance,upperNoteAN,upperNote);
+                //console.log(lowerNote,degree," => ",lowerNoteAN,distance,upperNoteAN,upperNote);
                 let newMI = new MI(MITs.PC, (lowerNote + "," + upperNote), degree);
-                console.log("newMI = ",newMI);
+                //console.log("newMI = ",newMI);
                 return newMI;
             }
         };
@@ -183,12 +183,12 @@ const GTs = GameTypes;  // a local alias of GameTypes
 // 给定起止音符，生成整个序列
 // accidental: "#","b","" （空表示不含升降符号)
 function GenerateNotes(lower_note, upper_note, accidental) {
-    console.log("GenerateNotes", lower_note, upper_note, accidental);
+    //console.log("GenerateNotes", lower_note, upper_note, accidental);
 
     let lowerAN = PKs.NoteToAN(lower_note);
     let upperAN = PKs.NoteToAN(upper_note);
 
-    console.log(lowerAN,upperAN);
+    //console.log(lowerAN,upperAN);
 
     let notes = new Array();
     for(let i=lowerAN; i<=upperAN; i++) {
@@ -206,7 +206,7 @@ function GenerateNotes(lower_note, upper_note, accidental) {
         notes.push(newNote);
     }
 
-    console.log(notes);
+    //console.log(notes);
     return notes;
 };
 

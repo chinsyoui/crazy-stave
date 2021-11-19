@@ -19,13 +19,13 @@
 
 		methods: {
 			onItemClick: function(e) {
-				console.log(this.Title + "." + "onItemClick", e);
+				//console.log(this.Title + "." + "onItemClick", e);
 				let user = e;
 				this.$store.commit('setCurrentUser', user);
 				uni.navigateTo({ url: '/pages/game/game-collection-list' });
 			},
 			onLastItemClick: function() {
-				console.log(this.Title + "." + "onLastItemClick");
+				//console.log(this.Title + "." + "onLastItemClick");
 				// uni.navigateTo({ url: '/pages/game/add-new-user' });
                 uni.navigateBack();
 			}			

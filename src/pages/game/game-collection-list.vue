@@ -35,8 +35,8 @@
 
 		onLoad() {
 			console.log(this.Title + "." + "onLoad");
-			console.log(this.CurrentUser);
-			console.log(this.GameCollections);
+			//console.log(this.CurrentUser);
+			//console.log(this.GameCollections);
 		},
 
 		methods: {

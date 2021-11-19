@@ -63,14 +63,14 @@ return {
 
     // return true if game finished
     onAnswnerButtonClicked: function(vue_this, button_type, answner, game_progress) {
-        console.log("onAnswnerButtonClicked ===", this.ctx.current_question_index, game_progress.TotalItemCount);
+        //console.log("onAnswnerButtonClicked ===", this.ctx.current_question_index, game_progress.TotalItemCount);
 
         // game already finished, maybe user click too quickly
         if (this.ctx.current_question_index > game_progress.TotalItemCount - 1)
             return undefined;
 
         console.assert(answner);
-        console.log("onButtonClick: ", answner);
+        //console.log("onButtonClick: ", answner);
 
         // OK means this is an introduction game, just finish it
         if (answner == "OK")
@@ -93,9 +93,9 @@ return {
 
         console.log("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
 
-        // check if user's answner correct or not
+         // check if user's answner correct or not
         let result = (answner.toUpperCase() === correct_answner.toUpperCase());
-        console.log("You Are: " + (result ? "Right" : "Wrong"));
+        //console.log("You Are: " + (result ? "Right" : "Wrong"));
 
         // update progress
         game_progress.CompletedItemCount ++;
@@ -120,16 +120,25 @@ return {
     },
 
     computeGameStars: function(game_progress) {
-        if (game_progress.TotalItemCount > game_progress.CompletedItemCount)
+        if (game_progress.CompletedItemCount < game_progress.TotalItemCount)
             return 0;
-        let error_percent = (parseFloat(game_progress.ErrorItemCount) / parseFloat(game_progress.TotalItemCount));
-        if (error_percent == 0)
+
+        if (game_progress.ErrorItemCount == 0)
             return 3;
-        if (error_percent < 0.05)
+        if (game_progress.ErrorItemCount == 1)
             return 2;
-        if (error_percent < 0.1)
+        if (game_progress.ErrorItemCount == 2)
             return 1;
         return 0;
+
+        // let error_percent = (parseFloat(game_progress.ErrorItemCount) / parseFloat(game_progress.TotalItemCount));
+        // if (error_percent == 0)
+        //     return 3;
+        // if (error_percent < 0.05)
+        //     return 2;
+        // if (error_percent < 0.1)
+        //     return 1;
+        // return 0;
     },
 
     /////////////////////////////////////
@@ -149,6 +158,8 @@ return {
             console.assert(res[0].node,"can't select canvas node, .node not found in return of selectQuery");
 
             let node = res[0].node;
+            console.log("node sizing = ", node.width, node.height);
+
             _this.ctx.canvasSizing.width = node.width;
             _this.ctx.canvasSizing.height = node.height;
             const crc2d = node.getContext('2d');
@@ -167,7 +178,7 @@ return {
     initStave: function(vue_this, callback) {
         console.assert(this.ctx.musicItems && this.ctx.musicItems.length);
 
-        console.log("msg from local vexflow: ", Vex.sayHello);
+        //console.log("msg from local vexflow: ", Vex.sayHello);
         if (!this.ctx.vfRenderContext) {
             //if (vue_this.$global.isMiniApp()) {
             if (isMiniApp()) {
@@ -181,8 +192,24 @@ return {
         }
     },
 
+    resizeCanvas: function() {
+    	let width = this.$options.canvasSizing.width;
+    	let height = this.$options.canvasSizing.height;
+    	console.log("resizing canvas to: " + width + " x " + height);
+
+    	const devicePixelRatio = window.devicePixelRatio || 1;
+
+    	// Scale the canvas size by the device pixel ratio
+    	// this.$options.canvasElement.width = width * devicePixelRatio;
+    	// this.$options.canvasElement.height = height * devicePixelRatio;
+    	// this.$options.canvasElement.style.width = width + 'px';
+    	// this.$options.canvasElement.style.height = height + 'px';
+
+    	this.$options.vfRenderContext.scale(devicePixelRatio, devicePixelRatio);
+    },
+
     testDrawFunc: function(_this, crc2d, params) {
-        console.log("crc2d = ", crc2d);
+        //console.log("crc2d = ", crc2d);
 
         crc2d.moveTo(10, 10);
         crc2d.lineTo(110, 60);
@@ -194,7 +221,7 @@ return {
         if (!_this.ctx.vfRenderer) {
             _this.ctx.vfRenderContext = new WeixinRenderContext(crc2d, _this.ctx.canvasSizing.width, _this.ctx.canvasSizing.height);
             _this.ctx.vfRenderer = new VF.Renderer(_this.ctx.vfRenderContext, VF.Renderer.Backends.CANVAS);
-            console.log("this.$options.vfRenderer = ", _this.ctx.vfRenderer.__proto__);
+            //console.log("this.$options.vfRenderer = ", _this.ctx.vfRenderer.__proto__);
         }
 
         console.log(_this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.musicItems);
@@ -204,11 +231,12 @@ return {
         _this.convertMusicItemsToStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.vfStaveNotes);
 
         const context = _this.ctx.vfRenderer.getContext();
-        console.log("VF.Renderer.getContext() = ", context.__proto__);
+        //console.log("VF.Renderer.getContext() = ", context.__proto__);
 
         //context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
         context.font = "10px Arial"; context.setFillStyle("#eed");
 
+        console.log("stave width = ", _this.ctx.canvasSizing.width);
         const vfStave = new VF.Stave(0, 0, _this.ctx.canvasSizing.width);
         vfStave.addClef(_this.ctx.staveClef); // .addTimeSignature("4/4");
         vfStave.setContext(context).draw();
@@ -236,7 +264,7 @@ return {
         _this.ctx.vfRenderer.ctx.context2D = crc2d;
         const context = _this.ctx.vfRenderer.getContext();
 
-        console.log("Switching to next... Last Result = ", params.old_item_result);
+        //console.log("Switching to next... Last Result = ", params.old_item_result);
         console.assert(params.new_item_index >=0 && params.new_item_index <= _this.ctx.vfStaveNotes.length);
 
         // update old note if exists
@@ -247,7 +275,7 @@ return {
             else
                 last_stave_note.setStyle({ fillStyle: "yellow", strokeStyle: "yellow" });
             last_stave_note.setContext(context).draw();
-            console.log(last_stave_note);
+            //console.log(last_stave_note);
         }
 
         // update new note if exists
@@ -255,7 +283,7 @@ return {
             let new_stave_note = _this.ctx.vfStaveNotes[params.new_item_index];
             new_stave_note.setStyle({ fillStyle: "red", strokeStyle: "red" });
             new_stave_note.setContext(context).draw();
-            console.log(new_stave_note);
+            //console.log(new_stave_note);
         }
     },
 

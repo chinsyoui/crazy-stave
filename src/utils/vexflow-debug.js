@@ -16446,7 +16446,7 @@ const sumArray = (arr) => arr.reduce((a, b) => a + b, 0);
  * total number of ticks in voices.
  */
 function createContexts(voices, makeContext, addToContext) {
-    console.log("function createContexts",voices, makeContext, addToContext);
+    //console.log("function createContexts",voices, makeContext, addToContext);
     const resolutionMultiplier = Formatter.getResolutionMultiplier(voices);
     // Initialize tick maps.
     const tickToContextMap = {};
@@ -16455,7 +16455,7 @@ function createContexts(voices, makeContext, addToContext) {
     // For each voice, extract notes and create a context for every
     // new tick that hasn't been seen before.
     voices.forEach((voice, voiceIndex) => {
-        console.log("voices.forEach((voice, voiceIndex) => {",voice, voiceIndex);
+        //console.log("voices.forEach((voice, voiceIndex) => {",voice, voiceIndex);
         // Use resolution multiplier as denominator so that no additional expansion
         // of fractional tick values is needed.
         const ticksUsed = new _fraction__WEBPACK_IMPORTED_MODULE_2__.Fraction(0, resolutionMultiplier);
@@ -16614,10 +16614,10 @@ class Formatter {
         else if (typeof params === 'boolean') {
             options.auto_beam = params;
         }
-        console.log("FormatAndDraw: ", ctx, stave, notes, params);
+        //console.log("FormatAndDraw: ", ctx, stave, notes, params);
         // Start by creating a voice and adding all the notes to it.
         const voice = new _voice__WEBPACK_IMPORTED_MODULE_10__.Voice(_tables__WEBPACK_IMPORTED_MODULE_6__.Tables.TIME4_4).setMode(_voice__WEBPACK_IMPORTED_MODULE_10__.Voice.Mode.SOFT).addTickables(notes);
-        console.log("FormatAndDraw: voice = ", voice);
+        //console.log("FormatAndDraw: voice = ", voice);
         // Then create beams, if requested.
         const beams = options.auto_beam ? _beam__WEBPACK_IMPORTED_MODULE_0__.Beam.applyAndGetBeams(voice) : [];
         // Instantiate a `Formatter` and format the notes.
@@ -16761,7 +16761,7 @@ class Formatter {
             if (!voices) {
                 throw new _util__WEBPACK_IMPORTED_MODULE_9__.RuntimeError('BadArgument', "'voices' required to run preCalculateMinTotalWidth");
             }
-            console.log("this.createTickContexts(voices) 16760", voices);
+            //console.log("this.createTickContexts(voices) 16760", voices);
             this.createTickContexts(voices);
         }
         // eslint-disable-next-line
@@ -16840,10 +16840,10 @@ class Formatter {
      * total number of ticks in voices.
      */
     createTickContexts(voices) {
-        console.log("createTickContexts(voices) {", voices);
+        //console.log("createTickContexts(voices) {", voices);
         const fn = (tickable, context, voiceIndex) => context.addTickable(tickable, voiceIndex);
         const contexts = createContexts(voices, (tick) => new _tickcontext__WEBPACK_IMPORTED_MODULE_7__.TickContext(tick), fn);
-        console.log("createTickContexts(voices) returns ", contexts);
+        //console.log("createTickContexts(voices) returns ", contexts);
         this.tickContexts = contexts;
         const contextArray = this.tickContexts.array;
         contextArray.forEach((context) => {
@@ -16864,7 +16864,7 @@ class Formatter {
             throw new _util__WEBPACK_IMPORTED_MODULE_9__.RuntimeError('NoTickContexts', 'preFormat requires TickContexts');
         }
         const { list: contextList, map: contextMap } = contexts;
-        console.log("{ list: contextList, map: contextMap } = ", contexts);
+        //console.log("{ list: contextList, map: contextMap } = ", contexts);
         // Reset loss history for evaluator.
         this.lossHistory = [];
         // If voices and a stave were provided, set the Stave for each voice
@@ -17223,7 +17223,7 @@ class Formatter {
             this.voices.forEach((v) => v.setSoftmaxFactor(softmaxFactor));
         }
         this.alignRests(voices, opts.align_rests);
-        console.log("this.createTickContexts(voices);",voices);
+        //console.log("this.createTickContexts(voices);",voices);
         this.createTickContexts(voices);
         this.preFormat(justifyWidth, opts.context, voices, opts.stave);
         // Only postFormat if a stave was supplied for y value formatting
@@ -31671,7 +31671,7 @@ class Voice extends _element__WEBPACK_IMPORTED_MODULE_0__.Element {
     }
     /** Add an array of tickables to the voice. */
     addTickables(tickables) {
-        console.log("addTickables(tickables) {", tickables);
+        //console.log("addTickables(tickables) {", tickables);
         for (let i = 0; i < tickables.length; ++i) {
             this.addTickable(tickables[i]);
         }

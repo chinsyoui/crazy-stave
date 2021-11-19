@@ -49,7 +49,7 @@
 		},
 
         onUnload() {
-            console.log("onUnload", this);
+            //console.log("onUnload", this);
             this.onGameFinished();
         },
 

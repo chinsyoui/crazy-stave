@@ -56,7 +56,7 @@
 		},
 
         onUnload() {
-            console.log("onUnload", this);
+            //console.log("onUnload", this);
             // note onUnload happens after back, we just do cleanup
             this.$options.ge.stopTimer();
         },
@@ -123,22 +123,6 @@
 				//uni.navigateTo({ url: '/pages/game/game-list' });
                 uni.navigateBack();
 			}
-
-			// resizeCanvas: function() {
-			// 	let width = this.$options.canvasSizing.width;
-			// 	let height = this.$options.canvasSizing.height;
-			// 	console.log("resizing canvas to: " + width + " x " + height);
-
-			// 	const devicePixelRatio = window.devicePixelRatio || 1;
-
-			// 	// Scale the canvas size by the device pixel ratio
-			// 	// this.$options.canvasElement.width = width * devicePixelRatio;
-			// 	// this.$options.canvasElement.height = height * devicePixelRatio;
-			// 	// this.$options.canvasElement.style.width = width + 'px';
-			// 	// this.$options.canvasElement.style.height = height + 'px';
-
-			// 	this.$options.vfRenderContext.scale(devicePixelRatio, devicePixelRatio);
-			// }
 		}
 	}
 </script>

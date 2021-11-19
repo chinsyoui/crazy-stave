@@ -28,7 +28,7 @@
 		},
 		methods: {
 			onItemClick: function() {
-                console.log(this.Title + "." + "onItemClick");
+                //console.log(this.Title + "." + "onItemClick");
                 uni.navigateTo({ url: '/pages/game/user-list' });
                 //this.ShowModalDlg = true;
 			},
