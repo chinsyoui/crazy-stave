@@ -156,7 +156,7 @@
 		<view id="questions-wrapper" class="questions-wrapper">
             <view class="outer-wrapper">
                 <view class="stave-wrapper-left"/>
-                <canvas z-index="-1" type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 1px solid black; width: 100%; height: 100%;"/>
+                <canvas z-index="-1" type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 1px solid gray; width: 100%; height: 100%;"/>
                 <view class="stave-wrapper-right"/>
             </view>
 		</view>

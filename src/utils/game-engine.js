@@ -19,7 +19,7 @@ return {
 
         vfStaveNotes: [],          // array of VF.StaveNote
 
-        canvasSizing: { width: 640, height: 480 },// sizing of canvas
+        canvasSizing: { width: 0, height: 0 },// sizing of canvas
         canvasElement: null,	   // HtmlCanvasElement (id='stave-wrapper')
         vfRenderContext: null, 	   // VF.RenderContext
         vfRenderer: null,		   // new VF.Renderer(vfRenderContext)
@@ -152,24 +152,27 @@ return {
     miniAppCanvasDraw: function(_this, drawFunc, drawFuncParams, callback, callbackParams) {
         //console.log("before wx.createSelectorQuery().selectAll('#the-canvas').node(...)");
 
-        wx.createSelectorQuery().selectAll('#the-canvas').node(res => {
-            console.assert(res,"can't select canvas node, selectQuery return null");
-            console.assert(res.length, "can't select canvas node, selectQuery return empty");
-            console.assert(res[0].node,"can't select canvas node, .node not found in return of selectQuery");
+        wx.createSelectorQuery().select('#the-canvas').fields({ node: true, size: true }, function (res) {
+            console.assert(res && res.node,"can't select canvas node");
 
-            let node = res[0].node;
-            console.log("node sizing = ", node.width, node.height);
+            let node = res.node;
+            //console.log("canvas sizing = ", res.width, res.height);
+            //console.log("canvas.node sizing = ", node.width, node.height);
 
-            _this.ctx.canvasSizing.width = node.width;
-            _this.ctx.canvasSizing.height = node.height;
+            if (_this.ctx.canvasSizing.width == 0 || _this.ctx.canvasSizing.height == 0) {
+                _this.ctx.canvasSizing.width = res.width; 
+                _this.ctx.canvasSizing.height = res.height;
+                node.width = res.width; 
+                node.height = res.height;
+            }
+
             const crc2d = node.getContext('2d');
-
             console.assert(crc2d,"can't get crc2d from ",node);
             //console.log("inside selectorQuery: execute drawFunc with crc2d", drawFunc);
 
             drawFunc(_this, crc2d, drawFuncParams);
             //console.log("inside selectorQuery: execute callback", callback);
-            if (callback) 
+            if (callback)
                 callback(_this, callbackParams);
         }).exec();
         //console.log("after async wx.createSelectorQuery().started");
@@ -211,9 +214,9 @@ return {
     testDrawFunc: function(_this, crc2d, params) {
         //console.log("crc2d = ", crc2d);
 
-        crc2d.moveTo(10, 10);
-        crc2d.lineTo(110, 60);
-        crc2d.rect(10, 10, 200, 120);
+        crc2d.moveTo(0, 0);
+        crc2d.lineTo(_this.ctx.canvasSizing.width, _this.ctx.canvasSizing.height);
+        crc2d.rect(10, 10, _this.ctx.canvasSizing.width-20, _this.ctx.canvasSizing.height-20);
         crc2d.stroke();
     },
 
