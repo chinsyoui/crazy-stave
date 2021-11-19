@@ -49,7 +49,7 @@ return {
         this.ctx.staveKeysig = game.StaveKeySig;
 
         this.ctx.musicItems = GenerateMusicItemsForGameInstance(game.MusicItemsCount, game.MusicItemsGenerator);
-        console.log("random generated music items: ", this.ctx.musicItems);
+        //console.log("random generated music items: ", this.ctx.musicItems);
 
         let _this = this;
         this.initStave(vue_this, function() {
@@ -91,7 +91,7 @@ return {
         if (button_type == BTs.Degree)
             correct_answner = correct_answner[0];
 
-        console.log("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
+        //console.log("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
 
          // check if user's answner correct or not
         let result = (answner.toUpperCase() === correct_answner.toUpperCase());
@@ -160,10 +160,10 @@ return {
             //console.log("canvas.node sizing = ", node.width, node.height);
 
             if (_this.ctx.canvasSizing.width == 0 || _this.ctx.canvasSizing.height == 0) {
-                _this.ctx.canvasSizing.width = res.width; 
-                _this.ctx.canvasSizing.height = res.height;
-                node.width = res.width; 
-                node.height = res.height;
+                _this.ctx.canvasSizing.width = res.width / 1.5; 
+                _this.ctx.canvasSizing.height = res.height / 2;  // TODO quick and dirty fix
+                node.width = _this.ctx.canvasSizing.width; 
+                node.height = _this.ctx.canvasSizing.height;
             }
 
             const crc2d = node.getContext('2d');
@@ -190,30 +190,12 @@ return {
                 // TODO not tested in H5 yet
                 // this.ctx.canvasElement = document.getElementById("the-canvas").children[0];
                 // this.ctx.vfRenderContext = this.ctx.canvasElement.getContext("2d");
-                // this.initStavePhase2();
             }
         }
     },
 
-    resizeCanvas: function() {
-    	let width = this.$options.canvasSizing.width;
-    	let height = this.$options.canvasSizing.height;
-    	console.log("resizing canvas to: " + width + " x " + height);
-
-    	const devicePixelRatio = window.devicePixelRatio || 1;
-
-    	// Scale the canvas size by the device pixel ratio
-    	// this.$options.canvasElement.width = width * devicePixelRatio;
-    	// this.$options.canvasElement.height = height * devicePixelRatio;
-    	// this.$options.canvasElement.style.width = width + 'px';
-    	// this.$options.canvasElement.style.height = height + 'px';
-
-    	this.$options.vfRenderContext.scale(devicePixelRatio, devicePixelRatio);
-    },
-
     testDrawFunc: function(_this, crc2d, params) {
         //console.log("crc2d = ", crc2d);
-
         crc2d.moveTo(0, 0);
         crc2d.lineTo(_this.ctx.canvasSizing.width, _this.ctx.canvasSizing.height);
         crc2d.rect(10, 10, _this.ctx.canvasSizing.width-20, _this.ctx.canvasSizing.height-20);
@@ -227,7 +209,7 @@ return {
             //console.log("this.$options.vfRenderer = ", _this.ctx.vfRenderer.__proto__);
         }
 
-        console.log(_this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.musicItems);
+        //console.log(_this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.musicItems);
 
         // 把MusicItems转换为StaveNotes
         _this.ctx.vfStaveNotes = new Array();
@@ -236,22 +218,13 @@ return {
         const context = _this.ctx.vfRenderer.getContext();
         //console.log("VF.Renderer.getContext() = ", context.__proto__);
 
-        //context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
-        context.font = "10px Arial"; context.setFillStyle("#eed");
-
-        console.log("stave width = ", _this.ctx.canvasSizing.width);
+        //console.log("stave width = ", _this.ctx.canvasSizing.width);
         const vfStave = new VF.Stave(0, 0, _this.ctx.canvasSizing.width);
         vfStave.addClef(_this.ctx.staveClef); // .addTimeSignature("4/4");
         vfStave.setContext(context).draw();
 
         VF.Formatter.FormatAndDraw(context, vfStave, _this.ctx.vfStaveNotes);
-
-        // var voice = new VF.Voice({ num_beats: this.$options..vfStaveNotes.length, beat_value: 4});
-        // voice.addTickables(this.$options..vfStaveNotes);
-        // var formatter = new VF.Formatter().joinVoices([voice]).format([voice], width - 20);
-        // voice.draw(context,stave);
-
-        console.log("render finished");
+        //console.log("render finished");
     },
 
     // change current highlighted music item to next music item,
@@ -294,7 +267,7 @@ return {
     // <Array,String,Array>
     convertMusicItemsToStaveNotes: function(music_items, stave_clef, vfStaveNotes) {
         console.assert(music_items && music_items.length > 0 && vfStaveNotes && vfStaveNotes.length == 0);
-        console.log("Enter convertMusicItemsToStaveNotes", music_items);
+        //console.log("Enter convertMusicItemsToStaveNotes", music_items);
 
         for(let i=0; i<music_items.length; i++) {
             let music_item = music_items[i];
@@ -331,7 +304,7 @@ return {
             }
         }
 
-        console.log("Leave convertMusicItemsToStaveNotes", vfStaveNotes);
+        //console.log("Leave convertMusicItemsToStaveNotes", vfStaveNotes);
     }
 };
 };
