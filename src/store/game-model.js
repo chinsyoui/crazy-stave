@@ -1,6 +1,96 @@
 import { ObjectMap } from "@/utils/ObjectMap.js"
 if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
 
+// 术语及缩写：
+// 唱名 Syllable Name (可省略Name后缀) 写做1234567但读作(DoReMiFaSolLaXi)
+// 音名 Pitch Name (可省略Name后缀) 即CDEFGAB
+// 音符 Note
+// 度数 Degree
+// 和弦 Chord
+// 八度 Octave = O
+// 紧凑型 Compact = C
+// 柱式 Pillar = P
+// 分解 Arpeggio = A
+// 三和弦 Traid Chord = TC
+// 大三和弦 Major Traid Chord = MajTC
+// 小三和弦 Minor Traid Chord = MinTC
+// 和弦转位 Chord Inversion = CI
+// 柱式和弦 Pillar Chord = PC
+// 分解和弦 Arpeggio Chord = AC
+// 升降号 Accidental = SF (Sharp & Flat)
+// 白键 WhiteKey = WK
+// 黑键 BlackKey = BK
+// 全部黑白键 FullKeys = FK
+// 音乐项 MusicItem = MI
+// 音乐项的类型 MusicItemTyp = MIT
+// 练习的类型 GameType = GT
+// 练习集 GameCollection = GC
+
+// NOTE: 和弦字符串中不要有空格。
+// NOTE: 音符要用大写，否则有时会和升降号用中的b分不清。
+
+// 钢琴88个键的编号：
+// 键所在八度的编号[0~9]    ON(octave number)   = (int)(AN/12)
+// 键的八度内相对编号[0~11] RN(relative number) = AN 'mod' 12
+// 键的绝对位置编号[9~96]  AN(absolute number) = (ON-1)*12+RN
+// 音符表示法(/后面为八度编号): C/4, D#/3, Fb/2
+// 度数表示法: 5x, 其中x为 纯p,减/小m,增/大M
+// PKs = PianoKeys
+export const PKs = {
+    // TODO: 理论上，每个大小调的转换表都不一样
+
+    // 转换表：键的相对位置->音名，黑键用#或者为b
+    RNtoPitchs: {
+        "#" : ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],
+        "b" : ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']
+    },
+    PitchToRNs: { "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11 },
+
+    // 转换表：度数表示法->键的绝对位置的差
+    DegreeToDistances: { '1p' : 0, '2m' : 1, '2M' : 2, '3m' : 3, '3M' :  4, '4m' :  5, '4M' :  6,
+                         '5m' : 6, '5p' : 7, '6m' : 8, '6M' : 9, '7m' : 10, '7M' : 11, '8p' : 12 },
+
+    ON: function(AN) { return Math.floor(AN/12); },
+    RN: function(AN) { return AN % 12; },
+    AN: function(ON,RN) { return ON*12+RN; },
+
+    BlackRNs: [1,3,6,8,10],
+    WhiteRNs: [0,2,4,5,7,9,11],
+
+    NoteToAN: function(note) {
+        console.assert(note && (note.length == 3 || note.length == 4));
+        let RN = PKs.PitchToRNs[note[0]];
+        let accidental = 0;
+        if (note.length == 4) // has accidental
+            accidental = (note(1) == '#') ? 1 : -1;
+        let ON = note.charCodeAt(note.length-1) - 48; // '0' = 48
+        let AN = PKs.AN(ON,RN);
+        //console.log("NoteToAN", note, RN, accidental, ON, AN);
+        return AN;
+    },
+
+    // accidental: "#","b"
+    ANtoNote: function(AN, accidental) {
+        console.assert(AN >=10 && AN <=97);
+        console.assert(accidental && accidental.length==1 && (accidental=="#" || accidental=="b"));
+
+        let ON = PKs.ON(AN);
+        let RN = PKs.RN(AN);
+        let baseWithAccidental = PKs.RNtoPitchs[accidental][RN];
+        let octave = String.fromCharCode(ON + 48); // '0' = 48
+        let note = baseWithAccidental + "/" + octave;
+        //console.log("ANtoNote", AN, ON, RN, baseWithAccidental, octave, note);
+        return note;
+    },
+
+    // get new note from a base note (使用上面定义的音符表示法), and degree (使用上面定义的度数表示法)
+    // accidental 表示如果音符含有升降号用哪种表示法(因为一个音符有两个名称)
+    NewNote: function(base_note, degree, accidental) {
+        let AN = PKS.NoteToAN(base_note) + PKs.DegreeToDistances[degree];
+        return PKs.ANtoNote(AN, accidental);
+    }
+};
+
 // MIT = Music Item Type
 export const MITs = {
 	Syllable: 2,    // 唱名
@@ -24,7 +114,6 @@ export const BTs = {
 	PitchWithSF: 6,			 		 // 七个音名，每个包括升降号，一共21个按钮，两行排列
 	Degree: 10,						 // 两个音符之间的度数，常用的有2/3/4/5/6/8度(不分大小度)
 	CI: 11,				 			 // 三和弦转位, 常见的有0/1/2三种
-	// TCWithCI: 7,   				 // 3个三和弦位置按钮：原位，第一转位，第二转位
 	WKOnlyTC: 20,      				 // 7个只包含白键的三和弦钮,不带转位: C,Dm,Em,F,G,Am,Bsus
 	WKOnlyWithCI: 21,      			 // 21个只包含白键的三和弦钮,以及转位
 	WKRootMajTC: 22, 				 // 7个以白键为根音的大三和弦按钮,不带转位: C,D,E,F,G,A,B

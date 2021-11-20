@@ -1,95 +1,5 @@
-import { BTs, MITs, MusicItem as MI, GameType as GT, Game, GameCollection as GC, User } from './game-model.js'
+import { PKs, BTs, MITs, MusicItem as MI, GameType as GT, Game, GameCollection as GC, User } from './game-model.js'
 if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
-
-// 术语及缩写：
-// 唱名 Syllable Name (可省略Name后缀) 写做1234567但读作(DoReMiFaSolLaXi)
-// 音名 Pitch Name (可省略Name后缀) 即CDEFGAB
-// 音符 Note
-// 度数 Degree
-// 和弦 Chord
-// 八度 Octave = O
-// 紧凑型 Compact = C
-// 柱式 Pillar = P
-// 分解 Arpeggio = A
-// 三和弦 Traid Chord = TC
-// 大三和弦 Major Traid Chord = MajTC
-// 小三和弦 Minor Traid Chord = MinTC
-// 和弦转位 Chord Inversion = CI
-// 柱式和弦 Pillar Chord = PC
-// 分解和弦 Arpeggio Chord = AC
-// 升降号 Accidental = SF (Sharp & Flat)
-// 白键 WhiteKey = WK
-// 黑键 BlackKey = BK
-// 全部黑白键 FullKeys = FK
-// 音乐项 MusicItem = MI
-// 音乐项的类型 MusicItemTyp = MIT
-// 练习的类型 GameType = GT
-// 练习集 GameCollection = GC
-
-// NOTE: 和弦字符串中不要有空格。
-// NOTE: 音符要用大写，否则有时会和升降号用中的b分不清。
-
-// 钢琴88个键的编号：
-// 键所在八度的编号[0~9]    ON(octave number)   = (int)(AN/12)
-// 键的八度内相对编号[0~11] RN(relative number) = AN 'mod' 12
-// 键的绝对位置编号[9~96]  AN(absolute number) = (ON-1)*12+RN
-// 音符表示法(/后面为八度编号): C/4, D#/3, Fb/2
-// 度数表示法: 5x, 其中x为 纯p,减/小m,增/大M
-// PKs = PianoKeys
-const PKs = {
-    // TODO: 理论上，每个大小调的转换表都不一样
-
-    // 转换表：键的相对位置->音名，黑键用#或者为b
-    RNtoPitchs: {
-        "#" : ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],
-        "b" : ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']
-    },
-    PitchToRNs: { "C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11 },
-
-    // 转换表：度数表示法->键的绝对位置的差
-    DegreeToDistances: { '1p' : 0, '2m' : 1, '2M' : 2, '3m' : 3, '3M' :  4, '4m' :  5, '4M' :  6,
-                         '5m' : 6, '5p' : 7, '6m' : 8, '6M' : 9, '7m' : 10, '7M' : 11, '8p' : 12 },
-
-    ON: function(AN) { return Math.floor(AN/12); },
-    RN: function(AN) { return AN % 12; },
-    AN: function(ON,RN) { return ON*12+RN; },
-
-    BlackRNs: [1,3,6,8,10],
-    WhiteRNs: [0,2,4,5,7,9,11],
-
-    NoteToAN: function(note) {
-        console.assert(note && (note.length == 3 || note.length == 4));
-        let RN = PKs.PitchToRNs[note[0]];
-        let accidental = 0;
-        if (note.length == 4) // has accidental
-            accidental = (note(1) == '#') ? 1 : -1;
-        let ON = note.charCodeAt(note.length-1) - 48; // '0' = 48
-        let AN = PKs.AN(ON,RN);
-        //console.log("NoteToAN", note, RN, accidental, ON, AN);
-        return AN;
-    },
-
-    // accidental: "#","b"
-    ANtoNote: function(AN, accidental) {
-        console.assert(AN >=10 && AN <=97);
-        console.assert(accidental && accidental.length==1 && (accidental=="#" || accidental=="b"));
-
-        let ON = PKs.ON(AN);
-        let RN = PKs.RN(AN);
-        let baseWithAccidental = PKs.RNtoPitchs[accidental][RN];
-        let octave = String.fromCharCode(ON + 48); // '0' = 48
-        let note = baseWithAccidental + "/" + octave;
-        //console.log("ANtoNote", AN, ON, RN, baseWithAccidental, octave, note);
-        return note;
-    },
-
-    // get new note from a base note (使用上面定义的音符表示法), and degree (使用上面定义的度数表示法)
-    // accidental 表示如果音符含有升降号用哪种表示法(因为一个音符有两个名称)
-    NewNote: function(base_note, degree, accidental) {
-        let AN = PKS.NoteToAN(base_note) + PKs.DegreeToDistances[degree];
-        return PKs.ANtoNote(AN, accidental);
-    }
-};
 
 // @func return integer in [min, max)
 function RandomInt(min, max) {
@@ -241,9 +151,9 @@ const O2WKOnlyCPTChordsWithCI = [ // "低音谱，低八度，白键" 为根音�
 	new MI(MITs.PC, "E/2,G/2,B/2", "0Em"),
 	new MI(MITs.PC, "G/2,B/2,E/3", "1Em/G"),
 	new MI(MITs.PC, "B/2,E/3,G/3", "2Em/B"),
-	new MI(MITs.PC, "F/2,A/2,C/2", "0F"),
-	new MI(MITs.PC, "A/2,C/2,F/3", "1F/A"),
-	new MI(MITs.PC, "C/2,F/3,A/3", "2F/C"),
+	new MI(MITs.PC, "F/2,A/2,C/3", "0F"),
+	new MI(MITs.PC, "A/2,C/3,F/3", "1F/A"),
+	new MI(MITs.PC, "C/3,F/3,A/3", "2F/C"),
 	new MI(MITs.PC, "G/2,B/2,D/3", "0G"),
 	new MI(MITs.PC, "B/2,D/3,G/3", "1G/B"),
 	new MI(MITs.PC, "D/3,G/3,B/3", "2G/D"),
@@ -252,7 +162,7 @@ const O2WKOnlyCPTChordsWithCI = [ // "低音谱，低八度，白键" 为根音�
 	new MI(MITs.PC, "E/3,A/3,C/4", "2Am/E"),
 	new MI(MITs.PC, "B/2,D/3,F/3", "0Bsus"),
 	new MI(MITs.PC, "D/3,F/3,B/3", "1Bsus/D"),
-	new MI(MITs.PC, "B/3,D/4,F/4", "2Bsus/B")
+	new MI(MITs.PC, "F/3,B/3,D/4", "2Bsus/F")
 ];
 
 const O2WKOnlyCATChords = [ // "低音谱，低八度，白键" 为根音及三五音的紧凑型分解三和弦
@@ -377,7 +287,7 @@ const O4WKOnlyCPTChordsWithCI = [ // "高音谱，基本八度，白键" 为根�
 	new MI(MITs.PC, "E/5,A/5,C/6", "2Am/E"),
 	new MI(MITs.PC, "B/4,D/5,F/5", "0Bsus"),
 	new MI(MITs.PC, "D/5,F/5,B/5", "1Bsus/D"),
-	new MI(MITs.PC, "B/5,D/6,F/6", "2Bsus/B")
+	new MI(MITs.PC, "F/5,B/5,D/6", "2Bsus/F")
 ];
 
 const O4WKOnlyCATChords = [ // "高音谱，基本八度，白键" 为根音及三五音的紧凑型分解三和弦
@@ -646,16 +556,16 @@ export const PredefinedGameCollections = [
 		[
 			new Game(5100, GTs.Intro, "第一节 学习", "认识三和弦及转位", "treble", "C", 0, []),
 
-			new Game(5111, GTs.TCCI, "第二节 练习", "视谱：三和弦转位（紧凑柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5112, GTs.TCCI, "第三节 练习", "视谱：三和弦转位（紧凑分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5113, GTs.TCCI, "第四节 练习", "视谱：三和弦转位（紧凑柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
-			new Game(5114, GTs.TCCI, "第五节 练习", "视谱：三和弦转位（紧凑分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
+			new Game(5111, GTs.TCCI, "第二节 练习", "三和弦转位（紧凑柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
+			new Game(5112, GTs.TCCI, "第三节 练习", "三和弦转位（紧凑分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
+			new Game(5113, GTs.TCCI, "第四节 练习", "三和弦转位（紧凑柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
+			new Game(5114, GTs.TCCI, "第五节 练习", "三和弦转位（紧凑分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
 
 			// TODO 八度型, 四个键
-			new Game(5115, GTs.TCCI, "第六节 练习", "视谱：三和弦转位（八度柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5116, GTs.TCCI, "第七节 练习", "视谱：三和弦转位（八度分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5117, GTs.TCCI, "第八节 练习", "视谱：三和弦转位（八度柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
-			new Game(5118, GTs.TCCI, "第九节 练习", "视谱：三和弦转位（八度分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI))
+			new Game(5115, GTs.TCCI, "第六节 练习", "三和弦转位（八度柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
+			new Game(5116, GTs.TCCI, "第七节 练习", "三和弦转位（八度分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
+			new Game(5117, GTs.TCCI, "第八节 练习", "三和弦转位（八度柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
+			new Game(5118, GTs.TCCI, "第九节 练习", "三和弦转位（八度分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI))
 		]
 	)
 	// new GC(61,"第六章","三和弦-基本练习","",
