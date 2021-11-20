@@ -122,7 +122,6 @@ return {
     computeGameStars: function(game_progress) {
         if (game_progress.CompletedItemCount < game_progress.TotalItemCount)
             return 0;
-
         if (game_progress.ErrorItemCount == 0)
             return 3;
         if (game_progress.ErrorItemCount == 1)
@@ -130,15 +129,6 @@ return {
         if (game_progress.ErrorItemCount == 2)
             return 1;
         return 0;
-
-        // let error_percent = (parseFloat(game_progress.ErrorItemCount) / parseFloat(game_progress.TotalItemCount));
-        // if (error_percent == 0)
-        //     return 3;
-        // if (error_percent < 0.05)
-        //     return 2;
-        // if (error_percent < 0.1)
-        //     return 1;
-        // return 0;
     },
 
     /////////////////////////////////////
@@ -146,9 +136,8 @@ return {
 
     // async run canvas draw func under mp-weixin,
     // callback will be called after drawFunc called.
-    // drawFunc = function(crc2d)
-    // callback = function() can be null
-    // will return canvas size as { width, height }
+    // drawFunc = function(crc2d, drawFuncParams)
+    // callback = function(callbackParams), can be null
     miniAppCanvasDraw: function(_this, drawFunc, drawFuncParams, callback, callbackParams) {
         //console.log("before wx.createSelectorQuery().selectAll('#the-canvas').node(...)");
 
@@ -159,9 +148,10 @@ return {
             //console.log("canvas sizing = ", res.width, res.height);
             //console.log("canvas.node sizing = ", node.width, node.height);
 
+            // set canvas drawing surface size as same with canvas html element size if not set yet.
             if (_this.ctx.canvasSizing.width == 0 || _this.ctx.canvasSizing.height == 0) {
-                _this.ctx.canvasSizing.width = res.width / 1.5; 
-                _this.ctx.canvasSizing.height = res.height / 2;  // TODO quick and dirty fix
+                _this.ctx.canvasSizing.width = res.width / 1.5;  // NOTE: quick and dirty fix
+                _this.ctx.canvasSizing.height = res.height / 2;  // NOTE: quick and dirty fix
                 node.width = _this.ctx.canvasSizing.width; 
                 node.height = _this.ctx.canvasSizing.height;
             }
@@ -184,12 +174,10 @@ return {
         //console.log("msg from local vexflow: ", Vex.sayHello);
         if (!this.ctx.vfRenderContext) {
             //if (vue_this.$global.isMiniApp()) {
-            if (isMiniApp()) {
+            if (isMiniApp())
                 this.miniAppCanvasDraw(this, this.mainDrawFunc, null, callback, null);
-            } else {
-                // TODO not tested in H5 yet
-                // this.ctx.canvasElement = document.getElementById("the-canvas").children[0];
-                // this.ctx.vfRenderContext = this.ctx.canvasElement.getContext("2d");
+            else {
+                console.log("not implemented yet");
             }
         }
     },
@@ -227,10 +215,9 @@ return {
         //console.log("render finished");
     },
 
-    // change current highlighted music item to next music item,
-    // show animations according result (whether user's answner to current question is correct or not)
+    // change style of current music item (according if user's answner correct or not), and highlight next music item.
     // @func <Number,bool,Number>
-    // note: new_music_item_index may be out of range
+    // note: if index of (old or new) music item doesn't exist, we just ignore it.
     toggleMusicItem: function(old_item_index, old_item_result, new_item_index) {
         let params = { old_item_index : old_item_index, old_item_result : old_item_result, new_item_index : new_item_index };
         this.miniAppCanvasDraw(this, this.tickDrawFunc, params, null, null);
@@ -245,19 +232,17 @@ return {
 
         // update old note if exists
         if (params.old_item_index >= 0) {
-            let last_stave_note = _this.ctx.vfStaveNotes[params.old_item_index];
-            if (params.old_item_result)
-                last_stave_note.setStyle({ fillStyle: "gray", strokeStyle: "gray" });
-            else
-                last_stave_note.setStyle({ fillStyle: "yellow", strokeStyle: "yellow" });
-            last_stave_note.setContext(context).draw();
-            //console.log(last_stave_note);
+            let old_stave_note = _this.ctx.vfStaveNotes[params.old_item_index];
+            let color = (params.old_item_result ? "gray" : "red");
+            old_stave_note.setStyle({ fillStyle: color, strokeStyle: color });
+            old_stave_note.setContext(context).draw();
+            //console.log(old_stave_note);
         }
 
         // update new note if exists
         if (params.new_item_index < _this.ctx.vfStaveNotes.length) {
             let new_stave_note = _this.ctx.vfStaveNotes[params.new_item_index];
-            new_stave_note.setStyle({ fillStyle: "red", strokeStyle: "red" });
+            new_stave_note.setStyle({ fillStyle: "blue", strokeStyle: "blue" });
             new_stave_note.setContext(context).draw();
             //console.log(new_stave_note);
         }

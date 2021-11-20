@@ -222,8 +222,8 @@
 			justify-content: center;
 			align-items: center;
 			height: 2rem;
-			background-color: #F0AD4E;
-			border: 1px solid #FFBD8E;
+			background-color: #FFFF66;
+			border: 1px solid black;
 		}
 
 			.game-progress-text-item {
@@ -234,7 +234,7 @@
 				.progress-text {
 					text-overflow: ellipsis;
 					font-size: 1em;
-					color: #F1F1F1;
+					color: blue;
 					/* border: 1px solid red; */
 				}
 

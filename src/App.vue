@@ -43,8 +43,8 @@
 
 <style>
 	html {
+        /* padding: top right bottom left; */
 		font-size: medium;
-	  	/* border: 1px solid red; */
 	  	height: 100%;
 	}
 
