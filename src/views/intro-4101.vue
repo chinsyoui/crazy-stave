@@ -2,9 +2,9 @@
 
 <template>
 	<view class="container">
-		<image class="image" src="../static/images/degrees.png" style="width: 100%"></image>
+		<image class="image" src="../static/images/degrees-ex.png" style="width: 100%"></image>
 		<view class="text-area">
-			<text class="text">两个音之间的距离，叫度数。\n钢琴上相邻的两个键叫二度，相邻两个大组(指12个黑白键组成的组)中的同名的音叫八度。\n如上图所示，还有三度，四度，五度，六度，七度等。\n\n看到五线谱上的两个音，能迅速识别出度数(同时知道中间隔几个键)，对于快速识谱非常重要。</text>
+			<text class="text">这是分解双音的度数，因为视觉上左右错开的缘故，看起来会更难一些。\n但熟能生巧，请加油练习。熟练后您看五线谱时就可以一眼看清多个音符了。</text>
 		</view>
 	</view>
 </template>

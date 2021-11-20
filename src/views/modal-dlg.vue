@@ -83,6 +83,7 @@
 
     .modal-body {
         font-size: 1.5em;
+        white-space: pre-wrap;
         margin: 20px 0;
     }
 

@@ -73,7 +73,7 @@
 			},
 
             getGameResultDisplayString: function(gp) {
-                let msg = "\n得分: " + gp.Score + " (用时" + gp.ElapsedSeconds + "秒, 错误 " + gp.ErrorItemCount + "个)";
+                let msg = "得分: " + gp.Score + " \n(用时" + gp.ElapsedSeconds + "秒, 错误 " + gp.ErrorItemCount + "个)";
                 switch(gp.Stars) {
                     case 1:
                         return "加油: ★   "+ msg;

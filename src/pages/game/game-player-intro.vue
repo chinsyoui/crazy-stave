@@ -6,10 +6,13 @@
     import Intro1102 from "@/views/intro-1102.vue"
     import Intro1103 from "@/views/intro-1103.vue"
     import Intro1104 from "@/views/intro-1104.vue"
+    import Intro1110 from "@/views/intro-1110.vue"
+    import Intro1120 from "@/views/intro-1120.vue"
     import Intro2100 from "@/views/intro-2100.vue"
     import Intro3100 from "@/views/intro-3100.vue"
     import Intro3101 from "@/views/intro-3101.vue"
     import Intro4100 from "@/views/intro-4100.vue"
+    import Intro4101 from "@/views/intro-4101.vue"
     import Intro5100 from "@/views/intro-5100.vue"
 
     import { mapState } from 'vuex'
@@ -21,10 +24,13 @@
             Intro1102,
             Intro1103,
             Intro1104,
+            Intro1110,
+            Intro1120,
             Intro2100,
             Intro3100,
             Intro3101,
             Intro4100,
+            Intro4101,
             Intro5100
         },
 
@@ -103,6 +109,12 @@
 		<block v-else-if="CurrentGame.Id==1104">
 			<Intro1104/>
 		</block>
+		<block v-else-if="CurrentGame.Id==1110">
+			<Intro1110/>
+		</block>
+		<block v-else-if="CurrentGame.Id==1120">
+			<Intro1120/>
+		</block>
 		<block v-else-if="CurrentGame.Id==2100">
 			<Intro2100/>
 		</block>
@@ -114,6 +126,9 @@
 		</block>
 		<block v-else-if="CurrentGame.Id==4100">
 			<Intro4100/>
+		</block>
+		<block v-else-if="CurrentGame.Id==4101">
+			<Intro4101/>
 		</block>
 		<block v-else-if="CurrentGame.Id==5100">
 			<Intro5100/>
