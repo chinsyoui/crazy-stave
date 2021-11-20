@@ -16,7 +16,7 @@ return {
         staveClef: "treble",       // default clef
         staveKeysig: "C",          // default keysig
         musicItems: [],            // random generated music items
-
+        notes_per_music_item: 0,   // notes per music item, must be same for all music items
         vfStaveNotes: [],          // array of VF.StaveNote
 
         canvasSizing: { width: 0, height: 0 },// sizing of canvas
@@ -76,7 +76,7 @@ return {
         if (answner == "OK")
             return true;
 
-        console.log("Your Answner to Question[" + this.ctx.current_question_index + "] = " + answner);
+        //console.log("Your Answner to Question[" + this.ctx.current_question_index + "] = " + answner);
 
         // get the correct answner of current question
         let music_item = this.ctx.musicItems[this.ctx.current_question_index];
@@ -95,7 +95,7 @@ return {
 
          // check if user's answner correct or not
         let result = (answner.toUpperCase() === correct_answner.toUpperCase());
-        //console.log("You Are: " + (result ? "Right" : "Wrong"));
+        console.log("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong"));
 
         // update progress
         game_progress.CompletedItemCount ++;
@@ -202,6 +202,8 @@ return {
         // 把MusicItems转换为StaveNotes
         _this.ctx.vfStaveNotes = new Array();
         _this.convertMusicItemsToStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.vfStaveNotes);
+        _this.ctx.notes_per_music_item = _this.ctx.vfStaveNotes.length / _this.ctx.musicItems.length;
+        console.assert(Number.isInteger(_this.ctx.notes_per_music_item)); // must be integer
 
         const context = _this.ctx.vfRenderer.getContext();
         //console.log("VF.Renderer.getContext() = ", context.__proto__);
@@ -223,28 +225,35 @@ return {
         this.miniAppCanvasDraw(this, this.tickDrawFunc, params, null, null);
     },
 
+    // draw music item of one tick (one question/answner)
     tickDrawFunc: function(_this, crc2d, params) {
         _this.ctx.vfRenderer.ctx.context2D = crc2d;
         const context = _this.ctx.vfRenderer.getContext();
 
         //console.log("Switching to next... Last Result = ", params.old_item_result);
-        console.assert(params.new_item_index >=0 && params.new_item_index <= _this.ctx.vfStaveNotes.length);
-
-        // update old note if exists
+        console.assert(params.new_item_index >=0 && params.new_item_index <= _this.ctx.musicItems.length);
+        
+        // update old note(s) if exists
         if (params.old_item_index >= 0) {
-            let old_stave_note = _this.ctx.vfStaveNotes[params.old_item_index];
-            let color = (params.old_item_result ? "gray" : "red");
-            old_stave_note.setStyle({ fillStyle: color, strokeStyle: color });
-            old_stave_note.setContext(context).draw();
-            //console.log(old_stave_note);
+            let old_notes_index_start = params.old_item_index * _this.ctx.notes_per_music_item;
+            for(let i=0;i<_this.ctx.notes_per_music_item;i++) {
+                let old_stave_note = _this.ctx.vfStaveNotes[old_notes_index_start+i];
+                let color = (params.old_item_result ? "gray" : "red");
+                old_stave_note.setStyle({ fillStyle: color, strokeStyle: color });
+                old_stave_note.setContext(context).draw();
+                console.log(old_stave_note);
+            }
         }
 
-        // update new note if exists
-        if (params.new_item_index < _this.ctx.vfStaveNotes.length) {
-            let new_stave_note = _this.ctx.vfStaveNotes[params.new_item_index];
-            new_stave_note.setStyle({ fillStyle: "blue", strokeStyle: "blue" });
-            new_stave_note.setContext(context).draw();
-            //console.log(new_stave_note);
+        // update new note(s) if exists
+        if (params.new_item_index < _this.ctx.musicItems.length) {
+            let new_notes_index_start = params.new_item_index * _this.ctx.notes_per_music_item;
+            for(let i=0;i<_this.ctx.notes_per_music_item;i++) {
+                let new_stave_note = _this.ctx.vfStaveNotes[new_notes_index_start+i];
+                new_stave_note.setStyle({ fillStyle: "blue", strokeStyle: "blue" });
+                new_stave_note.setContext(context).draw();
+                console.log(new_stave_note);
+            }
         }
     },
 
@@ -252,7 +261,7 @@ return {
     // <Array,String,Array>
     convertMusicItemsToStaveNotes: function(music_items, stave_clef, vfStaveNotes) {
         console.assert(music_items && music_items.length > 0 && vfStaveNotes && vfStaveNotes.length == 0);
-        //console.log("Enter convertMusicItemsToStaveNotes", music_items);
+        console.log("Enter convertMusicItemsToStaveNotes", music_items);
 
         for(let i=0; i<music_items.length; i++) {
             let music_item = music_items[i];
@@ -278,10 +287,12 @@ return {
                     }
                     break;
                 case MITs.AC: {
-                        let note = new VF.StaveNote({ keys: value.split(','), clef: stave_clef, duration: "q" });
-                        vfStaveNotes.push(note);
-                        console.log("not implemented yet");
-                    } 
+                        let keys = value.split(',');
+                        for(let key of keys) {
+                            let note = new VF.StaveNote({ keys: [key], clef: stave_clef, duration: "q" });
+                            vfStaveNotes.push(note);
+                        }
+                    }
                     break;
                 default:
                     console.assert("not implemented yet");
@@ -289,7 +300,7 @@ return {
             }
         }
 
-        //console.log("Leave convertMusicItemsToStaveNotes", vfStaveNotes);
+        console.log("Leave convertMusicItemsToStaveNotes", vfStaveNotes);
     }
 };
 };
