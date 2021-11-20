@@ -140,8 +140,9 @@ const O2WKOnlyCPTChords = [ // "低音谱，低八度，白键" 为根音及三�
 	new MI(MITs.PC, "B/2,D/3,F/3", "B")
 ];
 
+// "低音谱，低八度，白键" 为根音及三五音的紧凑型柱式三和弦, 包括转位
 // 值的格式：第一位为0/1/2转位号码,其余字符为和弦名称
-const O2WKOnlyCPTChordsWithCI = [ // "低音谱，低八度，白键" 为根音及三五音的紧凑型柱式三和弦, 包括转位
+const O2WKOnlyCPTChordsWithCI = [
 	new MI(MITs.PC, "C/2,E/2,G/2", "0C"),
 	new MI(MITs.PC, "E/2,G/2,C/3", "1C/E"),
 	new MI(MITs.PC, "G/2,C/3,E/3", "2C/G"),
@@ -163,6 +164,84 @@ const O2WKOnlyCPTChordsWithCI = [ // "低音谱，低八度，白键" 为根音�
 	new MI(MITs.PC, "B/2,D/3,F/3", "0Bsus"),
 	new MI(MITs.PC, "D/3,F/3,B/3", "1Bsus/D"),
 	new MI(MITs.PC, "F/3,B/3,D/4", "2Bsus/F")
+];
+
+// "低音谱，低八度，白键" 为根音及三五音的紧凑型分解三和弦, 包括转位
+// 值的格式：第一位为0/1/2转位号码,其余字符为和弦名称
+const O2WKOnlyCATChordsWithCI = [
+	new MI(MITs.AC, "C/2,E/2,G/2", "0C"),
+	new MI(MITs.AC, "E/2,G/2,C/3", "1C/E"),
+	new MI(MITs.AC, "G/2,C/3,E/3", "2C/G"),
+	new MI(MITs.AC, "D/2,F/2,A/2", "0Dm"),
+	new MI(MITs.AC, "F/2,A/2,D/3", "1Dm/F"),
+	new MI(MITs.AC, "A/2,D/3,F/3", "2Dm/A"),
+	new MI(MITs.AC, "E/2,G/2,B/2", "0Em"),
+	new MI(MITs.AC, "G/2,B/2,E/3", "1Em/G"),
+	new MI(MITs.AC, "B/2,E/3,G/3", "2Em/B"),
+	new MI(MITs.AC, "F/2,A/2,C/3", "0F"),
+	new MI(MITs.AC, "A/2,C/3,F/3", "1F/A"),
+	new MI(MITs.AC, "C/3,F/3,A/3", "2F/C"),
+	new MI(MITs.AC, "G/2,B/2,D/3", "0G"),
+	new MI(MITs.AC, "B/2,D/3,G/3", "1G/B"),
+	new MI(MITs.AC, "D/3,G/3,B/3", "2G/D"),
+	new MI(MITs.AC, "A/2,C/3,E/3", "0Am"),
+	new MI(MITs.AC, "C/3,E/3,A/3", "1Am/C"),
+	new MI(MITs.AC, "E/3,A/3,C/4", "2Am/E"),
+	new MI(MITs.AC, "B/2,D/3,F/3", "0Bsus"),
+	new MI(MITs.AC, "D/3,F/3,B/3", "1Bsus/D"),
+	new MI(MITs.AC, "F/3,B/3,D/4", "2Bsus/F")
+];
+
+// "低音谱，低八度，白键" 为根音及三五音的八度型柱式三和弦, 包括转位
+// 值的格式：第一位为0/1/2转位号码,其余字符为和弦名称
+const O2WKOnlyOPTChordsWithCI = [
+	new MI(MITs.PC, "C/2,E/2,G/2,C/3", "0C"),
+	new MI(MITs.PC, "E/2,G/2,C/3,E/3", "1C/E"),
+	new MI(MITs.PC, "G/2,C/3,E/3,G/3", "2C/G"),
+	new MI(MITs.PC, "D/2,F/2,A/2,D/3", "0Dm"),
+	new MI(MITs.PC, "F/2,A/2,D/3,F/3", "1Dm/F"),
+	new MI(MITs.PC, "A/2,D/3,F/3,A/3", "2Dm/A"),
+	new MI(MITs.PC, "E/2,G/2,B/2,E/3", "0Em"),
+	new MI(MITs.PC, "G/2,B/2,E/3,G/3", "1Em/G"),
+	new MI(MITs.PC, "B/2,E/3,G/3,B/3", "2Em/B"),
+	new MI(MITs.PC, "F/2,A/2,C/3,F/3", "0F"),
+	new MI(MITs.PC, "A/2,C/3,F/3,A/3", "1F/A"),
+	new MI(MITs.PC, "C/3,F/3,A/3,C/4", "2F/C"),
+	new MI(MITs.PC, "G/2,B/2,D/3,G/3", "0G"),
+	new MI(MITs.PC, "B/2,D/3,G/3,B/3", "1G/B"),
+	new MI(MITs.PC, "D/3,G/3,B/3,D/3", "2G/D"),
+	new MI(MITs.PC, "A/2,C/3,E/3,A/3", "0Am"),
+	new MI(MITs.PC, "C/3,E/3,A/3,C/4", "1Am/C"),
+	new MI(MITs.PC, "E/3,A/3,C/4,E/4", "2Am/E"),
+	new MI(MITs.PC, "B/2,D/3,F/3,B/3", "0Bsus"),
+	new MI(MITs.PC, "D/3,F/3,B/3,D/4", "1Bsus/D"),
+	new MI(MITs.PC, "F/3,B/3,D/4,F/4", "2Bsus/F")
+];
+
+// "低音谱，低八度，白键" 为根音及三五音的八度型分解三和弦, 包括转位
+// 值的格式：第一位为0/1/2转位号码,其余字符为和弦名称
+const O2WKOnlyOATChordsWithCI = [
+	new MI(MITs.AC, "C/2,E/2,G/2,C/3", "0C"),
+	new MI(MITs.AC, "E/2,G/2,C/3,E/3", "1C/E"),
+	new MI(MITs.AC, "G/2,C/3,E/3,G/3", "2C/G"),
+	new MI(MITs.AC, "D/2,F/2,A/2,D/3", "0Dm"),
+	new MI(MITs.AC, "F/2,A/2,D/3,F/3", "1Dm/F"),
+	new MI(MITs.AC, "A/2,D/3,F/3,A/3", "2Dm/A"),
+	new MI(MITs.AC, "E/2,G/2,B/2,E/3", "0Em"),
+	new MI(MITs.AC, "G/2,B/2,E/3,G/3", "1Em/G"),
+	new MI(MITs.AC, "B/2,E/3,G/3,B/3", "2Em/B"),
+	new MI(MITs.AC, "F/2,A/2,C/3,F/3", "0F"),
+	new MI(MITs.AC, "A/2,C/3,F/3,A/3", "1F/A"),
+	new MI(MITs.AC, "C/3,F/3,A/3,C/4", "2F/C"),
+	new MI(MITs.AC, "G/2,B/2,D/3,G/3", "0G"),
+	new MI(MITs.AC, "B/2,D/3,G/3,B/3", "1G/B"),
+	new MI(MITs.AC, "D/3,G/3,B/3,D/4", "2G/D"),
+	new MI(MITs.AC, "A/2,C/3,E/3,A/3", "0Am"),
+	new MI(MITs.AC, "C/3,E/3,A/3,C/4", "1Am/C"),
+	new MI(MITs.AC, "E/3,A/3,C/4,E/4", "2Am/E"),
+	new MI(MITs.AC, "B/2,D/3,F/3,B/3", "0Bsus"),
+	new MI(MITs.AC, "D/3,F/3,B/3,D/4", "1Bsus/D"),
+	new MI(MITs.AC, "F/3,B/3,D/4,F/4", "2Bsus/F")
 ];
 
 const O2WKOnlyCATChords = [ // "低音谱，低八度，白键" 为根音及三五音的紧凑型分解三和弦
@@ -265,8 +344,9 @@ const O4WKOnlyCPTChords = [ // "高音谱，基本八度，白键" 为根音及�
 	new MI(MITs.PC, "B/4,D/5,F/5", "B")
 ];
 
+// "高音谱，基本八度，白键" 为根音及三五音的紧凑型柱式三和弦, 包括转位
 // 值的格式：第一位为0/1/2转位号码,其余字符为和弦名称
-const O4WKOnlyCPTChordsWithCI = [ // "高音谱，基本八度，白键" 为根音及三五音的紧凑型柱式三和弦, 包括转位
+const O4WKOnlyCPTChordsWithCI = [
 	new MI(MITs.PC, "C/4,E/4,G/4", "0C"),
 	new MI(MITs.PC, "E/4,G/4,C/5", "1C/E"),
 	new MI(MITs.PC, "G/4,C/5,E/5", "2C/G"),
@@ -290,7 +370,86 @@ const O4WKOnlyCPTChordsWithCI = [ // "高音谱，基本八度，白键" 为根�
 	new MI(MITs.PC, "F/5,B/5,D/6", "2Bsus/F")
 ];
 
-const O4WKOnlyCATChords = [ // "高音谱，基本八度，白键" 为根音及三五音的紧凑型分解三和弦
+// "高音谱，基本八度，白键" 为根音及三五音的八度型柱式三和弦, 包括转位
+// 值的格式：第一位为0/1/2转位号码,其余字符为和弦名称
+const O4WKOnlyOPTChordsWithCI = [
+	new MI(MITs.PC, "C/4,E/4,G/4,C/5", "0C"),
+	new MI(MITs.PC, "E/4,G/4,C/5,E/5", "1C/E"),
+	new MI(MITs.PC, "G/4,C/5,E/5,G/5", "2C/G"),
+	new MI(MITs.PC, "D/4,F/4,A/4,D/5", "0Dm"),
+	new MI(MITs.PC, "F/4,A/4,D/5,F/5", "1Dm/F"),
+	new MI(MITs.PC, "A/4,D/5,F/5,A/5", "2Dm/A"),
+	new MI(MITs.PC, "E/4,G/4,B/4,E/5", "0Em"),
+	new MI(MITs.PC, "G/4,B/4,E/5,G/5", "1Em/G"),
+	new MI(MITs.PC, "B/4,E/5,G/5,B/5", "2Em/B"),
+	new MI(MITs.PC, "F/4,A/4,C/5,F/5", "0F"),
+	new MI(MITs.PC, "A/4,C/5,F/5,A/5", "1F/A"),
+	new MI(MITs.PC, "C/5,F/5,A/5,C/6", "2F/C"),
+	new MI(MITs.PC, "G/4,B/4,D/5,G/5", "0G"),
+	new MI(MITs.PC, "B/4,D/5,G/5,B/5", "1G/B"),
+	new MI(MITs.PC, "D/5,G/5,B/5,D/6", "2G/D"),
+	new MI(MITs.PC, "A/4,C/5,E/5,A/5", "0Am"),
+	new MI(MITs.PC, "C/5,E/5,A/5,C/6", "1Am/C"),
+	new MI(MITs.PC, "E/5,A/5,C/6,E/6", "2Am/E"),
+	new MI(MITs.PC, "B/4,D/5,F/5,B/5", "0Bsus"),
+	new MI(MITs.PC, "D/5,F/5,B/5,D/6", "1Bsus/D"),
+	new MI(MITs.PC, "F/5,B/5,D/6,F/6", "2Bsus/F")
+];
+
+// "高音谱，基本八度，白键" 为根音及三五音的紧凑型分解三和弦, 包括转位
+// 值的格式：第一位为0/1/2转位号码,其余字符为和弦名称
+const O4WKOnlyCATChordsWithCI = [
+	new MI(MITs.AC, "C/4,E/4,G/4", "0C"),
+	new MI(MITs.AC, "E/4,G/4,C/5", "1C/E"),
+	new MI(MITs.AC, "G/4,C/5,E/5", "2C/G"),
+	new MI(MITs.AC, "D/4,F/4,A/4", "0Dm"),
+	new MI(MITs.AC, "F/4,A/4,D/5", "1Dm/F"),
+	new MI(MITs.AC, "A/4,D/5,F/5", "2Dm/A"),
+	new MI(MITs.AC, "E/4,G/4,B/4", "0Em"),
+	new MI(MITs.AC, "G/4,B/4,E/5", "1Em/G"),
+	new MI(MITs.AC, "B/4,E/5,G/5", "2Em/B"),
+	new MI(MITs.AC, "F/4,A/4,C/5", "0F"),
+	new MI(MITs.AC, "A/4,C/5,F/5", "1F/A"),
+	new MI(MITs.AC, "C/5,F/5,A/5", "2F/C"),
+	new MI(MITs.AC, "G/4,B/4,D/5", "0G"),
+	new MI(MITs.AC, "B/4,D/5,G/5", "1G/B"),
+	new MI(MITs.AC, "D/5,G/5,B/5", "2G/D"),
+	new MI(MITs.AC, "A/4,C/5,E/5", "0Am"),
+	new MI(MITs.AC, "C/5,E/5,A/5", "1Am/C"),
+	new MI(MITs.AC, "E/5,A/5,C/6", "2Am/E"),
+	new MI(MITs.AC, "B/4,D/5,F/5", "0Bsus"),
+	new MI(MITs.AC, "D/5,F/5,B/5", "1Bsus/D"),
+	new MI(MITs.AC, "F/5,B/5,D/6", "2Bsus/F")
+];
+
+// "高音谱，基本八度，白键" 为根音及三五音的八度型分解三和弦, 包括转位
+// 值的格式：第一位为0/1/2转位号码,其余字符为和弦名称
+const O4WKOnlyOATChordsWithCI = [
+	new MI(MITs.AC, "C/4,E/4,G/4,C/5", "0C"),
+	new MI(MITs.AC, "E/4,G/4,C/5,E/5", "1C/E"),
+	new MI(MITs.AC, "G/4,C/5,E/5,G/5", "2C/G"),
+	new MI(MITs.AC, "D/4,F/4,A/4,D/5", "0Dm"),
+	new MI(MITs.AC, "F/4,A/4,D/5,F/5", "1Dm/F"),
+	new MI(MITs.AC, "A/4,D/5,F/5,A/5", "2Dm/A"),
+	new MI(MITs.AC, "E/4,G/4,B/4,E/5", "0Em"),
+	new MI(MITs.AC, "G/4,B/4,E/5,G/5", "1Em/G"),
+	new MI(MITs.AC, "B/4,E/5,G/5,B/5", "2Em/B"),
+	new MI(MITs.AC, "F/4,A/4,C/5,F/5", "0F"),
+	new MI(MITs.AC, "A/4,C/5,F/5,A/5", "1F/A"),
+	new MI(MITs.AC, "C/5,F/5,A/5,C/6", "2F/C"),
+	new MI(MITs.AC, "G/4,B/4,D/5,G/5", "0G"),
+	new MI(MITs.AC, "B/4,D/5,G/5,B/5", "1G/B"),
+	new MI(MITs.AC, "D/5,G/5,B/5,D/6", "2G/D"),
+	new MI(MITs.AC, "A/4,C/5,E/5,A/6", "0Am"),
+	new MI(MITs.AC, "C/5,E/5,A/5,C/6", "1Am/C"),
+	new MI(MITs.AC, "E/5,A/5,C/6,E/6", "2Am/E"),
+	new MI(MITs.AC, "B/4,D/5,F/5,B/5", "0Bsus"),
+	new MI(MITs.AC, "D/5,F/5,B/5,D/6", "1Bsus/D"),
+	new MI(MITs.AC, "F/5,B/5,D/6,F/6", "2Bsus/F")
+];
+
+// "高音谱，基本八度，白键" 为根音及三五音的紧凑型分解三和弦
+const O4WKOnlyCATChords = [ 
 	new MI(MITs.AC, "C/4,E/4,G/4", "C"),
 	new MI(MITs.AC, "D/4,F/4,A/4", "D"),
 	new MI(MITs.AC, "E/4,G/4,B/4", "E"),
@@ -300,7 +459,8 @@ const O4WKOnlyCATChords = [ // "高音谱，基本八度，白键" 为根音及�
 	new MI(MITs.AC, "B/4,D/5,F/5", "B")
 ];
 
-const O4WKOnlyOPTChords = [ // "高音谱，基本八度，白键" 为根音及三五音的八度型柱式三和弦
+// "高音谱，基本八度，白键" 为根音及三五音的八度型柱式三和弦
+const O4WKOnlyOPTChords = [
 	new MI(MITs.PC, "C/4,G/4,C/5", "C"),
 	new MI(MITs.PC, "D/4,A/4,D/5", "D"),
 	new MI(MITs.PC, "E/4,B/4,E/5", "E"),
@@ -310,8 +470,8 @@ const O4WKOnlyOPTChords = [ // "高音谱，基本八度，白键" 为根音及�
 	new MI(MITs.PC, "B/4,F/5,B/5", "B")
 ];
 
-
-const O4WKOnlyOATChords = [ // "高音谱，基本八度，白键" 为根音及三五音的八度型分解三和弦
+// "高音谱，基本八度，白键" 为根音及三五音的八度型分解三和弦
+const O4WKOnlyOATChords = [
 	new MI(MITs.AC, "C/4,G/4,C/5", "C"),
 	new MI(MITs.AC, "D/4,A/4,D/5", "D"),
 	new MI(MITs.AC, "E/4,B/4,E/5", "E"),
@@ -331,7 +491,8 @@ const O5WKs = [ // 高音谱，高八度，白键
 	new MI(MITs.Note, "B/5", "B")
 ];
 
-const O5WKOnlyCPTChords = [ // "高音谱，高八度，白键" 为根音及三五音的紧凑型柱式三和弦
+// "高音谱，高八度，白键" 为根音及三五音的紧凑型柱式三和弦
+const O5WKOnlyCPTChords = [
 	new MI(MITs.PC, "C/5,E/5,G/5", "C"),
 	new MI(MITs.PC, "D/5,F/5,A/5", "D"),
 	new MI(MITs.PC, "E/5,G/5,B/5", "E"),
@@ -341,8 +502,8 @@ const O5WKOnlyCPTChords = [ // "高音谱，高八度，白键" 为根音及三�
 	new MI(MITs.PC, "B/5,D/6,F/6", "B")
 ];
 
-
-const O5WKOnlyCATChords = [ // "高音谱，高八度，白键" 为根音及三五音的紧凑型分解三和弦
+// "高音谱，高八度，白键" 为根音及三五音的紧凑型分解三和弦
+const O5WKOnlyCATChords = [
 	new MI(MITs.AC, "C/5,E/5,G/5", "C"),
 	new MI(MITs.AC, "D/5,F/5,A/5", "D"),
 	new MI(MITs.AC, "E/5,G/5,B/5", "E"),
@@ -352,8 +513,8 @@ const O5WKOnlyCATChords = [ // "高音谱，高八度，白键" 为根音及三�
 	new MI(MITs.AC, "B/5,D/6,F/6", "B")
 ];
 
-
-const O5WKOnlyOPTChords = [ // "高音谱，高八度，白键" 为根音及三五音的八度型柱式三和弦
+// "高音谱，高八度，白键" 为根音及三五音的八度型柱式三和弦
+const O5WKOnlyOPTChords = [
 	new MI(MITs.PC, "C/5,G/5,C/6", "C"),
 	new MI(MITs.PC, "D/5,A/5,D/6", "D"),
 	new MI(MITs.PC, "E/5,B/5,E/6", "E"),
@@ -363,7 +524,8 @@ const O5WKOnlyOPTChords = [ // "高音谱，高八度，白键" 为根音及三�
 	new MI(MITs.PC, "B/5,F/6,B/6", "B")
 ];
 
-const O5WKOnlyOATChords = [ // "高音谱，高八度，白键" 为根音及三五音的八度型分解三和弦
+// "高音谱，高八度，白键" 为根音及三五音的八度型分解三和弦
+const O5WKOnlyOATChords = [
 	new MI(MITs.AC, "C/5,G/5,C/6", "C"),
 	new MI(MITs.AC, "D/5,A/5,D/6", "D"),
 	new MI(MITs.AC, "E/5,B/5,E/6", "E"),
@@ -557,15 +719,15 @@ export const PredefinedGameCollections = [
 			new Game(5100, GTs.Intro, "第一节 学习", "认识三和弦及转位", "treble", "C", 0, []),
 
 			new Game(5111, GTs.TCCI, "第二节 练习", "三和弦转位（紧凑柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5112, GTs.TCCI, "第三节 练习", "三和弦转位（紧凑分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
+			new Game(5112, GTs.TCCI, "第三节 练习", "三和弦转位（紧凑分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCATChordsWithCI)),
 			new Game(5113, GTs.TCCI, "第四节 练习", "三和弦转位（紧凑柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
-			new Game(5114, GTs.TCCI, "第五节 练习", "三和弦转位（紧凑分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
+			new Game(5114, GTs.TCCI, "第五节 练习", "三和弦转位（紧凑分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCATChordsWithCI)),
 
 			// TODO 八度型, 四个键
-			new Game(5115, GTs.TCCI, "第六节 练习", "三和弦转位（八度柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5116, GTs.TCCI, "第七节 练习", "三和弦转位（八度分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5117, GTs.TCCI, "第八节 练习", "三和弦转位（八度柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
-			new Game(5118, GTs.TCCI, "第九节 练习", "三和弦转位（八度分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI))
+			new Game(5115, GTs.TCCI, "第六节 练习", "三和弦转位（八度柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyOPTChordsWithCI)),
+			new Game(5116, GTs.TCCI, "第七节 练习", "三和弦转位（八度分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyOATChordsWithCI)),
+			new Game(5117, GTs.TCCI, "第八节 练习", "三和弦转位（八度柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyOPTChordsWithCI)),
+			new Game(5118, GTs.TCCI, "第九节 练习", "三和弦转位（八度分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyOATChordsWithCI))
 		]
 	)
 	// new GC(61,"第六章","三和弦-基本练习","",
