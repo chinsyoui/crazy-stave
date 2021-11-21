@@ -54,17 +54,13 @@
 		width: 100%;
 	}
 
-        .button-hover {
-			background-color: #818181;
-        }
-
 		.button-list-line1 {
 			display: flex;
 			flex-direction: row;
 			flex-wrap: nowrap;
 			justify-content: center;
 			align-items: center;
-			height: 2rem;
+			height: 2.5rem;
 			width: 100%;
 		}
 
@@ -72,8 +68,8 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 2.5rem;
-                height: 2rem;
+                width: 2.8rem;
+                height: 2.5rem;
                 margin: 2px;
 				background-color: #F1F1F1;
 				border: 2px solid black;
@@ -97,7 +93,7 @@
             flex-wrap: nowrap;
             justify-content: center;
             align-items: center;
-            height: 4rem;
+            height: 3.5rem;
             width: 100%;
 		}
 
@@ -105,9 +101,10 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 4rem;
-                height: calc(4rem -3px);
-                margin: 12px;
+                width: 3.5rem;
+                height: 3rem;
+                margin-left: 1.3rem;
+                margin-right: 1.3rem;
                 background-color: #F1F1F1;
                 border: 3px solid black;
 			}
@@ -123,4 +120,9 @@
                         font-size: 2em;
                         overflow: hidden;
 					}
+
+        .button-hover {
+			background-color: #818181;
+        }
+
 </style>

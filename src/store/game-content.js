@@ -726,15 +726,15 @@ export const PredefinedGameCollections = [
 			new Game(5100, GTs.Intro, "第一节 学习", "认识三和弦及转位", "treble", "C", 0, []),
 
 			new Game(5111, GTs.TCCI, "第二节 练习", "三和弦转位（紧凑柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5112, GTs.TCCI, "第三节 练习", "三和弦转位（紧凑分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyCATChordsWithCI)),
+			new Game(5112, GTs.TCCI, "第三节 练习", "三和弦转位（紧凑分解型), 高音谱", "treble", "C",8, MIGs.NewST(O4WKOnlyCATChordsWithCI)),
 			new Game(5113, GTs.TCCI, "第四节 练习", "三和弦转位（紧凑柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
-			new Game(5114, GTs.TCCI, "第五节 练习", "三和弦转位（紧凑分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyCATChordsWithCI)),
+			new Game(5114, GTs.TCCI, "第五节 练习", "三和弦转位（紧凑分解型), 低音谱", "bass", "C", 8, MIGs.NewST(O2WKOnlyCATChordsWithCI)),
 
 			// TODO 八度型, 四个键
 			new Game(5115, GTs.TCCI, "第六节 练习", "三和弦转位（八度柱式型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyOPTChordsWithCI)),
-			new Game(5116, GTs.TCCI, "第七节 练习", "三和弦转位（八度分解型), 高音谱", "treble", "C", 12, MIGs.NewST(O4WKOnlyOATChordsWithCI)),
+			new Game(5116, GTs.TCCI, "第七节 练习", "三和弦转位（八度分解型), 高音谱", "treble", "C", 8, MIGs.NewST(O4WKOnlyOATChordsWithCI)),
 			new Game(5117, GTs.TCCI, "第八节 练习", "三和弦转位（八度柱式型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyOPTChordsWithCI)),
-			new Game(5118, GTs.TCCI, "第九节 练习", "三和弦转位（八度分解型), 低音谱", "bass", "C", 12, MIGs.NewST(O2WKOnlyOATChordsWithCI))
+			new Game(5118, GTs.TCCI, "第九节 练习", "三和弦转位（八度分解型), 低音谱", "bass", "C", 8, MIGs.NewST(O2WKOnlyOATChordsWithCI))
 		]
 	)
 	// new GC(61,"第六章","三和弦-基本练习","",
