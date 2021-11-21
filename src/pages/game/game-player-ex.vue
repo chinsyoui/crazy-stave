@@ -9,7 +9,7 @@
 
 	import { mapState } from 'vuex'
 	import { BTs } from '@/store/game-model.js'
-	import { GameEngine } from '@/utils/game-engine.js'
+	import { GameEngine } from '@/store/game-engine.js'
 
 	export default {
         ge: null,
