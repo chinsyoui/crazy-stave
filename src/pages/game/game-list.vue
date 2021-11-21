@@ -63,7 +63,7 @@
 
 				let page_url = "";
 				if (game.Type.ButtonType == BTs.Any)
-					page_url = "/pages/game/game-player-intro";
+					page_url = "/subpkg/pages/game/game-player-intro";
 				else
 					page_url = "/pages/game/game-player-ex";
 				uni.navigateTo({ url: page_url });

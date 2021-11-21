@@ -31,18 +31,29 @@
 			}
 		},
 		{
-			"path": "pages/game/game-player-intro",
-			"style": {
-				"navigationBarTitleText": "疯狂五线谱-知识学习"
-			}
-		},
-		{
 			"path": "pages/game/add-new-user",
 			"style": {
 				"navigationBarTitleText": "疯狂五线谱-创建新用户"
 			}
 		}
 	],
+    "subPackages": [{
+        "root": "subpkg",
+        "pages": [
+            {
+                "path": "pages/game/game-player-intro",
+                "style": {
+                    "navigationBarTitleText": "疯狂五线谱-知识学习"
+                }
+            }
+        ]
+    }],
+    "preloadRule": {
+        "pages/game/game-list": {
+            "network": "all",
+            "packages": ["subpkg"]
+        }
+    },    
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
