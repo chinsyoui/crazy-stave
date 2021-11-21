@@ -54,6 +54,10 @@
 		width: 100%;
 	}
 
+        .button-hover {
+			background-color: #818181;
+        }
+
 		.button-list-line1 {
 			display: flex;
 			flex-direction: row;

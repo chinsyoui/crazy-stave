@@ -53,6 +53,10 @@
 			border: 3px solid black;
 		}
 
+        .button-hover {
+			background-color: #818181;
+        }
+
 			.button-text-wrapper {
 				display: flex;
                 justify-content: center;
