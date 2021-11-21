@@ -17,7 +17,8 @@ const MICs = {
         return props[index];
     },
     // ByDegree = by random generate notes from a base notes and random degrees
-    // Props = { MaxNote: "C/6", BaseNotes: String[], Degrees: ["2m","3M","5p","8p"] }
+    // Props = { MaxNote: "C/6", MIT: 4, BaseNotes: String[], Degrees: ["2m","3M","5p","8p"] }
+    // 注: MIT MusicItemType，参见MITs中定义的值。
     ByDegree : function(props) {
         //console.log("ByDegree: ",props);
         let maxAN = PKs.NoteToAN(props.MaxNote);
@@ -31,7 +32,7 @@ const MICs = {
             if (upperNoteAN <= maxAN) {
                 let upperNote = PKs.ANtoNote(upperNoteAN,"#");
                 //console.log(lowerNote,degree," => ",lowerNoteAN,distance,upperNoteAN,upperNote);
-                let newMI = new MI(MITs.PC, (lowerNote + "," + upperNote), degree);
+                let newMI = new MI(props.MIT, (lowerNote + "," + upperNote), degree);
                 //console.log("newMI = ",newMI);
                 return newMI;
             }
@@ -706,12 +707,18 @@ export const PredefinedGameCollections = [
 	new GC(41,"第四章","双音练习","",
 		[
 			new Game(4100, GTs.Intro, "第一节 学习", "双音的度数", "treble", "C", 0, []),
-			new Game(4101, GTs.Intro, "第二节 学习", "双音的度数-进阶", "treble", "C", 0, []),
 
-			new Game(4111, GTs.DoubleNoteDegree, "第三节 练习", "双音度数识别 (高音谱两个八度)", "treble", "C", 12,
-                new MIG({ MaxNote: "C/6", BaseNotes: GenerateNotes("C/4","C/6",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, "ByDegree")),
-			new Game(4112, GTs.DoubleNoteDegree, "第四节 练习", "双音度数识别 (低音谱两个八度)", "bass", "C", 12,
-                new MIG({ MaxNote: "E/4", BaseNotes: GenerateNotes("C/2","C/4",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, "ByDegree"))
+            new Game(4111, GTs.DoubleNoteDegree, "第二节 练习", "双音度数识别 (柱式型，高音谱)", "treble", "C", 12,
+                new MIG({ MaxNote: "E/6", MIT: MITs.PC, BaseNotes: GenerateNotes("C/4","C/6",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, "ByDegree")),
+			new Game(4112, GTs.DoubleNoteDegree, "第三节 练习", "双音度数识别 (柱式型，低音谱)", "bass", "C", 12,
+                new MIG({ MaxNote: "E/4", MIT: MITs.PC, BaseNotes: GenerateNotes("C/2","C/4",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, "ByDegree")),
+
+            new Game(4101, GTs.Intro, "第四节 学习", "双音的度数-进阶", "treble", "C", 0, []),
+
+            new Game(4121, GTs.DoubleNoteDegree, "第五节 练习", "双音度数识别 (分解型，高音谱)", "treble", "C", 12,
+                new MIG({ MaxNote: "E/6", MIT: MITs.AC, BaseNotes: GenerateNotes("C/4","C/6",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, "ByDegree")),
+			new Game(4122, GTs.DoubleNoteDegree, "第六节 练习", "双音度数识别 (分解型，低音谱)", "bass", "C", 12,
+                new MIG({ MaxNote: "E/4", MIT: MITs.AC, BaseNotes: GenerateNotes("C/2","C/4",""), Degrees: ["2M","3M","4M","5p","6M","7M","8p"]}, "ByDegree"))
 		]
 	),
 	new GC(51,"第五章","多音练习：三和弦及转位","",

@@ -9,6 +9,11 @@
 			}
 		},
 		computed: {
+            isIntroGame() {
+                return function(game) {
+                    return (game.Type.ButtonType == BTs.Any);
+                }
+            },
 			getGameCollectionState() {
                 return function() {
 				    return this.CurrentUser.GameCollectionStates.getMapItem(this.CurrentGameCollection.Id);
@@ -88,8 +93,8 @@
 					<view class="uni-media-list">
 						<!-- <image class="uni-media-list-logo" :src="value.Icon"></image> -->
 						<view class="uni-media-list-body">
-							<view class="uni-media-list-text-top" style="color: blue; font: bold">{{ value.DisplayName }}</view>
-							<view class="uni-media-list-text-top">{{ value.Description }}</view>
+							<view class="uni-media-list-text-top"  v-bind:class="{ 'intro-game': isIntroGame(value) }" style="color: blue; font: bold">{{ value.DisplayName }}</view>
+							<view class="uni-media-list-text-middle">{{ value.Description }}</view>
 							<view class="uni-media-list-text-bottom">
 								<text style="color: gray">★{{ getGameStateStars(value.Id) }} 得分#{{ getGameStateTotalPlayCount(value.Id) }} 已练习{{ getGameStateTotalPlayDuration(value.Id) }}秒</text>
 							</view>
@@ -147,7 +152,17 @@
                     padding: 0.5em 0.5em 0.5em 0.5em;
 				}
 
-					.uni-media-list-text-top {
+					.uni-media-list-text-top.intro-game {
+                        background-color: #EEFFFF;
+					}
+
+                    .uni-media-list-text-top {
+						font-size: 1em;
+						overflow: hidden;
+                        background-color: #FFFFCC;
+                    }
+
+					.uni-media-list-text-middle {
 						font-size: 1em;
 						overflow: hidden;
 					}

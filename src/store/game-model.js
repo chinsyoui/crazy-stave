@@ -32,11 +32,10 @@ if (!console.assert) console.assert = (condition, ...info) => { if (!condition) 
 // 钢琴88个键的编号：
 // 键所在八度的编号[0~9]    ON(octave number)   = (int)(AN/12)
 // 键的八度内相对编号[0~11] RN(relative number) = AN 'mod' 12
-// 键的绝对位置编号[9~96]  AN(absolute number) = (ON-1)*12+RN
-// 音符表示法(/后面为八度编号): C/4, D#/3, Fb/2
-// 度数表示法: 5x, 其中x为 纯p,减/小m,增/大M
-// PKs = PianoKeys
-export const PKs = {
+// 键的绝对位置编号[9~96]   AN(absolute number) = (ON-1)*12+RN
+// 音符的标准音名表示法: C/4, D#/3, Fb/2  (斜杠/的后面为八度编号)
+// 度数表示法: 5x, 其中x为: p=纯, m=减/小, M=增/大
+export const PKs = { // PKs = PianoKeys
     // TODO: 理论上，每个大小调的转换表都不一样
 
     // 转换表：键的相对位置->音名，黑键用#或者为b
@@ -54,9 +53,12 @@ export const PKs = {
     RN: function(AN) { return AN % 12; },
     AN: function(ON,RN) { return ON*12+RN; },
 
+    // 五个黑键的RN值
     BlackRNs: [1,3,6,8,10],
+    // 七个白键的RN值
     WhiteRNs: [0,2,4,5,7,9,11],
 
+    // 将音符(标准音名表示法)转换为其AN值
     NoteToAN: function(note) {
         console.assert(note && (note.length == 3 || note.length == 4));
         let RN = PKs.PitchToRNs[note[0]];
@@ -69,6 +71,7 @@ export const PKs = {
         return AN;
     },
 
+    // 将AN值转换为音符的标准音名表示法，因为会出现同音多名，因此需要时会采用符合指定升降号的名称。
     // accidental: "#","b"
     ANtoNote: function(AN, accidental) {
         console.assert(AN >=10 && AN <=97);
@@ -83,8 +86,9 @@ export const PKs = {
         return note;
     },
 
-    // get new note from a base note (使用上面定义的音符表示法), and degree (使用上面定义的度数表示法)
-    // accidental 表示如果音符含有升降号用哪种表示法(因为一个音符有两个名称)
+    // 以一个音符为基础，生成指定度数(向上)的新的音符。
+    // 音符均使用用标准音名表示法, 度数使用标准度数表示法。
+    // accidental 表示如果遇到同音多名时使用哪个名称。
     NewNote: function(base_note, degree, accidental) {
         let AN = PKS.NoteToAN(base_note) + PKs.DegreeToDistances[degree];
         return PKs.ANtoNote(AN, accidental);
@@ -112,7 +116,7 @@ export const BTs = {
 	SyllableWithSF : 3,		 		 // 七个数字，每个包括升降号，一共21个按钮，两行排列
 	Pitch: 5,						 // 7个音名按钮
 	PitchWithSF: 6,			 		 // 七个音名，每个包括升降号，一共21个按钮，两行排列
-	Degree: 10,						 // 两个音符之间的度数，常用的有2/3/4/5/6/8度(不分大小度)
+	Degree: 10,						 // 两个音符之间的度数，常用的有2/3/4/5/6/7/8度(不分大小度)
 	CI: 11,				 			 // 三和弦转位, 常见的有0/1/2三种
 	WKOnlyTC: 20,      				 // 7个只包含白键的三和弦钮,不带转位: C,Dm,Em,F,G,Am,Bsus
 	WKOnlyWithCI: 21,      			 // 21个只包含白键的三和弦钮,以及转位

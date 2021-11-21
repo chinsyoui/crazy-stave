@@ -241,7 +241,7 @@ return {
                 let color = (params.old_item_result ? "gray" : "red");
                 old_stave_note.setStyle({ fillStyle: color, strokeStyle: color });
                 old_stave_note.setContext(context).draw();
-                console.log(old_stave_note);
+                //console.log(old_stave_note);
             }
         }
 
@@ -252,7 +252,7 @@ return {
                 let new_stave_note = _this.ctx.vfStaveNotes[new_notes_index_start+i];
                 new_stave_note.setStyle({ fillStyle: "blue", strokeStyle: "blue" });
                 new_stave_note.setContext(context).draw();
-                console.log(new_stave_note);
+                //console.log(new_stave_note);
             }
         }
     },
