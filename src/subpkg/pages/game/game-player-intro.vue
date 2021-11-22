@@ -97,106 +97,86 @@
 </script>
 
 <template>
-	<view class="content">
-		<view class="outermost-top-bar"/>
-		<view class="title-wrapper" @click="onBackClick()">
-			<text class="title">{{Title}} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
-		</view>
-		<block v-if="CurrentGame.Id==1100">
-			<Intro1100/>
-		</block>
-		<block v-else-if="CurrentGame.Id==1101">
-			<Intro1101/>
-		</block>
-		<block v-else-if="CurrentGame.Id==1102">
-			<Intro1102/>
-		</block>
-		<block v-else-if="CurrentGame.Id==1103">
-			<Intro1103/>
-		</block>
-		<block v-else-if="CurrentGame.Id==1104">
-			<Intro1104/>
-		</block>
-		<block v-else-if="CurrentGame.Id==1110">
-			<Intro1110/>
-		</block>
-		<block v-else-if="CurrentGame.Id==1120">
-			<Intro1120/>
-		</block>
-		<block v-else-if="CurrentGame.Id==2100">
-			<Intro2100/>
-		</block>
-		<block v-else-if="CurrentGame.Id==3100">
-			<Intro3100/>
-		</block>
-		<block v-else-if="CurrentGame.Id==3101">
-			<Intro3101/>
-		</block>
-		<block v-else-if="CurrentGame.Id==4100">
-			<Intro4100/>
-		</block>
-		<block v-else-if="CurrentGame.Id==4101">
-			<Intro4101/>
-		</block>
-		<block v-else-if="CurrentGame.Id==5100">
-			<Intro5100/>
-		</block>
-		<block v-else>
-			<text class="introduction">敬请期待</text>
-		</block>
-		<view class="outermost-bottom-bar">
-            <view class="button" style="padding-left: 30px; float: left" v-if="hasPrevGame" v-on:click.stop="onPrevButtonClick('next')">
-                <text class="button-text">上一节</text>
+    <view class="container-flex-rows" style="display: flex; flex-direction: row; width: 100%; height: 100%">
+        <view class="left-bar" style="width: 50px; height: 100%"/>
+        <view class="content-center" style="flex-grow: 1; display: flex; flex-direction: column; width: 100%; height: 100%">
+            <view class="top-bar title-wrapper" @click="onBackClick()">
+                <text class="title">{{Title}} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
             </view>
-            <view class="button" style="padding-right: 30px; float: right" v-if="hasNextGame" v-on:click.stop="onNextButtonClick('next')">
-                <text class="button-text">下一节</text>
+            <view class="container-center" style="flex-grow: 1; padding: 1em 1em 1em 1em">
+                <block v-if="CurrentGame.Id==1100">
+                    <Intro1100/>
+                </block>
+                <block v-else-if="CurrentGame.Id==1101">
+                    <Intro1101/>
+                </block>
+                <block v-else-if="CurrentGame.Id==1102">
+                    <Intro1102/>
+                </block>
+                <block v-else-if="CurrentGame.Id==1103">
+                    <Intro1103/>
+                </block>
+                <block v-else-if="CurrentGame.Id==1104">
+                    <Intro1104/>
+                </block>
+                <block v-else-if="CurrentGame.Id==1110">
+                    <Intro1110/>
+                </block>
+                <block v-else-if="CurrentGame.Id==1120">
+                    <Intro1120/>
+                </block>
+                <block v-else-if="CurrentGame.Id==2100">
+                    <Intro2100/>
+                </block>
+                <block v-else-if="CurrentGame.Id==3100">
+                    <Intro3100/>
+                </block>
+                <block v-else-if="CurrentGame.Id==3101">
+                    <Intro3101/>
+                </block>
+                <block v-else-if="CurrentGame.Id==4100">
+                    <Intro4100/>
+                </block>
+                <block v-else-if="CurrentGame.Id==4101">
+                    <Intro4101/>
+                </block>
+                <block v-else-if="CurrentGame.Id==5100">
+                    <Intro5100/>
+                </block>
+                <block v-else>
+                    <text class="introduction">敬请期待</text>
+                </block>
+            </view>
+            <view class="bottom-bar" style="display: flex; flex-direction: row; width: 100%; height: 2em">
+                <view v-if="hasPrevGame" class="bottom-bar-left title-wrapper" style="height: 2em" @click="onPrevButtonClick()">
+                    <text class="title">上一节</text>
+                </view>
+                <view class="bottom-bar-center" style="flex-grow: 1"/>
+                <view v-if="hasNextGame" class="bottom-bar-right title-wrapper" style="height: 2em" @click="onNextButtonClick()">
+                    <text class="title">下一节</text>
+                </view>
             </view>
         </view>
-	</view>
+        <view class="right-bar" style="width: 50px; height: 100%"/>
+    </view>
 </template>
 
 <style>
-	.content {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		/* border: 1px solid red; */
-	}
+    .title-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        /* border: 1px solid red; */
+    }
 
-		.outermost-top-bar {
-			height: 1rem;
-		}
+    .title {
+        text-overflow: ellipsis;
+        font-size: 1.1em;
+        color: blue;
+    }
 
-		.title-wrapper {
-			display: flex;
-			flex-wrap: nowrap;
-			justify-content: center;
-			/* border: 1px solid red; */
-		}
-
-			.title {
-				text-overflow: ellipsis;
-				font-size: 1.1em;
-				color: blue;
-			}
-
-		.introduction {
-			margin: 3em 3em;
-			font-size: 1em;
-		}
-
-		.outermost-bottom-bar {
-            display: table-row;
-			height: 2rem;
-            width: 100%;
-		}
-
-            .button {
-                font-size: 1.2em;
-                padding-bottom: 1em;
-            }
-
+    .introduction {
+        margin: 3em 3em;
+        font-size: 1em;
+    }
 </style>

@@ -15,7 +15,6 @@
 	.container {
 		display: flex;
 		flex-direction: column;
-        padding: 1em 3em 3em 3em;
 		flex-wrap: nowrap;
 		justify-content: center;
 		align-items: center;

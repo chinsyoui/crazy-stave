@@ -74,15 +74,6 @@
 		height: 100%;
 	}
 
-	/* H5 兼容 pc 所需 */
-	/* #ifdef H5 */
-	@media screen and (min-width: 768px) {
-		body{
-			overflow-y: scroll;
-		}
-	}
-	/* #endif */
-
 	/*每个页面公共css */
 
 	uni-actionsheet {
@@ -103,7 +94,7 @@
 	}
 
     uni-list {
-        -webkit-overflow-scrolling: touch;        
+        -webkit-overflow-scrolling: touch;
     }
 
     uni-modal .uni-modal__bd{      
