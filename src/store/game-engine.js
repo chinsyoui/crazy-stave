@@ -151,11 +151,15 @@ return {
 
             // set canvas drawing surface size as same with canvas html element size if not set yet.
             if (_this.ctx.canvasSizing.width == 0 || _this.ctx.canvasSizing.height == 0) {
-                _this.ctx.canvasSizing.width = res.width / 1.5;  // NOTE: quick and dirty fix
-                _this.ctx.canvasSizing.height = res.height / 2;  // NOTE: quick and dirty fix
+                let wRatio = (res.width > 800 ? 1.2 : 1);
+                _this.ctx.canvasSizing.width = Math.floor(res.width / wRatio);  // NOTE: quick and dirty fix
+                let hRatio = (res.height > 200 ? 1.2 : 1);
+                _this.ctx.canvasSizing.height = Math.floor(res.height /hRatio);  // NOTE: quick and dirty fix
                 node.width = _this.ctx.canvasSizing.width; 
                 node.height = _this.ctx.canvasSizing.height;
             }
+
+            logger.info("Canvas: Element Size = " + Math.floor(res.width) + "x" + Math.floor(res.height) +", Drawing Size = " + node.width + "x" + node.height);
 
             const crc2d = node.getContext('2d');
             logger.assert(crc2d,"can't get crc2d from ",node);
@@ -210,12 +214,21 @@ return {
         //logger.debug("VF.Renderer.getContext() = ", context.__proto__);
 
         //logger.debug("stave width = ", _this.ctx.canvasSizing.width);
-        const vfStave = new VF.Stave(0, 0, _this.ctx.canvasSizing.width);
+        const vfStave = new VF.Stave(0, Math.floor(_this.ctx.canvasSizing.height - 120)/2, _this.ctx.canvasSizing.width);
         vfStave.addClef(_this.ctx.staveClef); // .addTimeSignature("4/4");
         vfStave.setContext(context).draw();
 
         VF.Formatter.FormatAndDraw(context, vfStave, _this.ctx.vfStaveNotes);
 
+        // const formatter = VF.Formatter();
+        // formatter.joinVoices([voice]);
+        // // const width = 250; //formatter.preCalculateMinTotalWidth([voice]);
+        // const width = formatter.preCalculateMinTotalWidth([voice]);
+        // formatter.format([voice]);
+        // const stave = f.Stave({ y: 40, width: width + Stave.defaultPadding });
+        // stave.draw();
+        // voice.draw(f.getContext(), stave);
+      
         // if (_this.ctx.musicItems[0].Type == MITs.AC) {
         //     var beams = VF.Beam.generateBeams(_this.ctx.vfStaveNotes);
         //     beams.forEach(function(beam) { beam.setContext(context).draw(); });

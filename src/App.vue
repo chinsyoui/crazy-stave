@@ -5,7 +5,8 @@
 		mounted() {
 			if (!this.$global.isMiniApp()) {
 				if (this.$global.isIOS()) {
-					window.onresize = this.onResizeWindow;
+                    if (window)
+					    window.onresize = this.onResizeWindow;
 					this.onResizeWindow();
 				}
 			}

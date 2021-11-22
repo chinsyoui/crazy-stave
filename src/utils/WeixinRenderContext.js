@@ -96,7 +96,7 @@ export function WeixinRenderContext(crc2d, width, height) {
     this.resize = (width, height) => {
         logger.debug("resize", width, height);
         const canvasElement = this.context2D.canvas;
-        const devicePixelRatio = window.devicePixelRatio || 1;
+        const devicePixelRatio = window && window.devicePixelRation ? window.devicePixelRatio : 1;
         // Scale the canvas size by the device pixel ratio clamping to the maximum supported size.
         [width, height] = CanvasContext.sanitizeCanvasDims(width * devicePixelRatio, height * devicePixelRatio);
         // Divide back down by the pixel ratio and convert to integers.
