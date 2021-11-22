@@ -1,3 +1,4 @@
+import logger from '@/utils/logger.js'
 import { BTs, MITs } from '@/store/game-model.js'
 import { GenerateMusicItemsForGameInstance } from '@/store/game-content.js'
 
@@ -41,7 +42,7 @@ return {
     },
 
     initGame: function(vue_this, game, timer_func) {
-        console.info("initGame: ", game);
+        logger.info("initGame: ", game);
 
         this.ctx.current_question_index = 0;
 
@@ -49,7 +50,7 @@ return {
         this.ctx.staveKeysig = game.StaveKeySig;
 
         this.ctx.musicItems = GenerateMusicItemsForGameInstance(game.MusicItemsCount, game.MusicItemsGenerator);
-        //console.log("random generated music items: ", this.ctx.musicItems);
+        //logger.debug("random generated music items: ", this.ctx.musicItems);
 
         let _this = this;
         this.initStave(vue_this, function() {
@@ -63,20 +64,20 @@ return {
 
     // return true if game finished
     onAnswnerButtonClicked: function(vue_this, button_type, answner, game_progress) {
-        //console.log("onAnswnerButtonClicked ===", this.ctx.current_question_index, game_progress.TotalItemCount);
+        //logger.debug("onAnswnerButtonClicked ===", this.ctx.current_question_index, game_progress.TotalItemCount);
 
         // game already finished, maybe user click too quickly
         if (this.ctx.current_question_index > game_progress.TotalItemCount - 1)
             return undefined;
 
-        console.assert(answner);
-        //console.log("onButtonClick: ", answner);
+        logger.assert(answner);
+        //logger.debug("onButtonClick: ", answner);
 
         // OK means this is an introduction game, just finish it
         if (answner == "OK")
             return true;
 
-        //console.log("Your Answner to Question[" + this.ctx.current_question_index + "] = " + answner);
+        //logger.debug("Your Answner to Question[" + this.ctx.current_question_index + "] = " + answner);
 
         // get the correct answner of current question
         let music_item = this.ctx.musicItems[this.ctx.current_question_index];
@@ -91,11 +92,11 @@ return {
         if (button_type == BTs.Degree)
             correct_answner = correct_answner[0];
 
-        //console.log("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
+        //logger.debug("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
 
          // check if user's answner correct or not
         let result = (answner.toUpperCase() === correct_answner.toUpperCase());
-        console.log("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong"));
+        logger.debug("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong"));
 
         // update progress
         game_progress.CompletedItemCount ++;
@@ -139,14 +140,14 @@ return {
     // drawFunc = function(crc2d, drawFuncParams)
     // callback = function(callbackParams), can be null
     miniAppCanvasDraw: function(_this, drawFunc, drawFuncParams, callback, callbackParams) {
-        //console.log("before wx.createSelectorQuery().selectAll('#the-canvas').node(...)");
+        //logger.debug("before wx.createSelectorQuery().selectAll('#the-canvas').node(...)");
 
         wx.createSelectorQuery().select('#the-canvas').fields({ node: true, size: true }, function (res) {
-            console.assert(res && res.node,"can't select canvas node");
+            logger.assert(res && res.node,"can't select canvas node");
 
             let node = res.node;
-            //console.log("canvas sizing = ", res.width, res.height);
-            //console.log("canvas.node sizing = ", node.width, node.height);
+            //logger.debug("canvas sizing = ", res.width, res.height);
+            //logger.debug("canvas.node sizing = ", node.width, node.height);
 
             // set canvas drawing surface size as same with canvas html element size if not set yet.
             if (_this.ctx.canvasSizing.width == 0 || _this.ctx.canvasSizing.height == 0) {
@@ -157,33 +158,33 @@ return {
             }
 
             const crc2d = node.getContext('2d');
-            console.assert(crc2d,"can't get crc2d from ",node);
-            //console.log("inside selectorQuery: execute drawFunc with crc2d", drawFunc);
+            logger.assert(crc2d,"can't get crc2d from ",node);
+            //logger.debug("inside selectorQuery: execute drawFunc with crc2d", drawFunc);
 
             drawFunc(_this, crc2d, drawFuncParams);
-            //console.log("inside selectorQuery: execute callback", callback);
+            //logger.debug("inside selectorQuery: execute callback", callback);
             if (callback)
                 callback(_this, callbackParams);
         }).exec();
-        //console.log("after async wx.createSelectorQuery().started");
+        //logger.debug("after async wx.createSelectorQuery().started");
     },
 
     initStave: function(vue_this, callback) {
-        console.assert(this.ctx.musicItems && this.ctx.musicItems.length);
+        logger.assert(this.ctx.musicItems && this.ctx.musicItems.length);
 
-        //console.log("msg from local vexflow: ", Vex.sayHello);
+        //logger.debug("msg from local vexflow: ", Vex.sayHello);
         if (!this.ctx.vfRenderContext) {
             //if (vue_this.$global.isMiniApp()) {
             if (isMiniApp())
                 this.miniAppCanvasDraw(this, this.mainDrawFunc, null, callback, null);
             else {
-                console.log("not implemented yet");
+                logger.debug("not implemented yet");
             }
         }
     },
 
     testDrawFunc: function(_this, crc2d, params) {
-        //console.log("crc2d = ", crc2d);
+        //logger.debug("crc2d = ", crc2d);
         crc2d.moveTo(0, 0);
         crc2d.lineTo(_this.ctx.canvasSizing.width, _this.ctx.canvasSizing.height);
         crc2d.rect(10, 10, _this.ctx.canvasSizing.width-20, _this.ctx.canvasSizing.height-20);
@@ -194,27 +195,33 @@ return {
         if (!_this.ctx.vfRenderer) {
             _this.ctx.vfRenderContext = new WeixinRenderContext(crc2d, _this.ctx.canvasSizing.width, _this.ctx.canvasSizing.height);
             _this.ctx.vfRenderer = new VF.Renderer(_this.ctx.vfRenderContext, VF.Renderer.Backends.CANVAS);
-            //console.log("this.$options.vfRenderer = ", _this.ctx.vfRenderer.__proto__);
+            //logger.debug("this.$options.vfRenderer = ", _this.ctx.vfRenderer.__proto__);
         }
 
-        //console.log(_this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.musicItems);
+        //logger.debug(_this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.musicItems);
 
         // 把MusicItems转换为StaveNotes
         _this.ctx.vfStaveNotes = new Array();
         _this.convertMusicItemsToStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.vfStaveNotes);
         _this.ctx.notes_per_music_item = _this.ctx.vfStaveNotes.length / _this.ctx.musicItems.length;
-        console.assert(Number.isInteger(_this.ctx.notes_per_music_item)); // must be integer
+        logger.assert(Number.isInteger(_this.ctx.notes_per_music_item)); // must be integer
 
         const context = _this.ctx.vfRenderer.getContext();
-        //console.log("VF.Renderer.getContext() = ", context.__proto__);
+        //logger.debug("VF.Renderer.getContext() = ", context.__proto__);
 
-        //console.log("stave width = ", _this.ctx.canvasSizing.width);
+        //logger.debug("stave width = ", _this.ctx.canvasSizing.width);
         const vfStave = new VF.Stave(0, 0, _this.ctx.canvasSizing.width);
         vfStave.addClef(_this.ctx.staveClef); // .addTimeSignature("4/4");
         vfStave.setContext(context).draw();
 
         VF.Formatter.FormatAndDraw(context, vfStave, _this.ctx.vfStaveNotes);
-        //console.log("render finished");
+
+        // if (_this.ctx.musicItems[0].Type == MITs.AC) {
+        //     var beams = VF.Beam.generateBeams(_this.ctx.vfStaveNotes);
+        //     beams.forEach(function(beam) { beam.setContext(context).draw(); });
+        // }
+
+        //logger.debug("render finished");
     },
 
     // change style of current music item (according if user's answner correct or not), and highlight next music item.
@@ -230,8 +237,8 @@ return {
         _this.ctx.vfRenderer.ctx.context2D = crc2d;
         const context = _this.ctx.vfRenderer.getContext();
 
-        //console.log("Switching to next... Last Result = ", params.old_item_result);
-        console.assert(params.new_item_index >=0 && params.new_item_index <= _this.ctx.musicItems.length);
+        //logger.debug("Switching to next... Last Result = ", params.old_item_result);
+        logger.assert(params.new_item_index >=0 && params.new_item_index <= _this.ctx.musicItems.length);
         
         // update old note(s) if exists
         if (params.old_item_index >= 0) {
@@ -241,7 +248,7 @@ return {
                 let color = (params.old_item_result ? "gray" : "red");
                 old_stave_note.setStyle({ fillStyle: color, strokeStyle: color });
                 old_stave_note.setContext(context).draw();
-                //console.log(old_stave_note);
+                //logger.debug(old_stave_note);
             }
         }
 
@@ -252,7 +259,7 @@ return {
                 let new_stave_note = _this.ctx.vfStaveNotes[new_notes_index_start+i];
                 new_stave_note.setStyle({ fillStyle: "blue", strokeStyle: "blue" });
                 new_stave_note.setContext(context).draw();
-                //console.log(new_stave_note);
+                //logger.debug(new_stave_note);
             }
         }
     },
@@ -260,8 +267,8 @@ return {
     // convert music items to vexflow's stave note objects and append them to vfStaveNotes.
     // <Array,String,Array>
     convertMusicItemsToStaveNotes: function(music_items, stave_clef, vfStaveNotes) {
-        console.assert(music_items && music_items.length > 0 && vfStaveNotes && vfStaveNotes.length == 0);
-        console.log("Enter convertMusicItemsToStaveNotes", music_items);
+        logger.assert(music_items && music_items.length > 0 && vfStaveNotes && vfStaveNotes.length == 0);
+        logger.debug("Enter convertMusicItemsToStaveNotes", music_items);
 
         for(let i=0; i<music_items.length; i++) {
             let music_item = music_items[i];
@@ -270,7 +277,7 @@ return {
             switch(music_item.Type) {
                 case MITs.Syllable:
                 case MITs.Pitch:
-                    console.assert("not implemented yet");
+                    logger.assert("not implemented yet");
                     break;
                 case MITs.Note: {
                         let note = new VF.StaveNote({ keys: [ value ], clef: stave_clef, duration: "q" });
@@ -295,12 +302,12 @@ return {
                     }
                     break;
                 default:
-                    console.assert("not implemented yet");
+                    logger.assert("not implemented yet");
                     break;
             }
         }
 
-        console.log("Leave convertMusicItemsToStaveNotes", vfStaveNotes);
+        logger.debug("Leave convertMusicItemsToStaveNotes", vfStaveNotes);
     }
 };
 };

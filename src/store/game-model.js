@@ -1,5 +1,5 @@
+import logger from '@/utils/logger.js'
 import { ObjectMap } from "@/utils/ObjectMap.js"
-if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
 
 // 术语及缩写：
 // 唱名 Syllable Name (可省略Name后缀) 写做1234567但读作(DoReMiFaSolLaXi)
@@ -60,29 +60,29 @@ export const PKs = { // PKs = PianoKeys
 
     // 将音符(标准音名表示法)转换为其AN值
     NoteToAN: function(note) {
-        console.assert(note && (note.length == 3 || note.length == 4));
+        logger.assert(note && (note.length == 3 || note.length == 4));
         let RN = PKs.PitchToRNs[note[0]];
         let accidental = 0;
         if (note.length == 4) // has accidental
             accidental = (note(1) == '#') ? 1 : -1;
         let ON = note.charCodeAt(note.length-1) - 48; // '0' = 48
         let AN = PKs.AN(ON,RN);
-        //console.log("NoteToAN", note, RN, accidental, ON, AN);
+        //logger.debug("NoteToAN", note, RN, accidental, ON, AN);
         return AN;
     },
 
     // 将AN值转换为音符的标准音名表示法，因为会出现同音多名，因此需要时会采用符合指定升降号的名称。
     // accidental: "#","b"
     ANtoNote: function(AN, accidental) {
-        console.assert(AN >=10 && AN <=97);
-        console.assert(accidental && accidental.length==1 && (accidental=="#" || accidental=="b"));
+        logger.assert(AN >=10 && AN <=97);
+        logger.assert(accidental && accidental.length==1 && (accidental=="#" || accidental=="b"));
 
         let ON = PKs.ON(AN);
         let RN = PKs.RN(AN);
         let baseWithAccidental = PKs.RNtoPitchs[accidental][RN];
         let octave = String.fromCharCode(ON + 48); // '0' = 48
         let note = baseWithAccidental + "/" + octave;
-        //console.log("ANtoNote", AN, ON, RN, baseWithAccidental, octave, note);
+        //logger.debug("ANtoNote", AN, ON, RN, baseWithAccidental, octave, note);
         return note;
     },
 

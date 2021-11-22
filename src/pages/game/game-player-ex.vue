@@ -1,4 +1,6 @@
 <script>
+    import logger from '@/utils/logger.js'
+
     import ButtonListSyllables from "@/views/button-list-syllables.vue"
     import ButtonListPitchs from "@/views/button-list-pitchs.vue"
     import ButtonListDegrees from "@/views/button-list-degrees.vue"
@@ -56,15 +58,15 @@
 		},
 
         onUnload() {
-            //console.log("onUnload", this);
+            //logger.debug("onUnload", this);
             // note onUnload happens after back, we just do cleanup
             this.$options.ge.stopTimer();
         },
 
         methods: {
 			onEntireViewRendered: function() {
-				console.info("onEntireViewRendered: CurrentGame = ", this.CurrentGame);
-				console.assert(this.CGBT != BTs.Any);
+				logger.info("onEntireViewRendered: CurrentGame = ", this.CurrentGame);
+				logger.assert(this.CGBT != BTs.Any);
                 this.$options.ge.initGame(this, this.CurrentGame, this.onTimer);
 			},
 
@@ -105,7 +107,7 @@
 			},
 
             onModalDlgClick: function(e) {
-				console.log("onModalDlgClick", e);
+				logger.debug("onModalDlgClick", e);
                 this.ShowModalDlg = false;
 
                 switch(e) {

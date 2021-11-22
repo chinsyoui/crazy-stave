@@ -1,7 +1,9 @@
+import logger from '@/utils/logger.js'
+
 // CanvasRenderingContext2D crc2d
 export function WeixinRenderContext(crc2d, width, height) {
-    console.assert(crc2d);
-    console.log("new WeixinRenderContext: ", crc2d, width, height);
+    logger.assert(crc2d);
+    logger.debug("new WeixinRenderContext: ", crc2d, width, height);
 
     this.context2D = crc2d;
     this.canvasWidth = width;
@@ -11,7 +13,7 @@ export function WeixinRenderContext(crc2d, width, height) {
      * Set all pixels to transparent black rgba(0,0,0,0).
      */
     this.clear = () => {
-        // console.log("clear");
+        // logger.debug("clear");
         this.context2D.clearRect(0, 0, this.canvasWidth, this.canvasWeight);
     };
 
@@ -30,7 +32,7 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.setFillStyle = (style) => {
-        // console.log("setFillStyle", style);
+        // logger.debug("setFillStyle", style);
         this.context2D.fillStyle = style;
         return this;
     };
@@ -43,19 +45,19 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
     
     this.setStrokeStyle = (style) => {
-        // console.log("setStrokeStyle", style);
+        // logger.debug("setStrokeStyle", style);
         this.context2D.strokeStyle = style;
         return this;
     };
 
     this.setShadowColor = (color) => {
-        // console.log("setShadowColor", color);
+        // logger.debug("setShadowColor", color);
         this.context2D.shadowColor = color;
         return this;
     };
 
     this.setShadowBlur = (blur) => {
-        // console.log("setShadowBlur", blur);
+        // logger.debug("setShadowBlur", blur);
 
         // CanvasRenderingContext2D does not scale the shadow blur by the current
         // transform, so we have to do it manually. We assume uniform scaling
@@ -68,31 +70,31 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.setLineWidth = (width) => {
-        // console.log("setLineWidth", width);
+        // logger.debug("setLineWidth", width);
         this.context2D.lineWidth = width;
         return this;
     };
 
     this.setLineCap = (capType) => {
-        // console.log("setLineCap", capType);
+        // logger.debug("setLineCap", capType);
         this.context2D.lineCap = capType;
         return this;
     };
     
     this.setLineDash = (dash) => {
-        // console.log("setLineDash", dash);
+        // logger.debug("setLineDash", dash);
         this.context2D.setLineDash(dash);
         return this;
     };
 
     this.scale = (x, y) => {
-        // console.log("scale", x, y);
+        // logger.debug("scale", x, y);
         this.context2D.scale(x, y);
         return this;
     };
 
     this.resize = (width, height) => {
-        console.log("resize", width, height);
+        logger.debug("resize", width, height);
         const canvasElement = this.context2D.canvas;
         const devicePixelRatio = window.devicePixelRatio || 1;
         // Scale the canvas size by the device pixel ratio clamping to the maximum supported size.
@@ -108,13 +110,13 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.rect = (x, y, width, height) => {
-        // console.log("rect", x, y, width, height);
+        // logger.debug("rect", x, y, width, height);
         this.context2D.rect(x, y, width, height);
         return this;
     };
 
     this.fillRect = (x, y, width, height) => {
-        // console.log("fillRect", x, y, width, height);
+        // logger.debug("fillRect", x, y, width, height);
         this.context2D.fillRect(x, y, width, height);
         return this;
     };
@@ -128,25 +130,25 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.beginPath = () => {
-        // console.log("beginPath");
+        // logger.debug("beginPath");
         this.context2D.beginPath();
         return this;
     };
 
     this.moveTo = (x, y) => {
-        // console.log("moveTo");
+        // logger.debug("moveTo");
         this.context2D.moveTo(x, y);
         return this;
     };
 
     this.lineTo = (x, y) => {
-        // console.log("lineTo");
+        // logger.debug("lineTo");
         this.context2D.lineTo(x, y);
         return this;
     };
 
     this.bezierCurveTo = (cp1x, cp1y, cp2x, cp2y, x, y) => {
-        // console.log("bezierCurveTo");
+        // logger.debug("bezierCurveTo");
         this.context2D.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
         return this;
     };
@@ -157,31 +159,31 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.arc = (x, y, radius, startAngle, endAngle, counterclockwise) => {
-        console.log("arc");
+        logger.debug("arc");
         this.context2D.arc(x, y, radius, startAngle, endAngle, counterclockwise);
         return this;
     };
 
     this.fill = () => {
-        // console.log("fill");
+        // logger.debug("fill");
         this.context2D.fill();
         return this;
     };
 
     this.stroke = () => {
-        // console.log("stroke");
+        // logger.debug("stroke");
         this.context2D.stroke();
         return this;
     };
 
     this.closePath = () => {
-        // console.log("closePath");
+        // logger.debug("closePath");
         this.context2D.closePath();
         return this;
     };
 
     this.measureText = (text) => {
-        // console.log("measureText");
+        // logger.debug("measureText");
         const metrics = this.context2D.measureText(text);
         return {
             width: metrics.width,
@@ -190,19 +192,19 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.fillText = (text, x, y) => {
-        // console.log("fillText");
+        // logger.debug("fillText");
         this.context2D.fillText(text, x, y);
         return this;
     };
 
     this.save = () => {
-        // console.log("save");
+        // logger.debug("save");
         this.context2D.save();
         return this;
     };
 
     this.restore = () => {
-        // console.log("restore");
+        // logger.debug("restore");
         this.context2D.restore();
         return this;
     };
@@ -224,7 +226,7 @@ export function WeixinRenderContext(crc2d, width, height) {
     };
 
     this.setFont = (family, size, weight) => {
-        // console.log("setFont", family, size, weight);
+        // logger.debug("setFont", family, size, weight);
         this.context2D.font = (weight || '') + ' ' + size + 'pt ' + family;
         this.textHeight = (size * 4) / 3;
         return this;

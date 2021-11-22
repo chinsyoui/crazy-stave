@@ -1,4 +1,5 @@
 <script>
+    import logger from '@/utils/logger.js'
 	import { mapState } from 'vuex'
 	import { BTs } from '@/store/game-model.js'
 
@@ -61,7 +62,7 @@
         },
 		methods: {
 			onItemClick: function(pair) { // game, index
-				console.log(this.Title + "." + "onItemClick", pair);
+				logger.debug(this.Title + "." + "onItemClick", pair);
                 let game = pair.value; let index = pair.index;
 
 				this.$store.commit('setCurrentGame', { game : game, index : index } );
@@ -75,7 +76,7 @@
 			},
 
 			onBackClick: function() {
-				console.log(this.Title + "." + "onBackClick");
+				logger.debug(this.Title + "." + "onBackClick");
                 uni.navigateBack();
 			}
 		}

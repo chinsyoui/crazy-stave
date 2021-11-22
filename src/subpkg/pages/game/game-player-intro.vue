@@ -1,4 +1,5 @@
 <script>
+    import logger from '@/utils/logger.js'
 	import * as GameModel from '@/store/game-model.js'
 
     import Intro1100 from "@/subpkg/views/intro-1100.vue"
@@ -55,7 +56,7 @@
 		},
 
         onUnload() {
-            //console.log("onUnload", this);
+            //logger.debug("onUnload", this);
             this.onGameFinished();
         },
 
@@ -63,7 +64,7 @@
 
 		methods: {
 			onEntireViewRendered: function() {
-				console.log("CurrentGame = ", this.CurrentGame);
+				logger.debug("CurrentGame = ", this.CurrentGame);
 			},
 
 			onButtonClick: function(value) {

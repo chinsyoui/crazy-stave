@@ -15,14 +15,14 @@
 		},
 		methods: {
 			onSaveClick: function(e) {
-				console.log(this.title + "." + "onSaveClick", e);
+				logger.debug(this.title + "." + "onSaveClick", e);
 				// TODO prepare new user object here
 				var user = null;
 				this.$store.commit('addNewUser',user);
 				uni.navigateBack();
 			},
 			onCancelClick: function() {
-				console.log(this.title + "." + "onCancelClick");
+				logger.debug(this.title + "." + "onCancelClick");
 				uni.navigateBack();
 			}			
 		}

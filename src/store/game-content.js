@@ -1,5 +1,5 @@
+import logger from '@/utils/logger.js'
 import { PKs, BTs, MITs, MusicItem as MI, GameType as GT, Game, GameCollection as GC, User } from './game-model.js'
-if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.log("assertion failed:", info); };
 
 // @func return integer in [min, max)
 function RandomInt(min, max) {
@@ -20,7 +20,7 @@ const MICs = {
     // Props = { MaxNote: "C/6", MIT: 4, BaseNotes: String[], Degrees: ["2m","3M","5p","8p"] }
     // 注: MIT MusicItemType，参见MITs中定义的值。
     ByDegree : function(props) {
-        //console.log("ByDegree: ",props);
+        //logger.debug("ByDegree: ",props);
         let maxAN = PKs.NoteToAN(props.MaxNote);
         while(true) {
             let lowerNote = props.BaseNotes[RandomInt(0,props.BaseNotes.length)];
@@ -31,9 +31,9 @@ const MICs = {
 
             if (upperNoteAN <= maxAN) {
                 let upperNote = PKs.ANtoNote(upperNoteAN,"#");
-                //console.log(lowerNote,degree," => ",lowerNoteAN,distance,upperNoteAN,upperNote);
+                //logger.debug(lowerNote,degree," => ",lowerNoteAN,distance,upperNoteAN,upperNote);
                 let newMI = new MI(props.MIT, (lowerNote + "," + upperNote), degree);
-                //console.log("newMI = ",newMI);
+                //logger.debug("newMI = ",newMI);
                 return newMI;
             }
         };
@@ -94,12 +94,12 @@ const GTs = GameTypes;  // a local alias of GameTypes
 // 给定起止音符，生成整个序列
 // accidental: "#","b","" （空表示不含升降符号)
 function GenerateNotes(lower_note, upper_note, accidental) {
-    //console.log("GenerateNotes", lower_note, upper_note, accidental);
+    //logger.debug("GenerateNotes", lower_note, upper_note, accidental);
 
     let lowerAN = PKs.NoteToAN(lower_note);
     let upperAN = PKs.NoteToAN(upper_note);
 
-    //console.log(lowerAN,upperAN);
+    //logger.debug(lowerAN,upperAN);
 
     let notes = new Array();
     for(let i=lowerAN; i<=upperAN; i++) {
@@ -107,17 +107,17 @@ function GenerateNotes(lower_note, upper_note, accidental) {
         if (!accidental || accidental.length==0) {
             let newRN = PKs.RN(i);
             if (PKs.BlackRNs.includes(newRN)) {
-                //console.log("########### SKIP", i, newRN);
+                //logger.debug("########### SKIP", i, newRN);
                 continue;
             }
         }
 
         let newNote = PKs.ANtoNote(i, accidental && accidental.length == 1 ? accidental : "#");
-        //console.log("###########", i, accidental, newNote, notes);
+        //logger.debug("###########", i, accidental, newNote, notes);
         notes.push(newNote);
     }
 
-    //console.log(notes);
+    //logger.debug(notes);
     return notes;
 };
 

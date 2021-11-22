@@ -1,3 +1,4 @@
+import logger from '@/utils/logger.js'
 import { ObjectMap } from "@/utils/ObjectMap.js"
 import * as GameModel from './game-model.js'
 import { BTs } from '@/store/game-model.js'
@@ -5,15 +6,15 @@ import { PredefinedGameCollections } from './game-content.js'
 
 // save app state to persistent storage
 function save(state) {
-    //console.log("saving state: ", state);
+    //logger.debug("saving state: ", state);
 
     uni.setStorageSync("Users", state.Users);
 	uni.setStorageSync("CurrentUserId",state.CurrentUser.Id);
 
-    //console.log("Users", uni.getStorageSync("Users"));
-	//console.log("CurrentUserId", uni.getStorageSync("CurrentUserId"));
+    //logger.debug("Users", uni.getStorageSync("Users"));
+	//logger.debug("CurrentUserId", uni.getStorageSync("CurrentUserId"));
 
-    //console.log("app state saved: ", state);
+    //logger.debug("app state saved: ", state);
 };
 
 // #ifndef VUE3
@@ -53,8 +54,8 @@ const store = createStore({
 		///////////////////////////////////////
 		// init app state
 		init(state) {
-			console.log("initing state", state);
-			//console.log("PredefinedGameCollections: ", PredefinedGameCollections);
+			logger.debug("initing state", state);
+			//logger.debug("PredefinedGameCollections: ", PredefinedGameCollections);
 			
             let users = null;
             let current_user_id = -1;
@@ -66,20 +67,20 @@ const store = createStore({
                     users = new Array();
                     _users.forEach((_user) => { 
                         let user = GameModel.NewUserFromJo(_user);
-                        //console.log("@@@@@ user = ", user);
+                        //logger.debug("@@@@@ user = ", user);
                         users.push(user);
                     });
                 }
             } catch (e) {
-                console.log("try load state from local storage failed: ", e);
+                logger.debug("try load state from local storage failed: ", e);
             }
 
-            console.log("loaded Users = ", users);
-            console.log("loaded CurrentUserId = ", current_user_id);
+            logger.debug("loaded Users = ", users);
+            logger.debug("loaded CurrentUserId = ", current_user_id);
         
 			if (!state.users) {
                 if (users && users.length > 0 && (current_user_id >= 0)) {
-                    console.log("saved state loaded");
+                    logger.debug("saved state loaded");
 
                     // overwrite with built-in game collections, because we're frenquently updating.
                     users[0].GameCollections = PredefinedGameCollections;
@@ -87,11 +88,11 @@ const store = createStore({
                     state.Users = users;
                     state.CurrentUser = state.Users[0];
                 } else {
-                    console.log("init default state");
+                    logger.debug("init default state");
 
                     let user = new GameModel.User(0, "主用户", "icon-url", PredefinedGameCollections, 0, new ObjectMap());
-                    console.assert(user.GameCollections && user.GameCollections.length > 0, "no games");
-                    console.assert(user.GameCollectionStates && user.GameCollectionStates.mapItemsCount == 0, "game collection state not empty");
+                    logger.assert(user.GameCollections && user.GameCollections.length > 0, "no games");
+                    logger.assert(user.GameCollectionStates && user.GameCollectionStates.mapItemsCount == 0, "game collection state not empty");
 
                     state.Users = [user];
                     state.CurrentUser = user;
@@ -100,13 +101,13 @@ const store = createStore({
                 }
 			}
 
-			console.log("state inited: ", state);
+			logger.debug("state inited: ", state);
 		},
 
 		///////////////////////////////////////
 		setCurrentUser(state, user) {
-			console.log('setCurrentUser', state, user);
-			console.assert(user);
+			logger.debug('setCurrentUser', state, user);
+			logger.assert(user);
 
 			state.CurrentUser = user;
 			state.CurrentGameCollections = user.GameCollections;
@@ -115,7 +116,7 @@ const store = createStore({
 		},
 
         setCurrentGameCollection(state, game_collection) {
-			console.log('setCurrentGameCollection', state, game_collection);
+			logger.debug('setCurrentGameCollection', state, game_collection);
 
             state.CurrentUser.CurrentGameCollectionId = game_collection.Id;
 			state.CurrentGameCollection = game_collection;
@@ -127,11 +128,11 @@ const store = createStore({
         // params = { game, index }
         setCurrentGame(state, params) {
             let game = params.game; let index = params.index;
-			console.log('setCurrentGame', state, game, index);
+			logger.debug('setCurrentGame', state, game, index);
 
             let gcId = state.CurrentUser.CurrentGameCollectionId;
 			let gcStates = state.CurrentUser.GameCollectionStates;
-			console.assert(gcStates);
+			logger.assert(gcStates);
 
 			// if game collection state not exists, create and add it
 			let gcState = gcStates.getMapItem(gcId);
@@ -156,23 +157,23 @@ const store = createStore({
 		},
 
         setCurrentGameItemIndex(state, index) {
-			//console.log('setCurrentGameItemIndex', state, index);
+			//logger.debug('setCurrentGameItemIndex', state, index);
 			state.CurrentGameItemIndex = index;
 		},
 
 		///////////////////////////////////////
 		onGameFinished(state, game_progress) {
-			console.log("onGameFinished", state, game_progress);
+			logger.debug("onGameFinished", state, game_progress);
 			// note: the following line always throw exception setAttribute with 0 blah blah
 			// uni.showToast("onGameFinished");
 
 			// update game state by this game progress
 			let gcStates = state.CurrentUser.GameCollectionStates;
-			console.assert(gcStates);
+			logger.assert(gcStates);
 
 			// find parent game collection state
 			let gcState = gcStates.getMapItem(state.CurrentGameCollection.Id);
-			console.assert(gcState);
+			logger.assert(gcState);
 
 			// find game state, create if not found
 			let game_state = gcState.GameStates.getMapItem(state.CurrentGame.Id);
@@ -196,32 +197,32 @@ const store = createStore({
 
 		///////////////////////////////////////
 		addUser(state, user) {
-			console.log("addUser", state, user);
+			logger.debug("addUser", state, user);
 			// TODO
 			uni.showToast("addUser");
 		},
 		removeUser(state, user) {
-			console.log("removeUser", state, user);
+			logger.debug("removeUser", state, user);
 			// TODO
 			uni.showToast("removeUser");
 		},
 		addGameCollection(state, game_collection) {
-			console.log("addGameCollection", state, game_collection);
+			logger.debug("addGameCollection", state, game_collection);
 			// TODO
 			uni.showToast("addGameCollection");
 		},
 		removeGameCollection(state, game_collection) {
-			console.log("removeGameCollection", state, game_collection);
+			logger.debug("removeGameCollection", state, game_collection);
 			// TODO
 			uni.showToast("removeGameCollection");
 		},
 		addGame(state, game) {
-			console.log("addGame", state, game);
+			logger.debug("addGame", state, game);
 			// TODO
 			uni.showToast("addGame");
 		},
 		removeGame(state, game) {
-			console.log("removeGame", state, game);
+			logger.debug("removeGame", state, game);
 			// TODO
 			uni.showToast("removeGame");
 		},
@@ -251,7 +252,7 @@ const store = createStore({
         // must called inside a game page.
         navigateToNextGame: function(context) {
             let state = context.state;
-            console.log("navigateToNextGame", state);
+            logger.debug("navigateToNextGame", state);
 
             let nextIndex = state.CurrentGameIndex + 1;
             if (nextIndex >= state.CurrentGameCollection.Games.length)
@@ -266,7 +267,7 @@ const store = createStore({
         // must called inside a game page.
         replayCurrentGame: function(context) {
             let state = context.state;
-            console.log("replayCurrentGame", state);
+            logger.debug("replayCurrentGame", state);
 
             context.commit('setCurrentGame', { game: state.CurrentGame, index : state.CurrentGameIndex });
             context.commit('redirectToGamePage', state.CurrentGame);

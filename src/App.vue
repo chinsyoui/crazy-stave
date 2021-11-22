@@ -1,5 +1,7 @@
 <script>
-	export default {
+    import logger from '@/utils/logger.js'
+
+    export default {
 		mounted() {
 			if (!this.$global.isMiniApp()) {
 				if (this.$global.isIOS()) {
@@ -9,7 +11,7 @@
 			}
 		},
 		onLaunch: function() {
-			console.log('App Launch');
+			logger.info('App Launch');
 
 			this.$store.commit("init");
 
@@ -22,17 +24,20 @@
 					this.$global.changeScreenOrientationToLandscapeByApi(this);
 				}
 
-				console.log("screen oridentation = ", screen.orientation.type);
+				logger.info("screen oridentation = ", screen.orientation.type);
 			}
 
 			// TODO load from storage
 		},
 		onShow: function() {
-			console.log('App Show');
+			logger.info('App Show');
 		},
 		onHide: function() {
-			console.log('App Hide');
+			logger.info('App Hide');
 		},
+        onError: function(err) {
+            logger.error(err);
+        },
 		methods: {
 			onResizeWindow() {
 				this.$global.changeScreenOrientationToLandscapeByCss(this.$el);

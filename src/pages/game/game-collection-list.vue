@@ -1,4 +1,5 @@
 <script>
+    import logger from '@/utils/logger.js'
 	import { mapState } from 'vuex'
 
 	export default {
@@ -34,20 +35,20 @@
         },
 
 		onLoad() {
-			console.log(this.Title + "." + "onLoad");
-			//console.log(this.CurrentUser);
-			//console.log(this.GameCollections);
+			logger.debug(this.Title + "." + "onLoad");
+			//logger.debug(this.CurrentUser);
+			//logger.debug(this.GameCollections);
 		},
 
 		methods: {
 			onItemClick: function(e) {
-				console.log(this.Title + "." + "onItemClick", e);
+				logger.debug(this.Title + "." + "onItemClick", e);
 				let game_collection = e;
 				this.$store.commit('setCurrentGameCollection', game_collection);
 				uni.navigateTo({ url: '/pages/game/game-list' });
 			},
 			onBackClick: function() {
-				console.log(this.Title + "." + "onBackClick");
+				logger.debug(this.Title + "." + "onBackClick");
 				// uni.navigateTo({ url: '/pages/game/user-list' });
                 uni.navigateBack();
 			}

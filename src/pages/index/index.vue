@@ -1,4 +1,5 @@
 <script>
+    import logger from '@/utils/logger.js'
     import ModalDlg from "@/views/modal-dlg.vue"
 
     export default {
@@ -32,7 +33,7 @@
                 if (um && um.onCheckForUpdate && um.onUpdateReady) {
                     um.onCheckForUpdate(function(res) {
                         // 请求完新版本信息的回调
-                        console.log(res.hasUpdate);
+                        logger.debug(res.hasUpdate);
                     });
 
                     um.onUpdateReady(function() {
@@ -54,12 +55,12 @@
         },
 		methods: {
 			onItemClick: function() {
-                //console.log(this.Title + "." + "onItemClick");
+                //logger.debug(this.Title + "." + "onItemClick");
                 uni.navigateTo({ url: '/pages/game/user-list' });
                 //this.ShowModalDlg = true;
 			},
             onModalDlgClick: function(e) {
-				console.log("onModalDlgClick", e);
+				logger.debug("onModalDlgClick", e);
                 this.ShowModalDlg = false;
             }
 		}

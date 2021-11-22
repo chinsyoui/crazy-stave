@@ -1,3 +1,5 @@
+import logger from '@/utils/logger.js'
+
 // Globally register all base components for convenience, because they
 // will be used very frequently. Components are registered using the
 // PascalCased version of their file name.
@@ -31,7 +33,7 @@
 export function isMiniApp() { return (wx); };
 
 // export function isIOS() {
-// 	console.assert(navigator && navigator.userAgent);
+// 	logger.assert(navigator && navigator.userAgent);
 
 // 	if (navigator && navigator.userAgent) {
 // 		var u = navigator.userAgent;
@@ -44,8 +46,8 @@ export function isMiniApp() { return (wx); };
 // };
 
 export function requestFullScreen(element) {
-	console.assert(document.documentElement);
-	console.log("requestFullScreen");
+	logger.assert(document.documentElement);
+	logger.log("requestFullScreen");
 	
 	let method = null;
 	
@@ -59,14 +61,14 @@ export function requestFullScreen(element) {
 		method = 'webkitRequestFullscreen';
 
 	if (!method) {
-		console.log("device doesn't support requestFullScreen");
+		logger.log("device doesn't support requestFullScreen");
 		return;
 	}
 	document.documentElement[method]();
 };
 
 export function exitFullScreen() {
-	console.assert(document.documentElement);
+	logger.assert(document.documentElement);
 	let method = null;
 	
 	if ('exitFullscreen' in document.documentElement)
@@ -84,8 +86,8 @@ export function exitFullScreen() {
 };
 
 export function changeScreenOrientationToLandscapeByApi() {
-	console.assert(screen);
-	console.log("changeScreenOrientationToLandscapeByApi");
+	logger.assert(screen);
+	logger.log("changeScreenOrientationToLandscapeByApi");
 
 	let method = null;
 	
@@ -99,7 +101,7 @@ export function changeScreenOrientationToLandscapeByApi() {
 		method = 'webkitOrientation';
 
 	if (!method) {
-		console.log("device doesn't support screen.*orientation");
+		logger.log("device doesn't support screen.*orientation");
 		return;
 	}
 
@@ -120,15 +122,15 @@ export function changeScreenOrientationToLandscapeByApi() {
 // htmlElement = document.getElementById("xxx"); 
 // htmlElement = this.$el;
 export function changeScreenOrientationToLandscapeByCss(htmlElement) {
-	console.assert(window && window.orientation);
-	console.assert(htmlElement);
+	logger.assert(window && window.orientation);
+	logger.assert(htmlElement);
 
-	console.log("changeScreenOrientationToLandscapeByCss");
+	logger.log("changeScreenOrientationToLandscapeByCss");
 
 	let width = document.documentElement.clientWidth;
 	let height = document.documentElement.clientHeight;
 
-	console.log(width, height);
+	logger.log(width, height);
 
 	let orientation = "";
 	let style = "";
@@ -154,7 +156,7 @@ export function changeScreenOrientationToLandscapeByCss(htmlElement) {
 };
 
 export function changeScreenOrientationToLandscape(_vue_this) {
-	console.assert(_vue_this);	
+	logger.assert(_vue_this);	
 	_vue_this.$nextTick(function() {
 		if (isIOS())
 			changeScreenOrientationToLandscapeByCss(_vue_this.$el);

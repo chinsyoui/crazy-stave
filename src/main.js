@@ -1,10 +1,10 @@
-// 微信小程序开发工具 iOS真机调试环境下没有 console.assert, 这里造一个
-if (!console.assert) console.assert = (condition, ...info) => { if (!condition) console.error("assertion failed:", info); };
+import logger from '@/utils/logger.js'
+logger.info("app started");
 
-console.log(process.env.NODE_ENV === 'development' ? 'dev' : 'prod');
-console.log("runtime env = " + uni.getSystemInfoSync().platform);
+logger.info("node_env = ", process.env.NODE_ENV === 'development' ? 'dev' : 'prod');
+logger.info("uni.platform = " + uni.getSystemInfoSync().platform);
 
-console.log("uni.getSystemInfoSync() = " + JSON.stringify(uni.getSystemInfoSync()));
+logger.info("uni.getSystemInfoSync() = " + JSON.stringify(uni.getSystemInfoSync()));
 
 import App from './App'
 import store from './store'
