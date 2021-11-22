@@ -45,7 +45,9 @@
 		computed: mapState({
 			CurrentUser: state => state.CurrentUser,
 			CurrentGameCollection: state => state.CurrentGameCollection,
-			CurrentGame: state => state.CurrentGame
+			CurrentGame: state => state.CurrentGame, 
+            hasPrevGame: state => (state.CurrentGameIndex > 0),
+            hasNextGame: state => (state.CurrentGameIndex < state.CurrentGameCollection.Games.length - 1)
 		}),
 
         mounted() {
@@ -67,7 +69,12 @@
 				logger.debug("CurrentGame = ", this.CurrentGame);
 			},
 
-			onButtonClick: function(value) {
+			onPrevButtonClick: function(value) {
+				this.onGameFinished();
+                this.$store.dispatch("navigateToPrevGame");
+			},
+
+            onNextButtonClick: function(value) {
 				this.onGameFinished();
                 this.$store.dispatch("navigateToNextGame");
 			},
@@ -138,7 +145,10 @@
 			<text class="introduction">敬请期待</text>
 		</block>
 		<view class="outermost-bottom-bar">
-            <view class="button" v-on:click.stop="onButtonClick('next')">
+            <view class="button" style="padding-left: 30px; float: left" v-if="hasPrevGame" v-on:click.stop="onPrevButtonClick('next')">
+                <text class="button-text">上一节</text>
+            </view>
+            <view class="button" style="padding-right: 30px; float: right" v-if="hasNextGame" v-on:click.stop="onNextButtonClick('next')">
                 <text class="button-text">下一节</text>
             </view>
         </view>
@@ -179,15 +189,13 @@
 		}
 
 		.outermost-bottom-bar {
-            display: flex;
-            flex-direction:row-reverse;
+            display: table-row;
 			height: 2rem;
             width: 100%;
 		}
 
             .button {
-                font-size: 1.5em;
-                padding-right: 3em;
+                font-size: 1.2em;
                 padding-bottom: 1em;
             }
 

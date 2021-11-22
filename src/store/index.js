@@ -247,8 +247,24 @@ const store = createStore({
 	},
 
     actions: {
+        // close current game and navigate to prev game in current game collection.
+        // return false if no prev game in current game collection.
+        // must called inside a game page.
+        navigateToPrevGame: function(context) {
+            let state = context.state;
+            logger.debug("navigateToPrevGame", state);
+
+            let prevIndex = state.CurrentGameIndex - 1;
+            if (prevIndex < 0)
+                return false;
+
+            let prevGame = state.CurrentGameCollection.Games[prevIndex];
+            context.commit('setCurrentGame', { game: prevGame, index: prevIndex} );
+            context.commit('redirectToGamePage', prevGame);
+        },
+
         // close current game and navigate to next game in current game collection.
-        // return false if no game in current game collection.
+        // return false if no next game in current game collection.
         // must called inside a game page.
         navigateToNextGame: function(context) {
             let state = context.state;
