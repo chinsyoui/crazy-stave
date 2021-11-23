@@ -1,17 +1,17 @@
 <script>
-    import logger from '@/utils/logger.js'
-
-    import ButtonListSyllables from "@/views/button-list-syllables.vue"
-    import ButtonListPitchs from "@/views/button-list-pitchs.vue"
-    import ButtonListDegrees from "@/views/button-list-degrees.vue"
-    import ButtonListCi from "@/views/button-list-ci.vue"
-    import ButtonListPitchsWithSf from "@/views/button-list-pitchs-with-sf.vue"
-    import ButtonListWkOnlyTcs from "@/views/button-list-wk-only-tcs.vue"
-    import ModalDlg from "@/views/modal-dlg.vue"
-
 	import { mapState } from 'vuex'
+    import logger from '@/utils/logger.js'
+    import ModalDlg from "@/views/modal-dlg.vue"
 	import { BTs } from '@/store/game-model.js'
-	import { GameEngine } from '@/store/game-engine.js'
+	
+    import ButtonListSyllables from "@/pkgp/views/button-list-syllables.vue"
+    import ButtonListPitchs from "@/pkgp/views/button-list-pitchs.vue"
+    import ButtonListDegrees from "@/pkgp/views/button-list-degrees.vue"
+    import ButtonListCi from "@/pkgp/views/button-list-ci.vue"
+    import ButtonListPitchsWithSf from "@/pkgp/views/button-list-pitchs-with-sf.vue"
+    import ButtonListWkOnlyTcs from "@/pkgp/views/button-list-wk-only-tcs.vue"
+
+    import { GameEngine } from '@/pkgp/utils/game-engine.js'
 
 	export default {
         ge: null,
@@ -144,30 +144,33 @@
             <template v-slot:body>{{ GameResultText }}</template>
         </ModalDlg>
 
-		<view class="outermost-top-bar"/>
-		<view class="title-wrapper" @click="onBackClick()">
-			<text class="title">{{Title}} - {{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
-		</view>
-
-		<view class="game-progress-bar" @click="onBackClick()">
-			<view class="game-progress-text-item">
-				<text class="progress-text">Progress: {{ CurrentGameProgress.CompletedItemCount }} / {{ CurrentGameProgress.TotalItemCount }}</text>
-			</view>
-			<view class="game-progress-text-item">
-				<text class="progress-text">Errors: {{ CurrentGameProgress.ErrorItemCount }}</text>
-			</view>
-			<view class="game-progress-text-item">
-				<text class="progress-text">Elapsed: {{ CurrentGameProgress.ElapsedSeconds }}s</text>
-			</view>
-			<view class="game-progress-text-item">
-				<text class="progress-text">Score: {{ CurrentGameProgress.Score }}</text>
-			</view>
-		</view>
+        <view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%;">
+            <view class="left-bar" style="width: 46px; height: 100%;"/>
+            <view class="title-wrapper" style="" @click="onBackClick()">
+                <text class="title">{{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
+            </view>
+            <view class="middle-bar" style="flex-grow: 1; width: 50px; height: 100%;"/>
+            <view class="game-progress-bar" @click="onBackClick()">
+                <view class="game-progress-text-item">
+                    <text class="progress-text">进度: {{ CurrentGameProgress.CompletedItemCount }} / {{ CurrentGameProgress.TotalItemCount }}</text>
+                </view>
+                <view class="game-progress-text-item">
+                    <text class="progress-text">错误: {{ CurrentGameProgress.ErrorItemCount }}</text>
+                </view>
+                <view class="game-progress-text-item">
+                    <text class="progress-text">用时: {{ CurrentGameProgress.ElapsedSeconds }}s</text>
+                </view>
+                <view class="game-progress-text-item">
+                    <text class="progress-text">得分: {{ CurrentGameProgress.Score }}</text>
+                </view>
+            </view>
+            <view class="right-bar" style="width: 46px; height: 100%;"/>
+        </view>
 		<view id="questions-wrapper" class="questions-wrapper">
-            <view class="outer-wrapper">
-                <view class="stave-wrapper-left"/>
+            <view class="outer-wrapper" style="flex-grow: 1; display: flex; flex-direction: row;">
+                <view class="left-bar" style="width: 50px; height: 100%;"/>
                 <canvas z-index="-1" type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 1px solid gray; width: 100%; height: 100%;"/>
-                <view class="stave-wrapper-right"/>
+                <view class="right-bar" style="width: 50px; height: 100%;"/>
             </view>
 		</view>
 		<block>
@@ -179,7 +182,6 @@
 			<ButtonListPitchsWithSf v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick"/>
 			<ButtonListWkOnlyTcs v-if="CGBT==TheBTs.WKOnlyTC" class="button-list" v-on:buttonClick="onButtonClick"/>
 		</block>
-		<view class="outermost-bottom-bar"/>
 	</view>
 </template>
 
@@ -194,36 +196,22 @@
 		/* border: 1px solid red; */
 	}
 
-		.outermost-top-bar {
-			height: 0.2rem;
-		}
-
-		.title-wrapper {
-			display: flex;
-			flex-wrap: nowrap;
-			justify-content: center;
-			/* border: 1px solid blue; */
-		}
-
 			.title {
+                padding-right: 10px;
+    			white-space: nowrap;
 				text-overflow: ellipsis;
 				font-size: 1em;
-				color: #8f8f94;
+				color: black;
 				/* border: 1px solid red; */
 			}
 
-		.introduction {
-			margin: 3em 3em;
-			font-size: 1em;
-		}
-
 		.game-progress-bar {
+			height: 2rem;
 			display: flex;
 			flex-direction: row;
 			flex-wrap: nowrap;
 			justify-content: center;
 			align-items: center;
-			height: 2rem;
 			background-color: #FFFF66;
 			border: 1px solid black;
 		}
@@ -234,6 +222,7 @@
 			}
 
 				.progress-text {
+    			    white-space: nowrap;
 					text-overflow: ellipsis;
 					font-size: 1em;
 					color: blue;
@@ -247,30 +236,5 @@
 			width: 100%;
 			flex-grow: 1;
 			/* border: 1px solid red; */
-		}
-
-            .outer-wrapper {
-                display: flex;
-                flex-direction: row;
-                padding: 1px;
-                flex-grow: 1;
-            }
-
-                .stave-wrapper-left {
-                    width: 50rpx;
-                    height: 100%;
-                }
-
-                .the-stave {}
-
-                .stave-wrapper-right {
-                    width: 50rpx;
-                    height: 100%;
-                }
-
-		.button-list {}
-
-		.outermost-bottom-bar {
-			height: 2rem;
 		}
 </style>

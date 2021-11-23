@@ -25,12 +25,6 @@
 			}
 		},
 		{
-			"path": "pages/game/game-player-ex",
-			"style": {
-				"navigationBarTitleText": "疯狂五线谱-GO!GO!GO!"
-			}
-		},
-		{
 			"path": "pages/game/add-new-user",
 			"style": {
 				"navigationBarTitleText": "疯狂五线谱-创建新用户"
@@ -38,20 +32,31 @@
 		}
 	],
     "subPackages": [{
-        "root": "subpkg",
+        "root": "pkgi",
         "pages": [
             {
-                "path": "pages/game/game-player-intro",
+                "path": "pages/game/game-intro",
                 "style": {
-                    "navigationBarTitleText": "疯狂五线谱-知识学习"
+                    "navigationBarTitleText": "疯狂五线谱-学习"
+                }
+            }
+        ]
+    },
+    {
+        "root": "pkgp",
+        "pages": [
+            {
+                "path": "pages/game/game-player",
+                "style": {
+                    "navigationBarTitleText": "疯狂五线谱-练习"
                 }
             }
         ]
     }],
     "preloadRule": {
-        "pages/game/game-list": {
+        "pages/game/user-list": {
             "network": "all",
-            "packages": ["subpkg"]
+            "packages": ["pkgi","pkgp"]
         }
     },    
 	"globalStyle": {

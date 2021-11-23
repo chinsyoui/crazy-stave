@@ -2,13 +2,13 @@ import logger from '@/utils/logger.js'
 import { BTs, MITs } from '@/store/game-model.js'
 import { GenerateMusicItemsForGameInstance } from '@/store/game-content.js'
 
-import { WeixinRenderContext } from '@/utils/WeixinRenderContext.js'
-
 // this line will cause all views/* component js codes compile to nothing,
 // seems it's caused by the regex strings, now disabled
 import { isMiniApp } from '@/utils/global.js'
 
-import Vex from '@/utils/vexflow.js'
+import Vex from '@/pkgp/utils/vexflow.js'
+import { WeixinRenderContext } from '@/pkgp/utils/WeixinRenderContext.js'
+
 const VF = Vex.Flow;
 
 export function GameEngine() {
@@ -154,12 +154,12 @@ return {
                 let wRatio = (res.width > 800 ? 1.2 : 1);
                 _this.ctx.canvasSizing.width = Math.floor(res.width / wRatio);  // NOTE: quick and dirty fix
                 let hRatio = (res.height > 200 ? 1.2 : 1);
-                _this.ctx.canvasSizing.height = Math.floor(res.height /hRatio);  // NOTE: quick and dirty fix
+                _this.ctx.canvasSizing.height = Math.floor(res.height /hRatio); // NOTE: quick and dirty fix
                 node.width = _this.ctx.canvasSizing.width; 
                 node.height = _this.ctx.canvasSizing.height;
-            }
 
-            logger.info("Canvas: Element Size = " + Math.floor(res.width) + "x" + Math.floor(res.height) +", Drawing Size = " + node.width + "x" + node.height);
+                logger.info("Resize Canvas: Element Size = " + Math.floor(res.width) + "x" + Math.floor(res.height) +", Drawing Size = " + node.width + "x" + node.height);
+            }
 
             const crc2d = node.getContext('2d');
             logger.assert(crc2d,"can't get crc2d from ",node);
@@ -176,7 +176,6 @@ return {
     initStave: function(vue_this, callback) {
         logger.assert(this.ctx.musicItems && this.ctx.musicItems.length);
 
-        //logger.debug("msg from local vexflow: ", Vex.sayHello);
         if (!this.ctx.vfRenderContext) {
             //if (vue_this.$global.isMiniApp()) {
             if (isMiniApp())

@@ -2,19 +2,19 @@
     import logger from '@/utils/logger.js'
 	import * as GameModel from '@/store/game-model.js'
 
-    import Intro1100 from "@/subpkg/views/intro-1100.vue"
-    import Intro1101 from "@/subpkg/views/intro-1101.vue"
-    import Intro1102 from "@/subpkg/views/intro-1102.vue"
-    import Intro1103 from "@/subpkg/views/intro-1103.vue"
-    import Intro1104 from "@/subpkg/views/intro-1104.vue"
-    import Intro1110 from "@/subpkg/views/intro-1110.vue"
-    import Intro1120 from "@/subpkg/views/intro-1120.vue"
-    import Intro2100 from "@/subpkg/views/intro-2100.vue"
-    import Intro3100 from "@/subpkg/views/intro-3100.vue"
-    import Intro3101 from "@/subpkg/views/intro-3101.vue"
-    import Intro4100 from "@/subpkg/views/intro-4100.vue"
-    import Intro4101 from "@/subpkg/views/intro-4101.vue"
-    import Intro5100 from "@/subpkg/views/intro-5100.vue"
+    import Intro1100 from "@/pkgi/views/intro-1100.vue"
+    import Intro1101 from "@/pkgi/views/intro-1101.vue"
+    import Intro1102 from "@/pkgi/views/intro-1102.vue"
+    import Intro1103 from "@/pkgi/views/intro-1103.vue"
+    import Intro1104 from "@/pkgi/views/intro-1104.vue"
+    import Intro1110 from "@/pkgi/views/intro-1110.vue"
+    import Intro1120 from "@/pkgi/views/intro-1120.vue"
+    import Intro2100 from "@/pkgi/views/intro-2100.vue"
+    import Intro3100 from "@/pkgi/views/intro-3100.vue"
+    import Intro3101 from "@/pkgi/views/intro-3101.vue"
+    import Intro4100 from "@/pkgi/views/intro-4100.vue"
+    import Intro4101 from "@/pkgi/views/intro-4101.vue"
+    import Intro5100 from "@/pkgi/views/intro-5100.vue"
 
     import { mapState } from 'vuex'
 	

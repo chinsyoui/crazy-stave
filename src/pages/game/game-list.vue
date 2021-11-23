@@ -1,6 +1,6 @@
 <script>
-    import logger from '@/utils/logger.js'
 	import { mapState } from 'vuex'
+    import logger from '@/utils/logger.js'
 	import { BTs } from '@/store/game-model.js'
 
 	export default {
@@ -69,9 +69,9 @@
 
 				let page_url = "";
 				if (game.Type.ButtonType == BTs.Any)
-					page_url = "/subpkg/pages/game/game-player-intro";
+					page_url = "/pkgi/pages/game/game-intro";
 				else
-					page_url = "/pages/game/game-player-ex";
+					page_url = "/pkgp/pages/game/game-player";
 				uni.navigateTo({ url: page_url });
 			},
 
