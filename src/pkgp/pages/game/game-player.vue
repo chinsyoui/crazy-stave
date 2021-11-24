@@ -28,6 +28,8 @@
                 ShowModalDlg: false,
                 GameResultText: "",
                 GameResultDlgButtons: [],
+                ShowHintCalled: false,   // whether showHint of current question called or not
+                LastButtonClickTime: -1, // elapsed seconds
 
                 ButtonTexts: {
                     'ns' : ['1','','2','','3','4','','5','','6','','7'],
@@ -61,7 +63,6 @@
 		},
 
         onUnload() {
-            //logger.debug("onUnload", this);
             // note onUnload happens after back, we just do cleanup
             this.$options.ge.stopTimer();
         },
@@ -75,6 +76,12 @@
 
 			onTimer: function() {
 				this.CurrentGameProgress.ElapsedSeconds ++;
+
+                //logger.debug("tick", this.CurrentGameProgress.ElapsedSeconds - this.LastButtonClickTime);
+                if (!this.ShowHintCalled && this.CurrentGameProgress.ElapsedSeconds - this.LastButtonClickTime >= 3) {
+                    this.ShowHintCalled = true;
+                    this.$refs.buttons.showHint(this.$options.ge.getCurrentQuestionCorrectAnswnerButtonIndex(this.CGBT));
+                }
 			},
 
             getGameResultDisplayString: function(gp) {
@@ -91,6 +98,10 @@
                 }
             },
 			onButtonClick: function(value) {
+                // reset hint flags
+                this.LastButtonClickTime = this.CurrentGameProgress.ElapsedSeconds;
+                this.ShowHintCalled = false;
+
                 let eof = this.$options.ge.onAnswnerButtonClicked(this, this.CGBT, value, this.CurrentGameProgress);
                 if (eof) {
                     // game finished, record final progress
@@ -133,7 +144,6 @@
 			},
 
             navigateBack: function() {
-				//uni.navigateTo({ url: '/pages/game/game-list' });
                 uni.navigateBack();
 			}
 		}
@@ -178,15 +188,15 @@
 		</view>
         <view class="button-list-wrapper">
 		<block>
-            <ButtonListKeys v-if="CGBT==TheBTs.Syllable" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['ns']" />
-            <ButtonListKeys v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['ps']" />
-            <ButtonListKeys v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['pl']" />
+            <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.Syllable" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['ns']" />
+            <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['ps']" />
+            <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['pl']" />
 
-            <ButtonListKeys v-if="CGBT==TheBTs.WKOnlyTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['WKOnlyTCs']" />
-            <ButtonListKeys v-if="CGBT==TheBTs.WKRootMajTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['WKRootMajTCs']" />
+            <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.WKOnlyTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['WKOnlyTCs']" />
+            <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.WKRootMajTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['WKRootMajTCs']" />
 
-			<ButtonListDegrees v-if="CGBT==TheBTs.Degree" class="button-list" v-on:buttonClick="onButtonClick"/>
-			<ButtonListCi v-if="CGBT==TheBTs.CI" class="button-list" v-on:buttonClick="onButtonClick"/>
+			<ButtonListDegrees ref="buttons" v-if="CGBT==TheBTs.Degree" class="button-list" v-on:buttonClick="onButtonClick"/>
+			<ButtonListCi ref="buttons" v-if="CGBT==TheBTs.CI" class="button-list" v-on:buttonClick="onButtonClick"/>
 		</block>
         </view>
 	</view>
@@ -218,8 +228,6 @@
 			justify-content: center;
 			align-items: center;
 			background-color: white;
-            box-sizing: border-box;
-			/* border: 1px solid black; */
 		}
 
 			.game-progress-text-item {

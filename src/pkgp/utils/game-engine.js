@@ -62,6 +62,24 @@ return {
         });
     },
 
+    getCurrentQuestionCorrectAnswnerButtonIndex: function(button_type) {
+        let music_item = this.ctx.musicItems[this.ctx.current_question_index];
+        let correct_answner = music_item.TargetValue;
+
+        let button_index = 0;
+
+        // 特殊处理: 和弦转位基本练习按钮只包含转位0/1/2数字，不含和弦名称, 而和弦转位值被编码在答案的第一个字节
+        if (button_type == BTs.CI)
+            button_index = correct_answner[0];
+        // 特殊处理: 双音度数判断基本练习里只包含度数，不含度数的类型(大小纯等)
+        else if (button_type == BTs.Degree)
+            button_index = correct_answner[0];
+        // 其他类型correct_answner都是一个音符值，把其转换为RN值，以便和answner(是一个RN值)做比较
+        else
+            button_index = PKs.NoteToRN(correct_answner);
+        return button_index;
+    },
+
     // return true if game finished
     onAnswnerButtonClicked: function(vue_this, button_type, answner, game_progress) {
         //logger.debug("onAnswnerButtonClicked ===", this.ctx.current_question_index, game_progress.TotalItemCount);
@@ -79,18 +97,7 @@ return {
         //logger.debug("Your Answner to Question[" + this.ctx.current_question_index + "] = " + answner);
 
         // get the correct answner of current question
-        let music_item = this.ctx.musicItems[this.ctx.current_question_index];
-        let correct_answner = music_item.TargetValue;
-
-        // 特殊处理: 和弦转位基本练习按钮只包含转位0/1/2数字，不含和弦名称, 而和弦转位值被编码在答案的第一个字节
-        if (button_type == BTs.CI)
-            correct_answner = correct_answner[0];
-        // 特殊处理: 双音度数判断基本练习里只包含度数，不含度数的类型(大小纯等)
-        else if (button_type == BTs.Degree)
-            correct_answner = correct_answner[0];
-        // 其他类型correct_answner都是一个音符值，把其转换为RN值，以便和answner(是一个RN值)做比较
-        else
-            correct_answner = PKs.NoteToRN(correct_answner);
+        let correct_answner = this.getCurrentQuestionCorrectAnswnerButtonIndex(button_type);
 
         //logger.debug("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
 
