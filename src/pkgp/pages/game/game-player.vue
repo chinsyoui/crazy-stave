@@ -2,15 +2,11 @@
 	import { mapState } from 'vuex'
     import logger from '@/utils/logger.js'
     import ModalDlg from "@/views/modal-dlg.vue"
-	import { BTs } from '@/store/game-model.js'
+	import { PKs,BTs } from '@/store/game-model.js'
 	
-    import ButtonListSyllables from "@/pkgp/views/button-list-syllables.vue"
-    import ButtonListPitchs from "@/pkgp/views/button-list-pitchs.vue"
     import ButtonListKeys from "@/pkgp/views/button-list-keys.vue"
     import ButtonListDegrees from "@/pkgp/views/button-list-degrees.vue"
     import ButtonListCi from "@/pkgp/views/button-list-ci.vue"
-    import ButtonListPitchsWithSf from "@/pkgp/views/button-list-pitchs-with-sf.vue"
-    import ButtonListWkOnlyTcs from "@/pkgp/views/button-list-wk-only-tcs.vue"
 
     import { GameEngine } from '@/pkgp/utils/game-engine.js'
 
@@ -19,13 +15,9 @@
 
         components: {
             ModalDlg,
-            ButtonListSyllables,
-            ButtonListPitchs,
             ButtonListKeys,
             ButtonListDegrees,
-            ButtonListCi,
-            ButtonListPitchsWithSf,
-            ButtonListWkOnlyTcs
+            ButtonListCi
         },
 
 		// custom reactive fields here
@@ -48,7 +40,8 @@
                 CurrentGameIndex: state => state.CurrentGameIndex,
                 CurrentGameProgress: state => state.CurrentGameProgress,
                 CGBT: state => state.CurrentGame.Type.ButtonType,
-                TheBTs: state => BTs
+                TheBTs: state => BTs,
+                PKs: state => PKs
     		})
         },
 
@@ -177,14 +170,15 @@
 		</view>
         <view class="button-list-wrapper">
 		<block>
-			<ButtonListSyllables v-if="CGBT==TheBTs.Syllable" class="button-list" v-on:buttonClick="onButtonClick"/>
-			<!-- <ButtonListPitchs v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick"/> -->
-            <ButtonListKeys v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick"/>
-			<ButtonListPitchs v-if="CGBT==TheBTs.WKRootMajTC" class="button-list" v-on:buttonClick="onButtonClick"/>
+            <ButtonListKeys v-if="CGBT==TheBTs.Syllable" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['n']" />
+            <ButtonListKeys v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['@']" />
+            <ButtonListKeys v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['@']" />
+
+            <ButtonListKeys v-if="CGBT==TheBTs.WKOnlyTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['WKOnlyTCs']" />
+            <ButtonListKeys v-if="CGBT==TheBTs.WKRootMajTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['WKRootMajTCs']" />
+
 			<ButtonListDegrees v-if="CGBT==TheBTs.Degree" class="button-list" v-on:buttonClick="onButtonClick"/>
 			<ButtonListCi v-if="CGBT==TheBTs.CI" class="button-list" v-on:buttonClick="onButtonClick"/>
-			<ButtonListPitchsWithSf v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick"/>
-			<ButtonListWkOnlyTcs v-if="CGBT==TheBTs.WKOnlyTC" class="button-list" v-on:buttonClick="onButtonClick"/>
 		</block>
         </view>
 	</view>
@@ -198,7 +192,6 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		/* border: 1px solid red; */
 	}
 
 			.title {
@@ -207,7 +200,6 @@
 				text-overflow: ellipsis;
 				font-size: 1em;
 				color: black;
-				/* border: 1px solid red; */
 			}
 
 		.game-progress-bar {
@@ -232,7 +224,6 @@
 					text-overflow: ellipsis;
 					font-size: 1em;
 					color: blue;
-					/* border: 1px solid red; */
 				}
 
 		.questions-wrapper {
@@ -241,6 +232,5 @@
 			flex-wrap: nowrap;
 			width: 100%;
 			flex-grow: 1;
-			/* border: 1px solid red; */
 		}
 </style>

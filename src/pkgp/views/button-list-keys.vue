@@ -1,14 +1,19 @@
 <script>
+	import { mapState } from 'vuex'
+	import { PKs } from '@/store/game-model.js'
+
     export default {
 		data() {
-			return {
-				TextOfWhiteButtons: [ "C","D","E","F","G","A","B" ],
-				ValueOfWhiteButtons: [ "C","D","E","F","G","A","B" ],
-				TextOfBlackButtons: [ "C#/Db","D#/Eb","F#/Gb","G#/Ab","A#/Bb" ],
-				ValueOfBlackButtons: [ "Db","Eb","Gb","Ab","Bb" ]
-			}
+			return {}
 		},
-		props: [],
+		props: {
+            Texts: Array   // must be String[12]
+        },
+		computed: {
+            ...mapState({
+                PKs: state => PKs
+    		})
+        },
         mounted() {
         },
         methods: {
@@ -23,38 +28,38 @@
 <template>
 	<view class="button-list" style="position: relative; width: 84vw; height: 100%; min-height:16vw;">
         <view class="layer-white" style="z-index: auto; width: 84vw; height: 100%; display: flex; flex-direction: row; justify-content: center; align-items: stretch; background-color: transparent;">
-            <block v-for="(value, index) in TextOfWhiteButtons" v-bind:key="index">
-                <view class="button-white" hover-class="button-hover" @click="onButtonClick(ValueOfWhiteButtons[index])">
+            <block v-for="(value, index) in PKs.WhiteRNs" v-bind:key="index">
+                <view class="button-white" hover-class="button-hover" @click="onButtonClick(value)">
                     <view class="button-text-wrapper">
-                        <text class="button-white-text">{{ value }}</text>
+                        <text class="button-white-text">{{ Texts[value] }}</text>
                     </view>
                 </view>
             </block>
         </view>
         <view class="layer-black" style="z-index: 1; width: 84vw; height: 100%;">
-            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 8vw" @click="onButtonClick(ValueOfBlackButtons[0])">
+            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 8vw" @click="onButtonClick(1)">
                 <view class="button-text-wrapper">
-                    <text class="button-black-text">{{ TextOfBlackButtons[0] }}</text>
+                    <text class="button-black-text">{{ Texts[1] }}</text>
                 </view>
             </view>
-            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 20vw" @click="onButtonClick(ValueOfBlackButtons[1])">
+            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 20vw" @click="onButtonClick(3)">
                 <view class="button-text-wrapper">
-                    <text class="button-black-text">{{ TextOfBlackButtons[1] }}</text>
+                    <text class="button-black-text">{{ Texts[3] }}</text>
                 </view>
             </view>
-            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 44vw" @click="onButtonClick(ValueOfBlackButtons[2])">
+            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 44vw" @click="onButtonClick(6)">
                 <view class="button-text-wrapper">
-                    <text class="button-black-text">{{ TextOfBlackButtons[2] }}</text>
+                    <text class="button-black-text">{{ Texts[6] }}</text>
                 </view>
             </view>
-            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 56vw" @click="onButtonClick(ValueOfBlackButtons[3])">
+            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 56vw" @click="onButtonClick(8)">
                 <view class="button-text-wrapper">
-                    <text class="button-black-text">{{ TextOfBlackButtons[3] }}</text>
+                    <text class="button-black-text">{{ Texts[8] }}</text>
                 </view>
             </view>
-            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 68vw" @click="onButtonClick(ValueOfBlackButtons[4])">
+            <view class="button-black" hover-class="button-hover" style="position: absolute; top: 0px; left: 68vw" @click="onButtonClick(10)">
                 <view class="button-text-wrapper">
-                    <text class="button-black-text">{{ TextOfBlackButtons[4] }}</text>
+                    <text class="button-black-text">{{ Texts[10] }}</text>
                 </view>
             </view>
         </view>

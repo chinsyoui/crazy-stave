@@ -1,5 +1,5 @@
 import logger from '@/utils/logger.js'
-import { BTs, MITs } from '@/store/game-model.js'
+import { PKs, BTs, MITs } from '@/store/game-model.js'
 import { GenerateMusicItemsForGameInstance } from '@/store/game-content.js'
 
 // this line will cause all views/* component js codes compile to nothing,
@@ -70,7 +70,6 @@ return {
         if (this.ctx.current_question_index > game_progress.TotalItemCount - 1)
             return undefined;
 
-        logger.assert(answner);
         //logger.debug("onButtonClick: ", answner);
 
         // OK means this is an introduction game, just finish it
@@ -83,19 +82,20 @@ return {
         let music_item = this.ctx.musicItems[this.ctx.current_question_index];
         let correct_answner = music_item.TargetValue;
 
-        // 特殊处理: 
-        // 和弦转位基本练习按钮只包含转位0/1/2数字，不含和弦名称, 而和弦转位值被编码在答案的第一个字节
+        // 特殊处理: 和弦转位基本练习按钮只包含转位0/1/2数字，不含和弦名称, 而和弦转位值被编码在答案的第一个字节
         if (button_type == BTs.CI)
             correct_answner = correct_answner[0];
-        // 特殊处理: 
-        // 双音度数判断基本练习里只包含度数，不含度数的类型(大小纯等)
-        if (button_type == BTs.Degree)
+        // 特殊处理: 双音度数判断基本练习里只包含度数，不含度数的类型(大小纯等)
+        else if (button_type == BTs.Degree)
             correct_answner = correct_answner[0];
+        // 其他类型correct_answner都是一个音符值，把其转换为RN值，以便和answner(是一个RN值)做比较
+        else
+            correct_answner = PKs.NoteToRN(correct_answner);
 
         //logger.debug("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
 
          // check if user's answner correct or not
-        let result = (answner.toUpperCase() === correct_answner.toUpperCase());
+        let result = (answner === correct_answner);
         logger.debug("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong"));
 
         // update progress

@@ -40,6 +40,10 @@ export const PKs = { // PKs = PianoKeys
 
     // 转换表：键的相对位置->音名，黑键用#或者为b
     RNtoPitchs: {
+        'WKOnlyTCs' : ['C','','Dm','','Em','F','','G','','Am','','Bsus'],
+        'WKRootMajTCs' : ['C','','D','','E','F','','G','','A','','B'],
+        'n' : ['1','1#/2b','2','2#/3b','3','4','4#/5b','5','5#/6b','6','6#/7b','7'],
+        '@' : ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'],
         "#" : ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],
         "b" : ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']
     },
@@ -64,11 +68,21 @@ export const PKs = { // PKs = PianoKeys
         let RN = PKs.PitchToRNs[note[0]];
         let accidental = 0;
         if (note.length == 4) // has accidental
-            accidental = (note(1) == '#') ? 1 : -1;
+            accidental = (note[1] == '#') ? 1 : ((note[1] == 'b') ? -1 : 0);
         let ON = note.charCodeAt(note.length-1) - 48; // '0' = 48
         let AN = PKs.AN(ON,RN);
         //logger.debug("NoteToAN", note, RN, accidental, ON, AN);
         return AN;
+    },
+
+    // 将音符(C/Db等)转换为其RN值
+    NoteToRN: function(note) {
+        logger.assert(note && (note.length > 0));
+        let RN = PKs.PitchToRNs[note[0]];
+        let accidental = 0;
+        if (note.length > 1) // has accidental
+            accidental = (note[1] == '#') ? 1 : ((note[1] == 'b') ? -1 : 0);
+        return (RN + accidental) % 12;
     },
 
     // 将AN值转换为音符的标准音名表示法，因为会出现同音多名，因此需要时会采用符合指定升降号的名称。
