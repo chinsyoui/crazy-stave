@@ -72,6 +72,7 @@
                 height: 2.5rem;
                 margin: 2px;
 				background-color: #F1F1F1;
+                box-sizing: border-box;
 				border: 2px solid black;
 			}
 	
@@ -106,6 +107,7 @@
                 margin-left: 1.3rem;
                 margin-right: 1.3rem;
                 background-color: #F1F1F1;
+                box-sizing: border-box;
                 border: 3px solid black;
 			}
 

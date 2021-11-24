@@ -6,6 +6,7 @@
 	
     import ButtonListSyllables from "@/pkgp/views/button-list-syllables.vue"
     import ButtonListPitchs from "@/pkgp/views/button-list-pitchs.vue"
+    import ButtonListKeys from "@/pkgp/views/button-list-keys.vue"
     import ButtonListDegrees from "@/pkgp/views/button-list-degrees.vue"
     import ButtonListCi from "@/pkgp/views/button-list-ci.vue"
     import ButtonListPitchsWithSf from "@/pkgp/views/button-list-pitchs-with-sf.vue"
@@ -20,6 +21,7 @@
             ModalDlg,
             ButtonListSyllables,
             ButtonListPitchs,
+            ButtonListKeys,
             ButtonListDegrees,
             ButtonListCi,
             ButtonListPitchsWithSf,
@@ -169,19 +171,22 @@
 		<view id="questions-wrapper" class="questions-wrapper">
             <view class="outer-wrapper" style="flex-grow: 1; display: flex; flex-direction: row;">
                 <view class="left-bar" style="width: 50px; height: 100%;"/>
-                <canvas z-index="-1" type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; border: 1px solid gray; width: 100%; height: 100%;"/>
+                <canvas z-index="-1" type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; box-sizing: border-box; border: 1px solid gray; width: 100%; height: 100%;"/>
                 <view class="right-bar" style="width: 50px; height: 100%;"/>
             </view>
 		</view>
+        <view class="button-list-wrapper">
 		<block>
 			<ButtonListSyllables v-if="CGBT==TheBTs.Syllable" class="button-list" v-on:buttonClick="onButtonClick"/>
-			<ButtonListPitchs v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick"/>
+			<!-- <ButtonListPitchs v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick"/> -->
+            <ButtonListKeys v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick"/>
 			<ButtonListPitchs v-if="CGBT==TheBTs.WKRootMajTC" class="button-list" v-on:buttonClick="onButtonClick"/>
 			<ButtonListDegrees v-if="CGBT==TheBTs.Degree" class="button-list" v-on:buttonClick="onButtonClick"/>
 			<ButtonListCi v-if="CGBT==TheBTs.CI" class="button-list" v-on:buttonClick="onButtonClick"/>
 			<ButtonListPitchsWithSf v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick"/>
 			<ButtonListWkOnlyTcs v-if="CGBT==TheBTs.WKOnlyTC" class="button-list" v-on:buttonClick="onButtonClick"/>
 		</block>
+        </view>
 	</view>
 </template>
 
@@ -213,6 +218,7 @@
 			justify-content: center;
 			align-items: center;
 			background-color: #FFFF66;
+            box-sizing: border-box;
 			border: 1px solid black;
 		}
 

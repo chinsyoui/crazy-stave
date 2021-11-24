@@ -99,6 +99,7 @@
 				font-size: 1em;
 				color: #8f8f94;
                 margin-bottom: 10px;
+                box-sizing: border-box;
 				/* border: 1px solid red; */
 			}
 	
@@ -109,6 +110,7 @@
 			align-items: center;
 			justify-content: center;
 			overflow-x: scroll;
+            box-sizing: border-box;
 			border: 1px solid blue;
 		}
 

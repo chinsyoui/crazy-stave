@@ -50,6 +50,7 @@
 			height: 3rem;
 			margin: 10px;
 			background-color: #F1F1F1;
+            box-sizing: border-box;
 			border: 3px solid black;
 		}
 

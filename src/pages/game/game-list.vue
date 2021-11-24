@@ -150,6 +150,7 @@
 					height: auto;
 					justify-content: space-around;
 					border: 1px solid blue;
+                    box-sizing: border-box;
                     padding: 0.5em 0.5em 0.5em 0.5em;
 				}
 

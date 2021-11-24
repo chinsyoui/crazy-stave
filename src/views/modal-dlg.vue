@@ -68,6 +68,7 @@
         margin: 0px auto;
         padding: 20px 30px;
         background-color: #fff;
+        box-sizing: border-box;
         border-radius: 2px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
         transition: all 0.3s ease;
@@ -102,6 +103,7 @@
 			margin: 10px;
             min-width: 6em;
 			background-color: #F1F1F1;
+            box-sizing: border-box;
 			border: 1px solid black;
 		}
 

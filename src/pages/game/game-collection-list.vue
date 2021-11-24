@@ -114,6 +114,7 @@
 			.uni-list-cell {
 				/* background-color: #C0C0C0; */
 				margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+                box-sizing: border-box;
 			    border: 1px solid blue;
 			}
 

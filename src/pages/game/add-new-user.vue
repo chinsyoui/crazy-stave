@@ -44,6 +44,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+        box-sizing: border-box;
 		border: 1px solid red;
 	}
 
@@ -59,12 +60,14 @@
 		.text-area {
 			display: flex;
 			justify-content: center;
+            box-sizing: border-box;
 			border: 1px solid red;
 		}
 
 			.title {
 				font-size: 36rpx;
 				color: #8f8f94;
+                box-sizing: border-box;
 				border: 1px solid red;
 			}
 	
