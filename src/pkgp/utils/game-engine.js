@@ -62,19 +62,20 @@ return {
         });
     },
 
+    // return the button index (a Integer) of current question's answner
     getCurrentQuestionCorrectAnswnerButtonIndex: function(button_type) {
         let music_item = this.ctx.musicItems[this.ctx.current_question_index];
         let correct_answner = music_item.TargetValue;
 
-        let button_index = 0;
+        let button_index = -1;
 
         // 特殊处理: 和弦转位基本练习按钮只包含转位0/1/2数字，不含和弦名称, 而和弦转位值被编码在答案的第一个字节
         if (button_type == BTs.CI)
-            button_index = correct_answner[0];
+            button_index = parseInt(correct_answner[0]);   // 转换成0开头的按钮索引
         // 特殊处理: 双音度数判断基本练习里只包含度数，不含度数的类型(大小纯等)
         else if (button_type == BTs.Degree)
-            button_index = correct_answner[0];
-        // 其他类型correct_answner都是一个音符值，把其转换为RN值，以便和answner(是一个RN值)做比较
+            button_index = parseInt(correct_answner[0])-2; // 转换成0开头的按钮索引
+        // 其他类型correct_answner都是一个音符值，把其转换为RN值，以便和answner(是0开头的按钮索引，亦即RN值)做比较
         else
             button_index = PKs.NoteToRN(correct_answner);
         return button_index;
@@ -103,7 +104,7 @@ return {
 
          // check if user's answner correct or not
         let result = (answner === correct_answner);
-        logger.debug("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong"));
+        logger.debug("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong") + answner + "/" + correct_answner);
 
         // update progress
         game_progress.CompletedItemCount ++;

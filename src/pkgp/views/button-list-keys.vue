@@ -25,8 +25,6 @@
                 PKs: state => PKs
     		})
         },
-        mounted() {
-        },
         methods: {
 			onButtonClick(value) {
 				//logger.debug("onButtonClick", value);

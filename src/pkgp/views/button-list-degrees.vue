@@ -1,19 +1,32 @@
 <script>
+    import logger from '@/utils/logger.js'
+
     export default {
 		data() {
 			return {
-				TextOfButtons: [ "二度","三度","四度","五度","六度","七度","八度" ],
-				ValueOfButtons: [ "2","3","4","5","6","7","8" ]
+                CorrectButtonIndex: -1,   // >=0时表示正确的按钮的索引
+				TextOfButtons: [ "二度","三度","四度","五度","六度","七度","八度" ]
 			}
 		},
-		props: [],
-        mounted() {
+		computed: {
+            isHint() {
+                return function(button_index) {
+                    let ret = (button_index === this.CorrectButtonIndex);
+    				//logger.debug("isHint", button_index, this.CorrectButtonIndex, ret);
+                    return ret;
+                }
+			}
         },
         methods: {
 			onButtonClick(value) {
 				//console.log("onButtonClick", value);
 				this.$emit("buttonClick", value);
-			}
+                this.CorrectButtonIndex = -1;  // 清除提示
+			},
+            showHint(correct_button_index) {
+                //logger.debug("showHint");
+                this.CorrectButtonIndex = correct_button_index;
+            }            
         }
     }
 </script>
@@ -21,9 +34,9 @@
 <template>
 	<view class="button-list">
 		<block v-for="(value, index) in TextOfButtons" v-bind:key="index">
-			<view class="button" hover-class="button-hover" @click="onButtonClick(ValueOfButtons[index])">
+			<view v-bind:class="{ hint: isHint(index) }" class="button" hover-class="button-hover" @click="onButtonClick(index)">
 				<view class="button-text-wrapper">
-					<text class="button-text">{{ value }}</text>
+					<text v-bind:class="{ hint: isHint(index) }" class="button-text">{{ value }}</text>
 				</view>
 			</view>
 		</block>
@@ -37,16 +50,20 @@
 		flex-wrap: nowrap;
 		justify-content: center;
 		align-items: center;
-		height: 4rem;
+		height: 8vw;
 		width: 100%;
 	}
+
+        .button.hint {
+            background-color: #CCFFFF;
+        }
 
 		.button {
             display: flex;
             justify-content: center;
             align-items: center;
-			min-width: 4rem;
-			min-height: 4rem;
+			min-width: 8vw;
+			min-height: 8vw;
 			margin: 10px;
 			background-color: #F1F1F1;
             box-sizing: border-box;
@@ -54,8 +71,12 @@
 		}
 
         .button-hover {
-			background-color: #818181;
+			background-color: #CCFFFF;
         }
+
+            .button-text.hint {
+                color: blue;
+            }
 
 			.button-text-wrapper {
 				display: flex;
