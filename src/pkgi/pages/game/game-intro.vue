@@ -166,7 +166,6 @@
         display: flex;
         flex-wrap: nowrap;
         justify-content: center;
-        /* border: 1px solid red; */
     }
 
     .title {

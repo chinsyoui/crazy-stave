@@ -19,7 +19,6 @@
 		justify-content: center;
 		align-items: center;
 		width: 100%;
-		/* border: 1px solid red; */
 	}
 
 		.image {
