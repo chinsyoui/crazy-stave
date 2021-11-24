@@ -217,9 +217,9 @@
 			flex-wrap: nowrap;
 			justify-content: center;
 			align-items: center;
-			background-color: #FFFF66;
+			background-color: white;
             box-sizing: border-box;
-			border: 1px solid black;
+			/* border: 1px solid black; */
 		}
 
 			.game-progress-text-item {
@@ -231,7 +231,7 @@
     			    white-space: nowrap;
 					text-overflow: ellipsis;
 					font-size: 1em;
-					color: blue;
+					color: black;
 				}
 
 		.questions-wrapper {
