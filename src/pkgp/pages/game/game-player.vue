@@ -2,7 +2,7 @@
 	import { mapState } from 'vuex'
     import logger from '@/utils/logger.js'
     import ModalDlg from "@/views/modal-dlg.vue"
-	import { PKs,BTs } from '@/store/game-model.js'
+	import { BTs } from '@/store/game-model.js'
 	
     import ButtonListKeys from "@/pkgp/views/button-list-keys.vue"
     import ButtonListDegrees from "@/pkgp/views/button-list-degrees.vue"
@@ -27,7 +27,16 @@
 
                 ShowModalDlg: false,
                 GameResultText: "",
-                GameResultDlgButtons: []
+                GameResultDlgButtons: [],
+
+                ButtonTexts: {
+                    'ns' : ['1','','2','','3','4','','5','','6','','7'],
+                    'ps' : ['C','','D','','E','F','','G','','A','','B'],
+                    'nl' : ['1','1#/2b','2','2#/3b','3','4','4#/5b','5','5#/6b','6','6#/7b','7'],
+                    'pl' : ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'],
+                    'WKOnlyTCs' : ['C','','Dm','','Em','F','','G','','Am','','Bsus'],
+                    'WKRootMajTCs' : ['C','','D','','E','F','','G','','A','','B']
+                }
 			}
 		},
 
@@ -41,7 +50,6 @@
                 CurrentGameProgress: state => state.CurrentGameProgress,
                 CGBT: state => state.CurrentGame.Type.ButtonType,
                 TheBTs: state => BTs,
-                PKs: state => PKs
     		})
         },
 
@@ -170,12 +178,12 @@
 		</view>
         <view class="button-list-wrapper">
 		<block>
-            <ButtonListKeys v-if="CGBT==TheBTs.Syllable" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['n']" />
-            <ButtonListKeys v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['@']" />
-            <ButtonListKeys v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['@']" />
+            <ButtonListKeys v-if="CGBT==TheBTs.Syllable" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['ns']" />
+            <ButtonListKeys v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['ps']" />
+            <ButtonListKeys v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['pl']" />
 
-            <ButtonListKeys v-if="CGBT==TheBTs.WKOnlyTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['WKOnlyTCs']" />
-            <ButtonListKeys v-if="CGBT==TheBTs.WKRootMajTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="PKs.RNtoPitchs['WKRootMajTCs']" />
+            <ButtonListKeys v-if="CGBT==TheBTs.WKOnlyTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['WKOnlyTCs']" />
+            <ButtonListKeys v-if="CGBT==TheBTs.WKRootMajTC" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['WKRootMajTCs']" />
 
 			<ButtonListDegrees v-if="CGBT==TheBTs.Degree" class="button-list" v-on:buttonClick="onButtonClick"/>
 			<ButtonListCi v-if="CGBT==TheBTs.CI" class="button-list" v-on:buttonClick="onButtonClick"/>

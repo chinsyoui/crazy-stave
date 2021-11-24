@@ -1,32 +1,20 @@
 <script>
     import logger from '@/utils/logger.js'
     import ModalDlg from "@/views/modal-dlg.vue"
+	import { mapState } from 'vuex'
 
     export default {
         components: {
             ModalDlg
         },
 		data() {
-			return {
-				Title: "Welcome",
-				DebugInfo: "",
-                ShowModalDlg: false
-			}
+			return {}
 		},
-        computed: {
-            OneButtons: function() {
-                return [ { Text : "确认", Value: "OK"} ]
-            },
-            TwoButtons: function() {
-                return [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"} ]
-            },
-            ThreeButtons: function() {
-                return [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"}, { Text : "下一个", Value: "next"} ]
-            }
+		computed: { 
+            ...mapState({
+			    Users: state => state.Users
+ 		    })
         },
-		mounted() {
-			// this.DebugInfo = this.DebugInfo + "uni.getSystemInfoSync() = " + JSON.stringify(uni.getSystemInfoSync());
-		},
         onLoad() {
             if (wx && wx.getUpdateManager) {
                 const um = wx.getUpdateManager();
@@ -56,24 +44,17 @@
 		methods: {
 			onItemClick: function() {
                 //logger.debug(this.Title + "." + "onItemClick");
-                uni.navigateTo({ url: '/pages/game/user-list' });
+				this.$store.commit('setCurrentUser', this.Users[0]);
+				uni.navigateTo({ url: '/pages/game/game-collection-list' });
+                //uni.navigateTo({ url: '/pages/game/user-list' });
                 //this.ShowModalDlg = true;
-			},
-            onModalDlgClick: function(e) {
-				logger.debug("onModalDlgClick", e);
-                this.ShowModalDlg = false;
-            }
+			}
 		}
 	}
 </script>
 
 <template>
  	<view class="container" @click="onItemClick()">
-        <ModalDlg v-if="ShowModalDlg" @click="onModalDlgClick" v-bind:buttons="TwoButtons">
-            <template v-slot:title>New Title</template>
-            <template v-slot:body>New Body</template>
-        </ModalDlg>
-
 		<image class="logo" src="/static/logo.png"></image>
 		<view class="text-area">
 			<text class="title" style="font: 1.1rem">
@@ -81,12 +62,9 @@
 			    本小程序可以帮助您将五线谱阅读速度快速提高到非常熟练的水平。\n
             </text>
 		</view>
-		<view class="text-area">
-			<text class="DebugInfo">{{ DebugInfo }}</text>
-		</view>
 		
 		<match-media max-height="480" max-width="640">
-			<view>屏幕太小，无法工作</view>
+			<view>屏幕太小</view>
 		</match-media>
  		<match-media min-height="300" orientation="landscape">
 			<view style="margin: 2rem 2rem">
@@ -108,7 +86,6 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		/* border: 1px solid red; */
 	}
 
 	.logo {
@@ -119,9 +96,5 @@
 		margin-left: 10px;
 		margin-right: 10px;
 		margin-bottom: 2rem;
-	}
-
-	.DebugInfo {
-		overflow-wrap: break-word;
 	}
 </style>

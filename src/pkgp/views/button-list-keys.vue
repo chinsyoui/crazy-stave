@@ -100,6 +100,7 @@
         }
 
         .button-white-text {
+            padding-bottom: 0.5vw;
             white-space: nowrap;
             font-size: 3em;
             overflow: hidden;
@@ -107,8 +108,9 @@
         }
 
         .button-black-text {
+            padding-bottom: 0.5vw;
             white-space: nowrap;
-            font-size: 1em;
+            font-size: 2.5vw;
             overflow: hidden;
             color: white;
         }

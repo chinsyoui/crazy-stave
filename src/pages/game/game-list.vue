@@ -85,14 +85,10 @@
 
 <template>
 	<view class="content">
-		<!-- <view class="text-area" @click="onBackClick()">
-			<text class="title">{{Title}} - {{ CurrentUser.DisplayName }} - {{ CurrentGameCollection.DisplayName }}</text>
-		</view> -->
 		<view class="uni-list">
 			<block v-for="(value, index) in Games" :key="index">
 				<view class="uni-list-cell" hover-class="uni-list-cell-hover" @click="onItemClick({value,index})">
 					<view class="uni-media-list">
-						<!-- <image class="uni-media-list-logo" :src="value.Icon"></image> -->
 						<view class="uni-media-list-body">
 							<view class="uni-media-list-text-top"  v-bind:class="{ 'intro-game': isIntroGame(value) }" style="color: blue; font: bold">{{ value.DisplayName }}</view>
 							<view class="uni-media-list-text-middle">{{ value.Description }}</view>

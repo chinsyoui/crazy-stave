@@ -144,7 +144,9 @@
                     <Intro5100/>
                 </block>
                 <block v-else>
-                    <text class="introduction">敬请期待</text>
+                    <view class="text-area" style="display: flex; justify-content: center; align-items: center">
+                        <text class="introduction">请稍等</text>
+                    </view>
                 </block>
             </view>
             <view class="bottom-bar" style="display: flex; flex-direction: row; width: 100%; height: 2em">
