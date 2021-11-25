@@ -9,17 +9,22 @@ function RandomInt(min, max) {
 };
 
 // functions that can create music item according specified props
-// MIC = MusicItemCreator = @func MusicItemCreator: MusicItem create_func(props)
+// MIC = MusicItemCreator = @func MusicItemCreator: MusicItem create_func(props,index)
 const MICs = {
-    // ByST = by random select from static template of music items, Props = MusicItem[]
-    ByST : function(props) {
-        let index = RandomInt(0,props.length);
+    // ByFixed = use fixed music items specified by template, Props = MusicItem[]
+    ByFixed : function(props,index) {
+        logger.assert(index >= 0 && index < props.length);
         return props[index];
+    },
+    // ByST = by random select from static template of music items, Props = MusicItem[]
+    ByST : function(props,index) {
+        let _index = RandomInt(0,props.length);
+        return props[_index];
     },
     // ByDegree = by random generate notes from a base notes and random degrees
     // Props = { MaxNote: "C/6", MIT: 4, BaseNotes: String[], Degrees: ["2m","3M","5p","8p"] }
     // 注: MIT MusicItemType，参见MITs中定义的值。
-    ByDegree : function(props) {
+    ByDegree : function(props,index) {
         //logger.debug("ByDegree: ",props);
         let maxAN = PKs.NoteToAN(props.MaxNote);
         while(true) {
@@ -38,7 +43,7 @@ const MICs = {
             }
         };
     },
-    EOF : function(props) { return null; }
+    EOF : function(props,index) { return null; }
 };
 
 // random generate count music items with specified template music items.
@@ -46,10 +51,11 @@ const MICs = {
 // MIG = MusicItemsGenerator
 function MIG(props,creator_func_name) {
     this.props = props;
-    this.creator_func_name = creator_func_name; // () => { return creator(this.props); };
+    this.creator_func_name = creator_func_name;
 };
 
 const MIGs = {
+    NewFixed: function(props) { return new MIG(props, "ByFixed"); },
     NewST: function(props) { return new MIG(props, "ByST"); },
     ///////////////////////////////////////////////////////////
     //G1: new MIG([], MICs.ByST),
@@ -63,7 +69,7 @@ const MIGs = {
 export function GenerateMusicItemsForGameInstance(count, generator) {
     let items = new Array(count);
     for(var i=0; i<count; i++)
-        items[i] = MICs[generator.creator_func_name](generator.props);
+        items[i] = MICs[generator.creator_func_name](generator.props,i);
     return items;
 };
   
@@ -119,6 +125,16 @@ function GenerateNotes(lower_note, upper_note, accidental) {
     //logger.debug(notes);
     return notes;
 };
+
+// const Easy01 = [ // 简易音符集1
+// 	new MI(MITs.Note, "C/4", "C"),
+// 	new MI(MITs.Note, "D/4", "D"),
+// 	new MI(MITs.Note, "E/4", "E"),
+// 	new MI(MITs.Note, "F/4", "F"),
+// 	new MI(MITs.Note, "G/4", "G"),
+// 	new MI(MITs.Note, "A/4", "A"),
+// 	new MI(MITs.Note, "B/4", "B")
+// ];
 
 const O2WKs = [ // 低音谱，低八度，白键
 	new MI(MITs.Note, "C/2", "C"),
@@ -656,11 +672,14 @@ export const PredefinedGameCollections = [
 	 // id, display_name, description, icon, games
 	new GC(11,"第一章","零基础入门","",
 		[   //  Game: id, type, display_name, clef, keysig, music_items_count, template_music_items
-			new Game(1100, GTs.Intro, "第一节 学习", "预备知识", "treble", "C", 0, []),
-			new Game(1101, GTs.Intro, "第二节 学习", "钢琴键盘", "treble", "C", 0, []),
-			new Game(1102, GTs.Intro, "第三节 学习", "五线谱", "treble", "C", 0, []),
-			new Game(1103, GTs.Intro, "第四节 学习", "谱号", "treble", "C", 0, []),
-			new Game(1104, GTs.Intro, "第五节 学习", "音符", "treble", "C", 0, []),
+			// new Game(1100, GTs.Intro, "第一节 学习", "预备知识", "treble", "C", 0, []),
+			new Game(1102, GTs.Intro, "第一节 入门", "认识五线谱", "treble", "C", 0, []),
+			new Game(1105, GTs.NoteToSyllable, "第二节 练习", "认识七个唱名", "treble", "C", 7, MIGs.NewFixed(O4WKs)),
+			new Game(1106, GTs.NoteToPitch, "第三节 练习", "认识七个音名", "treble", "C", 7, MIGs.NewFixed(O4WKs)),
+
+			new Game(1101, GTs.Intro, "第四节 学习", "钢琴键盘", "treble", "C", 0, []),
+			new Game(1103, GTs.Intro, "第五节 学习", "谱号", "treble", "C", 0, []),
+			new Game(1104, GTs.Intro, "第六节 学习", "音符", "treble", "C", 0, []),
 
 			new Game(1110, GTs.Intro, "第六节 学习", "唱名速记表", "treble", "C", 0, []),
 			new Game(1111, GTs.NoteToSyllable, "第七节 练习", "音符到唱名 (高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),

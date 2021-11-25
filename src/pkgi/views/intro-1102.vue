@@ -4,7 +4,10 @@
 	<view class="container">
 		<image class="image" src="../static/images/stave-keys-names.png" style="width: 35%"></image>
 		<view class="text-area">
-			<text class="text">每个基本音都有三个称呼：音名（7个大写英文字母之一），唱名(7个发音标记之一)，数字(7个阿拉伯数字之一)。\n五线谱就是把音摆在五根线上(可以在一根线之上或两根线之间，简称线或间)，每个音符表示一个音(小椭圆)。\n五线谱上的音符和钢琴键盘上键、音名/唱名/数字的对应关系如上图所示。</text>
+			<text class="text">五线谱上的音符(小椭圆)和钢琴键盘上的白键是一一对应的，音符位置的高低决定了是哪个键。\n我们都知道，音乐有七个音，分别是1234567(读作DoReMiFaSolLaSi)，这叫唱名。\n在五线谱上，同时还有七个对应的音名(依次是CDEFGAB)。\n接下来，让我们做个练习熟悉一下。\n</text>
+		</view>
+		<view class="text-area" style="margin-top: 10px">
+			<text class="text" style="font-size: smaller">注：为简化起见，此处以高音谱/中央八度/C大调/固定调唱名法为例。</text>
 		</view>
 	</view>
 </template>
