@@ -25,9 +25,17 @@ return {
         vfRenderContext: null, 	   // VF.RenderContext
         vfRenderer: null,		   // new VF.Renderer(vfRenderContext)
 
+        ac: null, //  wx.InnerAudioContext
+
         timer: null,               // timer for elapsed seconds 
         current_question_index: 0, // current question index
         EOF: null
+    },
+
+    destroy: function() {
+        if (this.ctx.ac)
+            this.ctx.ac.destroy();
+        this.ctx.ac = null;
     },
 
     stopTimer: function() {
@@ -52,6 +60,15 @@ return {
         this.ctx.musicItems = GenerateMusicItemsForGameInstance(game.MusicItemsCount, game.MusicItemsGenerator);
         //logger.debug("random generated music items: ", this.ctx.musicItems);
 
+        if (!this.ctx.ac) {
+            this.ctx.ac = wx.createInnerAudioContext({ useWebAudioImplement : false });
+            this.ctx.ac.autoplay = true;
+            this.ctx.ac.onPlay(() => { logger.debug('play note'); });
+            this.ctx.ac.onError((res) => {
+                logger.warn("play note error: ", res.errCode, res.errMsg);
+            })
+        }
+   
         let _this = this;
         this.initStave(vue_this, function() {
             // start game and focus to first question
@@ -81,6 +98,20 @@ return {
         return button_index;
     },
 
+    tryPlayNoteSoundEffect: function(button_type, answner) { 
+        switch(button_type) {
+            case BTs.Syllable:
+            case BTs.SyllableWithSF:
+            case BTs.Pitch:
+            case BTs.PitchWithSF:
+                logger.assert(this.ctx.ac);
+                this.ctx.ac.src = "pkgp/static/12keys/key" + answner + ".mp3";
+                return;
+            default:
+                return;
+        }
+    },
+
     // return true if game finished
     onAnswnerButtonClicked: function(vue_this, button_type, answner, game_progress) {
         //logger.debug("onAnswnerButtonClicked ===", this.ctx.current_question_index, game_progress.TotalItemCount);
@@ -99,6 +130,7 @@ return {
 
         // get the correct answner of current question
         let correct_answner = this.getCurrentQuestionCorrectAnswnerButtonIndex(button_type);
+        this.tryPlayNoteSoundEffect(button_type, answner);
 
         //logger.debug("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
 

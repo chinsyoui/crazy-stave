@@ -65,6 +65,7 @@
         onUnload() {
             // note onUnload happens after back, we just do cleanup
             this.$options.ge.stopTimer();
+            this.$options.ge.destroy();
         },
 
         methods: {
@@ -97,6 +98,7 @@
                         return "请继续努力 " + msg;
                 }
             },
+
 			onButtonClick: function(value) {
                 // reset hint flags
                 this.LastButtonClickTime = this.CurrentGameProgress.ElapsedSeconds;
