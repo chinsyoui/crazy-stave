@@ -78,7 +78,7 @@ export const PKs = { // PKs = PianoKeys
         let accidental = 0;
         if (note.length > 1) // has accidental
             accidental = (note[1] == '#') ? 1 : ((note[1] == 'b') ? -1 : 0);
-        return (RN + accidental) % 12;
+        return (RN + accidental + 12) % 12;
     },
 
     // 将AN值转换为音符的标准音名表示法，因为会出现同音多名，因此需要时会采用符合指定升降号的名称。
@@ -107,8 +107,6 @@ export const PKs = { // PKs = PianoKeys
 
 // MIT = Music Item Type
 export const MITs = {
-	Syllable: 2,    // 唱名
-	Pitch: 3,	    // 音名
 	Note: 4,        // one stave note
 	PC: 5,          // multiple stave note in a pillar chord
 	AC: 6           // multiple stave note in arpeggio chord, optionally under one beam line

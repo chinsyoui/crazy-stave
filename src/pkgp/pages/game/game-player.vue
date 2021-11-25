@@ -189,6 +189,7 @@
         <view class="button-list-wrapper">
 		<block>
             <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.Syllable" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['ns']" />
+            <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.SyllableWithSF" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['nl']" />
             <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.Pitch" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['ps']" />
             <ButtonListKeys ref="buttons" v-if="CGBT==TheBTs.PitchWithSF" class="button-list" v-on:buttonClick="onButtonClick" v-bind:Texts="ButtonTexts['pl']" />
 

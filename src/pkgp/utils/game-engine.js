@@ -295,10 +295,6 @@ return {
             let value = music_item.SourceValue;
 
             switch(music_item.Type) {
-                case MITs.Syllable:
-                case MITs.Pitch:
-                    logger.assert("not implemented yet");
-                    break;
                 case MITs.Note: {
                         let note = new VF.StaveNote({ keys: [ value ], clef: stave_clef, duration: "q" });
                         if (value.includes("b"))
@@ -322,7 +318,7 @@ return {
                     }
                     break;
                 default:
-                    logger.assert("not implemented yet");
+                    logger.assert("Invalid MIT");
                     break;
             }
         }

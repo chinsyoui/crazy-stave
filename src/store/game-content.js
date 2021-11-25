@@ -71,11 +71,10 @@ export function GenerateMusicItemsForGameInstance(count, generator) {
 // @enum <Id, DisplayName, ButtonType>
 export const GameTypes = {
 	Intro: new GT(0, "说明", BTs.Any),
-	// SyllableToPitch: new GameType(12, "唱名到音名练习", BTs.Pitch),
-	// PitchToSyllable: new GameType(14, "音名到唱名练习", BTs.Syllable),
 	NoteToPitch: new GT(21, "音符到音名练习", BTs.Pitch),
 	NoteToSyllable: new GT(22, "音符到唱名及数字练习", BTs.Syllable),
 	NoteToPitchWithSF: new GT(23, "音符到音名练习-带升降号", BTs.PitchWithSF),
+	NoteToSyllableWithSF: new GT(24, "音符到唱名练习-带升降号", BTs.SyllableWithSF),
 	DoubleNoteDegree:  new GT(31, "双音度数视谱练习", BTs.Degree),
 	TCCI: new GT(32, "认识三和弦的转位", BTs.CI), // 与和弦名称，只识别是哪种位置
 	CPTChordsNaming: new GT(51, "紧凑型柱式三和弦视谱练习", BTs.WKOnlyTC),
@@ -694,14 +693,17 @@ export const PredefinedGameCollections = [
 	new GC(31,"第三章","高级音符练习","",
 		[
 			new Game(3100, GTs.Intro, "第一节 学习", "认识升降号", "treble", "C", 0, []),
-			new Game(3101, GTs.Intro, "第二节 学习", "认识调式", "treble", "C", 0, []),
 
-			new Game(3111, GTs.NoteToPitchWithSF, "第三节 练习", "带升降号，音符到音名(高音谱两个八度)", "treble", "C", 24, MIGs.NewST(O45FKs)),
-			new Game(3112, GTs.NoteToPitchWithSF, "第四节 练习", "带升降号，音符到音名(低音谱两个八度)", "bass", "C", 24, MIGs.NewST(O23FKs)),
-			
+			new Game(3111, GTs.NoteToSyllableWithSF, "第二节 练习", "带升降号，音符到唱名(高音谱两个八度)", "treble", "C", 24, MIGs.NewST(O45FKs)),
+			new Game(3112, GTs.NoteToSyllableWithSF, "第三节 练习", "带升降号，音符到唱名(低音谱两个八度)", "bass", "C", 24, MIGs.NewST(O23FKs)),
+
+			new Game(3121, GTs.NoteToPitchWithSF, "第四节 练习", "带升降号，音符到音名(高音谱两个八度)", "treble", "C", 24, MIGs.NewST(O45FKs)),
+			new Game(3122, GTs.NoteToPitchWithSF, "第五节 练习", "带升降号，音符到音名(低音谱两个八度)", "bass", "C", 24, MIGs.NewST(O23FKs))
+
+			// new Game(3101, GTs.Intro, "第二节 学习", "认识调式", "treble", "C", 0, []),
 			// TODO 根据谱号，识别调号名称，并记住升降音数量及名称
-			new Game(3113, GTs.NoteToPitchWithSF, "第五节 练习", "TODO：熟记12个大调的谱号", "treble", "C", 24, MIGs.NewST(O45FKs)),
-			new Game(3114, GTs.NoteToPitchWithSF, "第六节 练习", "TODO：熟记12个大调的升降音", "bass", "C", 24, MIGs.NewST(O23FKs))
+			// new Game(3133, GTs.NoteToPitchWithSF, "第五节 练习", "TODO：熟记12个大调的谱号", "treble", "C", 24, MIGs.NewST(O45FKs)),
+			// new Game(3134, GTs.NoteToPitchWithSF, "第六节 练习", "TODO：熟记12个大调的升降音", "bass", "C", 24, MIGs.NewST(O23FKs))
 		]
 	),
 	new GC(41,"第四章","双音练习","",
