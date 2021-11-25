@@ -54,26 +54,35 @@
 </script>
 
 <template>
- 	<view class="container" @click="onItemClick()">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title" style="font: 1.1rem">
-                五线谱是音乐的语言，学习音乐就要将这门语言学习到相当于母语的熟练程度。\n
-			    本小程序可以帮助您将五线谱阅读速度快速提高到非常熟练的水平。\n
-            </text>
-		</view>
-		
-		<match-media max-height="480" max-width="640">
-			<view>屏幕太小</view>
-		</match-media>
- 		<match-media min-height="300" orientation="landscape">
-			<view style="margin: 2rem 2rem">
-    			<text class="title" style="font: 1.2rem bold; color: blue">点击屏幕开始</text>
+ 	<view class="container">
+        <view style="display:flex; flex-direction:column; justify-content:center; align-items:center; width: 100%; height: 80%" @click="onItemClick()">
+            <image class="logo" src="/static/logo.png"></image>
+            <view class="text-area">
+                <text class="title" style="font: 1.3rem bold;">
+                    零基础轻松学会五线谱，让您像母语一样熟练阅读五线谱。
+                </text>
             </view>
-		</match-media>
-		<match-media min-width="300" orientation="portrait">
-			<view>请横屏使用</view>
-		</match-media>
+
+            <match-media max-height="320" max-width="480">
+                <view>屏幕太小</view>
+            </match-media>
+            <match-media min-height="200" orientation="landscape">
+                <view style="margin-top: 20px">
+                    <text class="title" style="font: 1.6rem bold; color: blue; margin-top: 20px">点击屏幕开始</text>
+                </view>
+            </match-media>
+            <match-media min-width="300" orientation="portrait">
+                <view>请横屏使用</view>
+            </match-media>
+
+            <view class="text-area">
+                <text class="title" style="font: 1.3rem bold;">\n
+                </text>
+            </view>
+        </view>
+		<view class="text-area">
+            <button open-type="feedback" type="primary">意见反馈</button>
+		</view>
 	</view>
 </template>
 
