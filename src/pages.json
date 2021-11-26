@@ -54,9 +54,13 @@
         ]
     }],
     "preloadRule": {
-        "pages/game/user-list": {
+        "pages/game/game-collection-list": {
             "network": "all",
-            "packages": ["pkgi","pkgp"]
+            "packages": ["pkgi"]
+        },
+        "pages/game/game-list": {
+            "network": "all",
+            "packages": ["pkgp"]
         }
     },    
 	"globalStyle": {
