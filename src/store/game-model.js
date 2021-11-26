@@ -170,17 +170,18 @@ export function GameType(id, display_name, button_type) {
 // 一个五线谱练习游戏，有:
 //   一个ID/名称,
 //   一个类型，同时关联指定了MusicItem的类型及按钮的类型ButtonType
-//   一个谱号，一个调号，
+//   一个谱号，一个调号，一个音符时长(1/2/4/8/16/32)
 //   一个MusicItem的总个数，以及一个用来生成MusicItem的生成器
 // 当练习游戏开始时，将用该生成器来随机生成实际游戏中的音乐项。
-//@class <Number, GameType, String, String, String, String, Number, String>
-export function Game(id, type, display_name, description, stave_clef, stave_keysig, music_items_count, music_items_generaor) {
+//@class <Number, GameType, String, String, String, String, String, Number, String>
+export function Game(id, type, display_name, description, stave_clef, stave_keysig, stave_duration, music_items_count, music_items_generaor) {
 	this.Id = id;
 	this.Type = type;
 	this.DisplayName = display_name;
     this.Description = description;
 	this.StaveClef = stave_clef;
 	this.StaveKeySig = stave_keysig;
+    this.StaveDuration = stave_duration;
 	this.MusicItemsCount = music_items_count;
 	this.MusicItemsGenerator = music_items_generaor;
 };

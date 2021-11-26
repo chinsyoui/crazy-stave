@@ -16,6 +16,7 @@ return {
     ctx: {
         staveClef: "treble",       // default clef
         staveKeysig: "C",          // default keysig
+        staveDuration: "4",        // default duration is 1/4
         musicItems: [],            // random generated music items
         notes_per_music_item: 0,   // notes per music item, must be same for all music items
         vfStaveNotes: [],          // array of VF.StaveNote
@@ -56,6 +57,7 @@ return {
 
         this.ctx.staveClef = game.StaveClef;
         this.ctx.staveKeysig = game.StaveKeySig;
+        this.ctx.staveDuration = game.StaveDuration;
 
         this.ctx.musicItems = GenerateMusicItemsForGameInstance(game.MusicItemsCount, game.MusicItemsGenerator);
         //logger.debug("random generated music items: ", this.ctx.musicItems);
@@ -272,11 +274,11 @@ return {
             //logger.debug("this.$options.vfRenderer = ", _this.ctx.vfRenderer.__proto__);
         }
 
-        //logger.debug(_this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.musicItems);
+        //logger.debug(_this.ctx.staveClef, _this.ctx.staveKeysig, this.ctx.staveDuration, _this.ctx.musicItems);
 
         // 把MusicItems转换为StaveNotes
         _this.ctx.vfStaveNotes = new Array();
-        _this.convertMusicItemsToStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.vfStaveNotes);
+        _this.convertMusicItemsToStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.staveDuration, _this.ctx.vfStaveNotes);
         _this.ctx.notes_per_music_item = _this.ctx.vfStaveNotes.length / _this.ctx.musicItems.length;
         logger.assert(Number.isInteger(_this.ctx.notes_per_music_item)); // must be integer
 
@@ -349,7 +351,7 @@ return {
 
     // convert music items to vexflow's stave note objects and append them to vfStaveNotes.
     // <Array,String,Array>
-    convertMusicItemsToStaveNotes: function(music_items, stave_clef, vfStaveNotes) {
+    convertMusicItemsToStaveNotes: function(music_items, stave_clef, stave_duration, vfStaveNotes) {
         logger.assert(music_items && music_items.length > 0 && vfStaveNotes && vfStaveNotes.length == 0);
         logger.debug("Enter convertMusicItemsToStaveNotes", music_items);
 
@@ -359,7 +361,7 @@ return {
 
             switch(music_item.Type) {
                 case MITs.Note: {
-                        let note = new VF.StaveNote({ keys: [ value ], clef: stave_clef, duration: "q" });
+                        let note = new VF.StaveNote({ keys: [ value ], clef: stave_clef, duration: stave_duration });
                         if (value.includes("b"))
                             note = note.addAccidental(0, new VF.Accidental("b"));
                         if (value.includes("#"))
