@@ -190,7 +190,7 @@
 		<view id="questions-wrapper" class="questions-wrapper">
             <view class="outer-wrapper" style="flex-grow: 1; display: flex; flex-direction: row;">
                 <view class="left-bar" style="width: 50px; height: 100%;"/>
-                <canvas z-index="-1" type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; box-sizing: border-box; border: 1px solid gray; width: 100%; height: 100%;"/>
+                <canvas z-index="-1" type="2d" id="the-canvas" canvas-id="the-canvas" class="the-canvas" style="display: inline-block; box-sizing: border-box; border: 1px solid gray; min-height: 100px; width: 100%; height: 100%;"/>
                 <view class="right-bar" style="width: 50px; height: 100%;"/>
             </view>
 		</view>

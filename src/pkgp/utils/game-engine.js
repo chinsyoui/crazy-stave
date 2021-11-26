@@ -223,11 +223,13 @@ return {
             //logger.debug("canvas.node sizing = ", node.width, node.height);
 
             // set canvas drawing surface size as same with canvas html element size if not set yet.
-            if (_this.ctx.canvasSizing.width == 0 || _this.ctx.canvasSizing.height == 0) {
+            if (_this.ctx.canvasSizing.width < 50 || _this.ctx.canvasSizing.height < 50) {
                 let wRatio = (res.width > 800 ? 1.2 : 1);
                 _this.ctx.canvasSizing.width = Math.floor(res.width / wRatio);  // NOTE: quick and dirty fix
                 let hRatio = (res.height > 200 ? 1.2 : 1);
                 _this.ctx.canvasSizing.height = Math.floor(res.height /hRatio); // NOTE: quick and dirty fix
+                if (_this.ctx.canvasSizing.height < 50)
+                    _this.ctx.canvasSizing.height = Math.floor(_this.ctx.canvasSizing.width * 0.4);
                 node.width = _this.ctx.canvasSizing.width; 
                 node.height = _this.ctx.canvasSizing.height;
 
