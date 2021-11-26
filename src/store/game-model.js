@@ -58,6 +58,11 @@ export const PKs = { // PKs = PianoKeys
     // 七个白键的RN值
     WhiteRNs: [0,2,4,5,7,9,11],
 
+    // get the note part (remove / and after)
+    getNotePart: function(note) {
+        return note.substring(0,note.indexOf('/'));
+    },
+
     // 将音符(标准音名表示法)转换为其AN值
     NoteToAN: function(note) {
         logger.assert(note && (note.length == 3 || note.length == 4));

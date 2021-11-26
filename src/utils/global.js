@@ -45,6 +45,10 @@ export function isMiniApp() { return (wx); };
 // 	}
 // };
 
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
+
 export function requestFullScreen(element) {
 	logger.assert(document.documentElement);
 	logger.log("requestFullScreen");

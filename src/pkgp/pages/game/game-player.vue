@@ -1,5 +1,6 @@
 <script>
 	import { mapState } from 'vuex'
+    import { sleep } from "@/utils/global.js"
     import logger from '@/utils/logger.js'
     import ModalDlg from "@/views/modal-dlg.vue"
 	import { BTs } from '@/store/game-model.js'
@@ -106,6 +107,7 @@
 
                 let eof = this.$options.ge.onAnswnerButtonClicked(this, this.CGBT, value, this.CurrentGameProgress);
                 if (eof) {
+                    sleep(1000).then(()=>{
                     // game finished, record final progress
     				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 
@@ -115,6 +117,10 @@
                     else
                         this.GameResultDlgButtons = [ { Text : "返回", Value: "back"}, { Text : "再来一遍", Value: "again"}, { Text : "下一个", Value: "next"} ];
                     this.showGameResultDialog();
+
+                    let sf = (this.CurrentGameProgress.Stars > 0 ? "winning" : "failed");
+                    this.$options.ge.playSoundEffect(sf);
+                    });
                 }
 			},
 

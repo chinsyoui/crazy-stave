@@ -62,8 +62,10 @@ return {
 
         if (!this.ctx.ac) {
             this.ctx.ac = wx.createInnerAudioContext({ useWebAudioImplement : false });
-            this.ctx.ac.autoplay = true;
-            this.ctx.ac.onPlay(() => { logger.debug('play note'); });
+            this.ctx.ac.autoplay = false;
+            this.ctx.ac.onPlay(() => { 
+                // logger.debug('play note'); 
+            });
             this.ctx.ac.onError((res) => {
                 logger.warn("play note error: ", res.errCode, res.errMsg);
             })
@@ -98,21 +100,28 @@ return {
         return button_index;
     },
 
+    playSoundEffect: function(name) { 
+        logger.assert(this.ctx.ac);
+        try {
+            this.ctx.ac.stop();
+            this.ctx.ac.src = "pkgp/static/" + name + ".mp3";
+            this.ctx.ac.play();
+        }catch(e) {
+            logger.warn(e);
+        }
+    },
+
     // when note is empty, play error sound effect
     tryPlayNoteSoundEffect: function(note) { 
-        logger.assert(this.ctx.ac);
-
-        this.ctx.ac.stop();
         if (note.length == 0)
-            this.ctx.ac.src = "pkgp/static/" + "error" + ".mp3";
+            this.playSoundEffect("error");
         else {
             let an = PKs.NoteToAN(note);
             let rn = PKs.RN(an);
             let on = PKs.ON(an);
             let file = (PKs.RNtoPitchs['#'][rn] + on).replace("#","s");
-            this.ctx.ac.src = "pkgp/static/mkeys/" + file + ".mp3";
+            this.playSoundEffect("mkeys/"+file);
         }
-        this.ctx.ac.play();
     },
 
     // return true if game finished
@@ -146,13 +155,19 @@ return {
             case BTs.Pitch:
             case BTs.PitchWithSF: {
                 logger.assert(this.ctx.ac);
-                // play note sound if user answner is correct, or error sound if user answner is incorrect
-                let music_item = this.ctx.musicItems[this.ctx.current_question_index];
-                this.tryPlayNoteSoundEffect(result ? music_item.SourceValue : "");
+                if (result) {
+                    // play note sound if user answner is correct, or error sound if user answner is incorrect
+                    let music_item = this.ctx.musicItems[this.ctx.current_question_index];
+                    this.tryPlayNoteSoundEffect(music_item.SourceValue);
+                } else {
+                    this.playSoundEffect("incorrect");
+                }
+                break;
             }
             default:
+                this.playSoundEffect(result ? "correct" : "incorrect");
                 break;
-        }                    
+        }
 
         // update progress
         game_progress.CompletedItemCount ++;

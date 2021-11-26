@@ -11,6 +11,12 @@ function RandomInt(min, max) {
 // functions that can create music item according specified props
 // MIC = MusicItemCreator = @func MusicItemCreator: MusicItem create_func(props,index)
 const MICs = {
+    // ByFixedSong = by fixed string of song, Props = String with notes.
+    ByFixedSong : function(props,index) {
+        let notes = props.split(',');  // TODO: low performance here
+        logger.assert(index >= 0 && index < notes.length);
+        return new MI(MITs.Note, notes[index], PKs.getNotePart(notes[index]));
+    },
     // ByFixed = use fixed music items specified by template, Props = MusicItem[]
     ByFixed : function(props,index) {
         logger.assert(index >= 0 && index < props.length);
@@ -55,6 +61,7 @@ function MIG(props,creator_func_name) {
 };
 
 const MIGs = {
+    NewFixedSong: function(props) { return new MIG(props, "ByFixedSong"); },
     NewFixed: function(props) { return new MIG(props, "ByFixed"); },
     NewST: function(props) { return new MIG(props, "ByST"); },
     ///////////////////////////////////////////////////////////
@@ -668,6 +675,8 @@ const O45WKOnlyOATChords = [ ...O4WKOnlyOATChords, ...O5WKOnlyOATChords ];
 const O23FKs = [ ...O2FKs,  ...O3FKs]; // 低音谱，两个八度，所有键
 const O45FKs = [ ...O4FKs,  ...O5FKs]; // 高音谱，两个八度，所有键
 
+const HappyBirthday = "G/4,G/4,A/4,G/4,C/5,B/4,G/4,G/4,A/4,G/4,D/5,C/5,G/4,G/4,G/5,E/5,C/5,B/4,A/4,F/5,F/5,E/5,C/5,D/5,C/5";
+
 export const PredefinedGameCollections = [
 	 // id, display_name, description, icon, games
 	new GC(11,"第一章","零基础入门","",
@@ -676,22 +685,23 @@ export const PredefinedGameCollections = [
 			new Game(1102, GTs.Intro, "第一节 入门", "认识五线谱", "treble", "C", 0, []),
 			new Game(1105, GTs.NoteToSyllable, "第二节 练习", "认识七个唱名", "treble", "C", 7, MIGs.NewFixed(O4WKs)),
 			new Game(1106, GTs.NoteToPitch, "第三节 练习", "认识七个音名", "treble", "C", 7, MIGs.NewFixed(O4WKs)),
+			new Game(1107, GTs.NoteToSyllable, "第四节 练习", "弹奏第一首歌", "treble", "C", 25, MIGs.NewFixedSong(HappyBirthday)),
 
-			new Game(1101, GTs.Intro, "第四节 学习", "钢琴键盘", "treble", "C", 0, []),
-			new Game(1103, GTs.Intro, "第五节 学习", "谱号", "treble", "C", 0, []),
+			new Game(1101, GTs.Intro, "第五节 学习", "钢琴键盘", "treble", "C", 0, []),
+			new Game(1103, GTs.Intro, "第六节 学习", "谱号", "treble", "C", 0, []),
 			new Game(1104, GTs.Intro, "第六节 学习", "音符", "treble", "C", 0, []),
 
-			new Game(1110, GTs.Intro, "第六节 学习", "唱名速记表", "treble", "C", 0, []),
-			new Game(1111, GTs.NoteToSyllable, "第七节 练习", "音符到唱名 (高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),
-			new Game(1112, GTs.NoteToSyllable, "第八节 练习", "音符到唱名 (低音谱基本八度)", "bass", "C", 12, MIGs.NewST(O3WKs)),
-			new Game(1113, GTs.NoteToSyllable, "第九节 练习", "音符到唱名 (高音谱高八度)", "treble", "C", 12, MIGs.NewST(O5WKs)),
-			new Game(1114, GTs.NoteToSyllable, "第十节 练习", "音符到唱名 (低音谱低八度)", "bass", "C", 12, MIGs.NewST(O2WKs)),
+			new Game(1110, GTs.Intro, "第七节 学习", "唱名速记表", "treble", "C", 0, []),
+			new Game(1111, GTs.NoteToSyllable, "第八节 练习", "音符到唱名 (高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),
+			new Game(1112, GTs.NoteToSyllable, "第九节 练习", "音符到唱名 (低音谱基本八度)", "bass", "C", 12, MIGs.NewST(O3WKs)),
+			new Game(1113, GTs.NoteToSyllable, "第十节 练习", "音符到唱名 (高音谱高八度)", "treble", "C", 12, MIGs.NewST(O5WKs)),
+			new Game(1114, GTs.NoteToSyllable, "第十一节 练习", "音符到唱名 (低音谱低八度)", "bass", "C", 12, MIGs.NewST(O2WKs)),
 
-			new Game(1120, GTs.Intro, "第十一节 学习", "音名速记表", "treble", "C", 0, []),
-            new Game(1121, GTs.NoteToPitch, "第十二节 练习", "音符到音名 (高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),
-			new Game(1122, GTs.NoteToPitch, "第十三节 练习", "音符到音名 (低音谱基本八度)", "bass", "C", 12, MIGs.NewST(O3WKs)),
-			new Game(1123, GTs.NoteToPitch, "第十四节 练习", "音符到音名 (高音谱高八度)", "treble", "C", 12, MIGs.NewST(O5WKs)),
-			new Game(1124, GTs.NoteToPitch, "第十五节 练习", "音符到音名 (低音谱低八度)", "bass", "C", 12, MIGs.NewST(O2WKs))			
+			new Game(1120, GTs.Intro, "第十二节 学习", "音名速记表", "treble", "C", 0, []),
+            new Game(1121, GTs.NoteToPitch, "第十三节 练习", "音符到音名 (高音谱基本八度)", "treble", "C", 12, MIGs.NewST(O4WKs)),
+			new Game(1122, GTs.NoteToPitch, "第十四节 练习", "音符到音名 (低音谱基本八度)", "bass", "C", 12, MIGs.NewST(O3WKs)),
+			new Game(1123, GTs.NoteToPitch, "第十五节 练习", "音符到音名 (高音谱高八度)", "treble", "C", 12, MIGs.NewST(O5WKs)),
+			new Game(1124, GTs.NoteToPitch, "第十六节 练习", "音符到音名 (低音谱低八度)", "bass", "C", 12, MIGs.NewST(O2WKs))			
 		]
 	),
 	new GC(21,"第二章","基本音符练习","",
