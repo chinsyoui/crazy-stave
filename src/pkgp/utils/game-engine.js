@@ -80,7 +80,7 @@ return {
     },
 
     // return the button index (a Integer) of current question's answner
-    getCurrentQuestionCorrectAnswnerButtonIndex: function(button_type) {
+    getCurrentQuestionCorrectButtonIndex: function(button_type) {
         let music_item = this.ctx.musicItems[this.ctx.current_question_index];
         let correct_answner = music_item.TargetValue;
 
@@ -98,18 +98,21 @@ return {
         return button_index;
     },
 
-    tryPlayNoteSoundEffect: function(button_type, answner) { 
-        switch(button_type) {
-            case BTs.Syllable:
-            case BTs.SyllableWithSF:
-            case BTs.Pitch:
-            case BTs.PitchWithSF:
-                logger.assert(this.ctx.ac);
-                this.ctx.ac.src = "pkgp/static/12keys/key" + answner + ".mp3";
-                return;
-            default:
-                return;
+    // when note is empty, play error sound effect
+    tryPlayNoteSoundEffect: function(note) { 
+        logger.assert(this.ctx.ac);
+
+        this.ctx.ac.stop();
+        if (note.length == 0)
+            this.ctx.ac.src = "pkgp/static/" + "error" + ".mp3";
+        else {
+            let an = PKs.NoteToAN(note);
+            let rn = PKs.RN(an);
+            let on = PKs.ON(an);
+            let file = (PKs.RNtoPitchs['#'][rn] + on).replace("#","s");
+            this.ctx.ac.src = "pkgp/static/mkeys/" + file + ".mp3";
         }
+        this.ctx.ac.play();
     },
 
     // return true if game finished
@@ -129,14 +132,27 @@ return {
         //logger.debug("Your Answner to Question[" + this.ctx.current_question_index + "] = " + answner);
 
         // get the correct answner of current question
-        let correct_answner = this.getCurrentQuestionCorrectAnswnerButtonIndex(button_type);
-        this.tryPlayNoteSoundEffect(button_type, answner);
+        let correct_button_index = this.getCurrentQuestionCorrectButtonIndex(button_type);
 
-        //logger.debug("The Correct Answner " + this.ctx.current_question_index + " = " + correct_answner);
+        //logger.debug("The Correct Answner " + this.ctx.current_question_index + " = " + correct_button_index);
 
          // check if user's answner correct or not
-        let result = (answner === correct_answner);
-        logger.debug("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong") + answner + "/" + correct_answner);
+        let result = (answner === correct_button_index);
+        logger.debug("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong") + answner + "/" + correct_button_index);
+
+        switch(button_type) {
+            case BTs.Syllable:
+            case BTs.SyllableWithSF:
+            case BTs.Pitch:
+            case BTs.PitchWithSF: {
+                logger.assert(this.ctx.ac);
+                // play note sound if user answner is correct, or error sound if user answner is incorrect
+                let music_item = this.ctx.musicItems[this.ctx.current_question_index];
+                this.tryPlayNoteSoundEffect(result ? music_item.SourceValue : "");
+            }
+            default:
+                break;
+        }                    
 
         // update progress
         game_progress.CompletedItemCount ++;

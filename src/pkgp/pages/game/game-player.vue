@@ -81,7 +81,7 @@
                 //logger.debug("tick", this.CurrentGameProgress.ElapsedSeconds - this.LastButtonClickTime);
                 if (!this.ShowHintCalled && this.CurrentGameProgress.ElapsedSeconds - this.LastButtonClickTime >= 3) {
                     this.ShowHintCalled = true;
-                    this.$refs.buttons.showHint(this.$options.ge.getCurrentQuestionCorrectAnswnerButtonIndex(this.CGBT));
+                    this.$refs.buttons.showHint(this.$options.ge.getCurrentQuestionCorrectButtonIndex(this.CGBT));
                 }
 			},
 
