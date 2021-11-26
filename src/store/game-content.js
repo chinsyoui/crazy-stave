@@ -675,7 +675,9 @@ const O45WKOnlyOATChords = [ ...O4WKOnlyOATChords, ...O5WKOnlyOATChords ];
 const O23FKs = [ ...O2FKs,  ...O3FKs]; // 低音谱，两个八度，所有键
 const O45FKs = [ ...O4FKs,  ...O5FKs]; // 高音谱，两个八度，所有键
 
-const HappyBirthday = "G/4,G/4,A/4,G/4,C/5,B/4,G/4,G/4,A/4,G/4,D/5,C/5,G/4,G/4,G/5,E/5,C/5,B/4,A/4,F/5,F/5,E/5,C/5,D/5,C/5";
+//const HappyBirthday /*25*/ = "G/4,G/4,A/4,G/4,C/5,B/4,G/4,G/4,A/4,G/4,D/5,C/5,G/4,G/4,G/5,E/5,C/5,B/4,A/4,F/5,F/5,E/5,C/5,D/5,C/5";
+const LittleStarHalf /*14*/ = "C/4,C/4,G/4,G/4,A/4,A/4,G/4,F/4,F/4,E/4,E/4,D/4,D/4,C/4";
+//const LittleStarFull /*42*/ = "C/4,C/4,G/4,G/4,A/4,A/4,G/4,F/4,F/4,E/4,E/4,D/4,D/4,C/4,G/4,G/4,F/4,F/4,E/4,E/4,D/4,G/4,G/4,F/4,F/4,E/4,E/4,D/4,C/4,C/4,G/4,G/4,A/4,A/4,G/4,F/4,F/4,E/4,E/4,D/4,D/4,C/4";
 
 export const PredefinedGameCollections = [
 	 // id, display_name, description, icon, games
@@ -685,7 +687,7 @@ export const PredefinedGameCollections = [
 			new Game(1102, GTs.Intro, "第一节 入门", "认识五线谱", "treble", "C", 0, []),
 			new Game(1105, GTs.NoteToSyllable, "第二节 练习", "认识七个唱名", "treble", "C", 7, MIGs.NewFixed(O4WKs)),
 			new Game(1106, GTs.NoteToPitch, "第三节 练习", "认识七个音名", "treble", "C", 7, MIGs.NewFixed(O4WKs)),
-			new Game(1107, GTs.NoteToSyllable, "第四节 练习", "弹奏第一首歌", "treble", "C", 25, MIGs.NewFixedSong(HappyBirthday)),
+			new Game(1107, GTs.NoteToSyllable, "第四节 练习", "弹奏第一首歌", "treble", "C", 14, MIGs.NewFixedSong(LittleStarHalf)),
 
 			new Game(1101, GTs.Intro, "第五节 学习", "钢琴键盘", "treble", "C", 0, []),
 			new Game(1103, GTs.Intro, "第六节 学习", "谱号", "treble", "C", 0, []),
