@@ -83,21 +83,21 @@ export function GenerateMusicItemsForGameInstance(count, generator) {
 // 一个种类的练习游戏，具有相同的ID/描述及同样一组(用来选择答案的)按钮。
 // @enum <Id, DisplayName, ButtonType>
 export const GameTypes = {
-	Intro: new GT(0, "说明", BTs.Any),
-	NoteToPitch: new GT(21, "音符到音名练习", BTs.Pitch),
-	NoteToSyllable: new GT(22, "音符到唱名及数字练习", BTs.Syllable),
-	NoteToPitchWithSF: new GT(23, "音符到音名练习-带升降号", BTs.PitchWithSF),
-	NoteToSyllableWithSF: new GT(24, "音符到唱名练习-带升降号", BTs.SyllableWithSF),
-	DoubleNoteDegree:  new GT(31, "双音度数视谱练习", BTs.Degree),
+	Intro: new GT(0, "知识学习", BTs.Any),
+	NoteToPitch: new GT(21, "音符到音名", BTs.Pitch),
+    NoteToSyllable: new GT(22, "音符到唱名", BTs.Syllable),
+    NoteToPitchWithSF: new GT(23, "音符到音名-带升降号", BTs.PitchWithSF),
+    NoteToSyllableWithSF: new GT(24, "音符到唱名-带升降号", BTs.SyllableWithSF),
+    DoubleNoteDegree:  new GT(31, "双音度数", BTs.Degree),
 	TCCI: new GT(32, "认识三和弦的转位", BTs.CI), // 与和弦名称，只识别是哪种位置
-	CPTChordsNaming: new GT(51, "紧凑型柱式三和弦视谱练习", BTs.WKOnlyTC),
-	CPTChordsNaming: new GT(51, "紧凑型柱式三和弦视谱练习", BTs.WKOnlyTCWithCI),
-	CATChordsNaming: new GT(52, "紧凑型分解三和弦视谱练习", BTs.WKOnlyTC),
-	CATChordsNaming: new GT(52, "紧凑型分解三和弦视谱练习", BTs.WKOnlyTC),
-	OPTChordsNaming: new GT(53, "八度型柱式三和弦视谱练习", BTs.WKOnlyTC),
-	OPTChordsNaming: new GT(53, "八度型柱式三和弦视谱练习", BTs.WKOnlyTC),
-	OATChordsNaming: new GT(54, "八度型分解三和弦视谱练习", BTs.WKOnlyTC),
-	OATChordsNaming: new GT(54, "八度型分解三和弦视谱练习", BTs.WKOnlyTC),
+	CPTChordsNaming: new GT(51, "紧凑型柱式三和弦", BTs.WKOnlyTC),
+	CPTChordsNaming: new GT(51, "紧凑型柱式三和弦", BTs.WKOnlyTCWithCI),
+	CATChordsNaming: new GT(52, "紧凑型分解三和弦", BTs.WKOnlyTC),
+	CATChordsNaming: new GT(52, "紧凑型分解三和弦", BTs.WKOnlyTC),
+	OPTChordsNaming: new GT(53, "八度型柱式三和弦", BTs.WKOnlyTC),
+	OPTChordsNaming: new GT(53, "八度型柱式三和弦", BTs.WKOnlyTC),
+	OATChordsNaming: new GT(54, "八度型分解三和弦", BTs.WKOnlyTC),
+	OATChordsNaming: new GT(54, "八度型分解三和弦", BTs.WKOnlyTC),
 	EOF: null
 };
 
@@ -682,7 +682,7 @@ const LittleStarHalf /*14*/ = "C/4,C/4,G/4,G/4,A/4,A/4,G/4,F/4,F/4,E/4,E/4,D/4,D
 export const PredefinedGameCollections = [
 	 // id, display_name, description, icon, games
 	new GC(11,"第一章 零基础入门","认识五线谱","",
-		[   //  Game: id, type, display_name, clef, keysig, music_items_count, template_music_items
+		[   //  Game: id, type, display_name, clef, keysig, duration, music_items_count, template_music_items
 			new Game(1102, GTs.Intro, "第一节 入门", "认识五线谱", "treble", "C", "1", 0, []),
 			new Game(1105, GTs.NoteToSyllable, "第二节 练习", "认识七个唱名", "treble", "C", "1", 7, MIGs.NewFixed(O4WKs)),
 			new Game(1106, GTs.NoteToPitch, "第三节 练习", "认识七个音名", "treble", "C", "1", 7, MIGs.NewFixed(O4WKs)),
@@ -693,7 +693,7 @@ export const PredefinedGameCollections = [
 		]
 	),
 	new GC(12,"第二章 认识基本音符","认识五线谱上的所有基本音符","",
-		[   //  Game: id, type, display_name, clef, keysig, music_items_count, template_music_items
+		[
 			new Game(1101, GTs.Intro, "第一节 学习", "认识钢琴键盘", "treble", "C", "1", 0, []),
 			new Game(1103, GTs.Intro, "第二节 学习", "认识五线谱的谱号", "treble", "C", "1", 0, []),
 
@@ -757,23 +757,39 @@ export const PredefinedGameCollections = [
 			new Game(5117, GTs.TCCI, "第八节 练习", "三和弦转位（八度柱式型), 低音谱", "bass", "C", "32", 12, MIGs.NewST(O2WKOnlyOPTChordsWithCI)),
 			new Game(5118, GTs.TCCI, "第九节 练习", "三和弦转位（八度分解型), 低音谱", "bass", "C", "32", 8, MIGs.NewST(O2WKOnlyOATChordsWithCI))
 		]
+	),
+	new GC(31,"第六章 调式变化","认识大小调及升降号","",
+		[
+			new Game(3100, GTs.Intro, "第一节 学习", "认识升降号", "treble", "C", "1", 0, []),
+
+			new Game(3111, GTs.NoteToSyllableWithSF, "第二节 练习", "带升降号，音符到唱名(高音谱两个八度)", "treble", "C", "4", 24, MIGs.NewST(O45FKs)),
+			new Game(3112, GTs.NoteToSyllableWithSF, "第三节 练习", "带升降号，音符到唱名(低音谱两个八度)", "bass", "C", "4", 24, MIGs.NewST(O23FKs)),
+			new Game(3113, GTs.NoteToPitchWithSF, "第四节 练习", "带升降号，音符到音名(高音谱两个八度)", "treble", "C", "4", 24, MIGs.NewST(O45FKs)),
+			new Game(3114, GTs.NoteToPitchWithSF, "第五节 练习", "带升降号，音符到音名(低音谱两个八度)", "bass", "C", "4", 24, MIGs.NewST(O23FKs)),
+
+			new Game(3101, GTs.Intro, "第六节 学习", "认识大小调", "treble", "C", "1", 0, []),
+			new Game(3102, GTs.Intro, "第七节 学习", "所有大调和小调", "treble", "C", "1", 0, []),
+
+            new Game(3121, GTs.NoteToSyllableWithSF, "第八节 练习", "G大调，音符到唱名(高音谱两个八度)", "treble", "G", "4", 24, MIGs.NewST(O45WKs)),
+			new Game(3122, GTs.NoteToSyllableWithSF, "第九节 练习", "F大调，音符到唱名(低音谱两个八度)", "bass", "F", "4", 24, MIGs.NewST(O23WKs)),
+			new Game(3123, GTs.NoteToSyllableWithSF, "第十节 练习", "D大调，音符到唱名(高音谱两个八度)", "treble", "D", "4", 24, MIGs.NewST(O45WKs)),
+			new Game(3124, GTs.NoteToSyllableWithSF, "第十一节 练习", "降B大调，音符到唱名(低音谱两个八度)", "bass", "Bb", "4", 24, MIGs.NewST(O23WKs)),
+			new Game(3125, GTs.NoteToSyllableWithSF, "第十二节 练习", "A大调，音符到唱名(高音谱两个八度)", "treble", "A", "4", 24, MIGs.NewST(O45WKs)),
+			new Game(3126, GTs.NoteToSyllableWithSF, "第十三节 练习", "降E大调，音符到唱名(低音谱两个八度)", "bass", "Eb", "4", 24, MIGs.NewST(O23WKs)),
+			new Game(3127, GTs.NoteToSyllableWithSF, "第十四节 练习", "E大调，音符到唱名(高音谱两个八度)", "treble", "E", "4", 24, MIGs.NewST(O45WKs)),
+			new Game(3128, GTs.NoteToSyllableWithSF, "第十五节 练习", "降A大调，音符到唱名(低音谱两个八度)", "bass", "Ab", "4", 24, MIGs.NewST(O23WKs)),
+			new Game(3129, GTs.NoteToSyllableWithSF, "第十六节 练习", "B大调，音符到唱名(高音谱两个八度)", "treble", "B", "4", 24, MIGs.NewST(O45WKs)),
+			new Game(3130, GTs.NoteToSyllableWithSF, "第十七节 练习", "降D大调，音符到唱名(低音谱两个八度)", "bass", "Db", "4", 24, MIGs.NewST(O23WKs)),
+			new Game(3131, GTs.NoteToSyllableWithSF, "第十八节 练习", "升F大调，音符到唱名(高音谱两个八度)", "treble", "F#", "4", 24, MIGs.NewST(O45WKs)),
+			new Game(3132, GTs.NoteToSyllableWithSF, "第十九节 练习", "降G大调，音符到唱名(低音谱两个八度)", "bass", "Gb", "4", 24, MIGs.NewST(O23WKs)),
+			new Game(3133, GTs.NoteToSyllableWithSF, "第二十节 练习", "升C大调，音符到唱名(高音谱两个八度)", "treble", "C#", "4", 24, MIGs.NewST(O45WKs)),
+			new Game(3134, GTs.NoteToSyllableWithSF, "第二十一节 练习", "降C大调，音符到唱名(低音谱两个八度)", "bass", "Cb", "4", 24, MIGs.NewST(O23WKs))
+
+			// // TODO 根据谱号，识别调号名称，并记住升降音数量及名称
+			// new Game(3183, GTs.NoteToPitchWithSF, "第五节 练习", "TODO：熟记12个大调的谱号", "treble", "C", "4", 24, MIGs.NewST(O45FKs)),
+			// new Game(3184, GTs.NoteToPitchWithSF, "第六节 练习", "TODO：熟记12个大调的升降音", "bass", "C", "4", 24, MIGs.NewST(O23FKs))
+		]
 	)
-	// new GC(31,"第六章 调式学习","认识大小调及升降号","",
-	// 	[
-			// new Game(3100, GTs.Intro, "第一节 学习", "认识升降号", "treble", "C", "1", 0, []),
-
-			// new Game(3111, GTs.NoteToSyllableWithSF, "第二节 练习", "带升降号，音符到唱名(高音谱两个八度)", "treble", "C", "4", 24, MIGs.NewST(O45FKs)),
-			// new Game(3112, GTs.NoteToSyllableWithSF, "第三节 练习", "带升降号，音符到唱名(低音谱两个八度)", "bass", "C", "4", 24, MIGs.NewST(O23FKs)),
-
-			// new Game(3121, GTs.NoteToPitchWithSF, "第四节 练习", "带升降号，音符到音名(高音谱两个八度)", "treble", "C", "4", 24, MIGs.NewST(O45FKs)),
-			// new Game(3122, GTs.NoteToPitchWithSF, "第五节 练习", "带升降号，音符到音名(低音谱两个八度)", "bass", "C", "4", 24, MIGs.NewST(O23FKs))
-
-			// new Game(3101, GTs.Intro, "第二节 学习", "认识调式", "treble", "C", "1", 0, []),
-			// TODO 根据谱号，识别调号名称，并记住升降音数量及名称
-			// new Game(3133, GTs.NoteToPitchWithSF, "第五节 练习", "TODO：熟记12个大调的谱号", "treble", "C", "4", 24, MIGs.NewST(O45FKs)),
-			// new Game(3134, GTs.NoteToPitchWithSF, "第六节 练习", "TODO：熟记12个大调的升降音", "bass", "C", "4", 24, MIGs.NewST(O23FKs))
-	// 	]
-	// ),
 	// new GC(61,"第六章","三和弦-基本练习","",
 	// 	[
 	// 		new Game(6100, GTs.Intro, "第一节 学习", "基本介绍：和弦及转位", "treble", "C", "1", 0, []),

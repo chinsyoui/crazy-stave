@@ -10,7 +10,7 @@
         },
         methods: {
 			onButtonClick(value) {
-				//console.log("onButtonClick", value);
+				//logger.debug("onButtonClick", value);
 				this.$emit("click", value);                
 			}
         }

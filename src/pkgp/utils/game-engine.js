@@ -1,5 +1,5 @@
 import logger from '@/utils/logger.js'
-import { PKs, BTs, MITs } from '@/store/game-model.js'
+import { PKs, Keysigs, BTs, MITs } from '@/store/game-model.js'
 import { GenerateMusicItemsForGameInstance } from '@/store/game-content.js'
 
 // this line will cause all views/* component js codes compile to nothing,
@@ -97,8 +97,16 @@ return {
         else if (button_type == BTs.Degree)
             button_index = parseInt(correct_answner[0])-2; // 转换成0开头的按钮索引
         // 其他类型correct_answner都是一个音符值，把其转换为RN值，以便和answner(是0开头的按钮索引，亦即RN值)做比较
-        else
-            button_index = PKs.NoteToRN(correct_answner);
+        else {
+            let keysigAcc = Keysigs.getKeysigAcc(this.ctx.staveKeysig);
+            let keysigAccPitchs = Keysigs.getKeysigAccPitchs(this.ctx.staveKeysig);
+
+            // 如果当前调式包含升降号，而音符不带升降号，但音符属于调式包含的升降音，则用户必须点击带升降号的按钮才算正确。
+            if (keysigAcc.length == 1 && correct_answner.length == 1 && keysigAccPitchs.indexOf(correct_answner) >= 0)
+                correct_answner = correct_answner + keysigAcc;
+
+                button_index = PKs.NoteToRN(correct_answner);
+        }
         return button_index;
     },
 
@@ -280,7 +288,7 @@ return {
 
         // 把MusicItems转换为StaveNotes
         _this.ctx.vfStaveNotes = new Array();
-        _this.convertMusicItemsToStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.staveDuration, _this.ctx.vfStaveNotes);
+        _this.convertMusicItemsToStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.staveDuration, _this.ctx.vfStaveNotes);
         _this.ctx.notes_per_music_item = _this.ctx.vfStaveNotes.length / _this.ctx.musicItems.length;
         logger.assert(Number.isInteger(_this.ctx.notes_per_music_item)); // must be integer
 
@@ -289,7 +297,7 @@ return {
 
         //logger.debug("stave width = ", _this.ctx.canvasSizing.width);
         const vfStave = new VF.Stave(0, Math.floor(_this.ctx.canvasSizing.height - 120)/2, _this.ctx.canvasSizing.width);
-        vfStave.addClef(_this.ctx.staveClef); // .addTimeSignature("4/4");
+        vfStave.addClef(_this.ctx.staveClef).addKeySignature(_this.ctx.staveKeysig); // .addTimeSignature("4/4");
         vfStave.setContext(context).draw();
 
         VF.Formatter.FormatAndDraw(context, vfStave, _this.ctx.vfStaveNotes);
@@ -352,10 +360,14 @@ return {
     },
 
     // convert music items to vexflow's stave note objects and append them to vfStaveNotes.
-    // <Array,String,Array>
-    convertMusicItemsToStaveNotes: function(music_items, stave_clef, stave_duration, vfStaveNotes) {
+    // <Array,String,String,String,Array>
+    convertMusicItemsToStaveNotes: function(music_items, stave_clef, stave_keysig, stave_duration, vfStaveNotes) {
         logger.assert(music_items && music_items.length > 0 && vfStaveNotes && vfStaveNotes.length == 0);
         logger.debug("Enter convertMusicItemsToStaveNotes", music_items);
+
+        let keysigAcc = Keysigs.getKeysigAcc(stave_keysig);
+        let keysigAccPitchs = Keysigs.getKeysigAccPitchs(stave_keysig);
+        //logger.debug(stave_keysig, " = ", keysigAccPitchs.toString());
 
         for(let i=0; i<music_items.length; i++) {
             let music_item = music_items[i];
@@ -364,22 +376,23 @@ return {
             switch(music_item.Type) {
                 case MITs.Note: {
                         let note = new VF.StaveNote({ keys: [ value ], clef: stave_clef, duration: stave_duration });
-                        if (value.includes("b"))
+                        // if has accidental, only draw it if not matched with default accidentals of current key signature. 
+                        if (value.includes("b") && !(keysigAcc == "b" && keysigAccPitchs.includes(value[0])))
                             note = note.addAccidental(0, new VF.Accidental("b"));
-                        if (value.includes("#"))
+                        if (value.includes("#") && !(keysigAcc == "#" && keysigAccPitchs.includes(value[0])))
                             note = note.addAccidental(0, new VF.Accidental("#"));
                         vfStaveNotes.push(note);
                     }
                     break;
                 case MITs.PC: {
-                        let note = new VF.StaveNote({ keys: value.split(','), clef: stave_clef, duration: "q" });
+                        let note = new VF.StaveNote({ keys: value.split(','), clef: stave_clef, duration: stave_duration });
                         vfStaveNotes.push(note);
                     }
                     break;
                 case MITs.AC: {
                         let keys = value.split(',');
                         for(let key of keys) {
-                            let note = new VF.StaveNote({ keys: [key], clef: stave_clef, duration: "q" });
+                            let note = new VF.StaveNote({ keys: [key], clef: stave_clef, duration: stave_duration });
                             vfStaveNotes.push(note);
                         }
                     }

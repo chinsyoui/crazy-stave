@@ -37,6 +37,8 @@ import { ObjectMap } from "@/utils/ObjectMap.js"
 // 度数表示法: 5x, 其中x为: p=纯, m=减/小, M=增/大
 export const PKs = { // PKs = PianoKeys
     // TODO: 理论上，每个大小调的转换表都不一样
+    PitchToSyllables: { "C": 1, "D": 2, "E": 3, "F": 4, "G": 5, "A": 6, "B": 7 },
+    SyllableToPitchs: [ "C", "D", "E", "F", "G", "A", "B"],
 
     // 转换表：键的相对位置->音名，黑键用#或者为b
     RNtoPitchs: {
@@ -107,6 +109,71 @@ export const PKs = { // PKs = PianoKeys
     NewNote: function(base_note, degree, accidental) {
         let AN = PKS.NoteToAN(base_note) + PKs.DegreeToDistances[degree];
         return PKs.ANtoNote(AN, accidental);
+    }
+};
+
+export const Keysigs = {
+    sMajors: ["G","D","A","E","B","F#","C#"],
+    fMajors: ["F","Bb","Eb","Ab","Db","Gb","Cb"],
+
+    sMinors: ["Dm","Gm","Cm","Fm","Bbm","Ebm","Abm"],
+    fMinors: ["Em","Bm","F#m","C#m","G#m","D#m","A#m"],
+
+    getAllMajorKeysigs: function() {
+        return ["C", ...this.sMajors, ...this.fMajors];
+    },
+
+    getAllMinorKeysigs: function() {
+        return ["Am", ...this.sMinors, ...this.fMinors];
+    },
+
+    getKeysigAcc: function(keysig) {
+        if (keysig == "C" || keysig == "Am")
+            return "";
+
+        let isMinor = (keysig[keysig.length-1] == "m");
+        if (isMinor) {
+            let index = this.sMinors.indexOf(keysig);
+            return (index >= 0 ? "#" : "b");
+        } else {
+            let index = this.sMajors.indexOf(keysig);
+            return (index >= 0 ? "#" : "b");
+        }
+    },
+
+    getKeysigAccPitchs: function(keysig) {
+        // Vex.Flow.getKeySignatures() -> { F: { acc: 'b', num: 1 } ... }
+        // Vex.Flow.keySignature("F") -> { acc: "b", num: 1 }
+        // Vex.Flow.keySignature("Ebm") -> { acc: "b", num: 5 }
+
+        const keysigAccs = { 
+            '#' : [ "F","C","G","D","A","E","B" ],
+            'b' : [ "B","E","A","D","G","C","F" ]
+        };
+
+        if (keysig == "C" || keysig == "Am")
+            return [];
+
+        let isMinor = (keysig[keysig.length-1] == "m");
+        let index = -1;
+        if (isMinor) {
+            index = this.sMinors.indexOf(keysig);
+            if (index >= 0)
+                return keysigAccs['#'].slice(0,index+1);
+            index = this.fMinors.indexOf(keysig);
+            if (index >= 0)
+                return keysigAccs['b'].slice(0,index+1);
+        } else {
+            index = this.sMajors.indexOf(keysig);
+            if (index >= 0)
+                return keysigAccs['#'].slice(0,index+1);
+            index = this.fMajors.indexOf(keysig);
+            if (index >= 0)
+                return keysigAccs['b'].slice(0,index+1);
+        }
+
+        logger.assert(false,"invalid keysig");
+        return [];
     }
 };
 

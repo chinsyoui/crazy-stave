@@ -19,7 +19,7 @@
         },
         methods: {
 			onButtonClick(value) {
-				//console.log("onButtonClick", value);
+				//logger.debug("onButtonClick", value);
 				this.$emit("buttonClick", value);
                 this.CorrectButtonIndex = -1;  // 清除提示
 			},
