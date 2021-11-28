@@ -168,7 +168,7 @@
         <view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%;">
             <view class="left-bar" style="width: 46px; height: 100%;"/>
             <view class="title-wrapper" style="" @click="onBackClick()">
-                <text class="title">{{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }}</text>
+                <text class="title">{{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }} - {{ CurrentGame.Description }}</text>
             </view>
             <view class="middle-bar" style="flex-grow: 1; width: 50px; height: 100%;"/>
             <view class="game-progress-bar" @click="onBackClick()">
@@ -225,7 +225,7 @@
                 padding-right: 10px;
     			white-space: nowrap;
 				text-overflow: ellipsis;
-				font-size: 1em;
+				font-size: 0.7em;
 				color: black;
 			}
 
