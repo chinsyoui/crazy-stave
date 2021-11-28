@@ -114,7 +114,7 @@ return {
         logger.assert(this.ctx.ac);
         try {
             this.ctx.ac.stop();
-            this.ctx.ac.src = "pkgp/static/" + name + ".mp3";
+            this.ctx.ac.src = "static/" + name + ".mp3";
             this.ctx.ac.play();
         }catch(e) {
             logger.warn(e);
