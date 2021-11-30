@@ -60,7 +60,7 @@ return {
         this.ctx.staveDuration = game.StaveDuration;
 
         this.ctx.musicItems = GenerateMusicItemsForGameInstance(game.MusicItemsCount, game.MusicItemsGenerator);
-        //logger.debug("random generated music items: ", this.ctx.musicItems);
+        logger.info("music items: ", this.ctx.musicItems);
 
         if (!this.ctx.ac) {
             this.ctx.ac = wx.createInnerAudioContext({ useWebAudioImplement : false });
@@ -83,31 +83,63 @@ return {
         });
     },
 
+    // source_value
+    //   new MI(MITs.PC, "Db/3,E/3,G/3", "Dbm") -> Db/3
+    //   new MI(MITs.PC, "F/4,A/4,D/5,F/5", "1Dm/F") -> D/4
+    //   new MI(MITs.AC, "A/4,D/5,A/5", "2Dm/A"), -> D/5
+    getCurrentQuestionCorrectNote(button_type) {
+        logger.assert(BTs.IsPK(button_type));
+        let music_item = this.ctx.musicItems[this.ctx.current_question_index];
+
+        // 提取出音名
+        let note = "";
+        switch(music_item.Type) {
+            case MITs.Note:
+                note = music_item.SourceValue;
+                break;
+            case MITs.PC:
+            case MITs.AC: {
+                let value = music_item.TargetValue;
+                let digit_first = (value[0] >= "0" && value[0] <= "9");
+                let ci = digit_first ? value[0] : 0; // 转位
+                note = music_item.SourceValue.split(",")[ci];
+                break;
+            }
+            default:
+                logger.assert(false);
+                break;
+        }
+
+        // 根据调式变换音名
+        let ks = Keysigs.getKeysigInfo(this.ctx.staveKeysig);        
+        let pitch = PKs.getPitchName(note);
+
+        // 如果当前调式包含升降号，而音符不带升降号，但音符属于调式包含的升降音，则用户必须点击带升降号的按钮才算正确。
+        if (ks.acc != "@" && pitch.length == 1 && ks.accPitchs.indexOf(pitch) >= 0)
+            note = pitch + ks.acc + "/" + PKs.ON(PKs.NoteToAN(note));
+        logger.info(note);
+        return note;
+    },
+
     // return the button index (a Integer) of current question's answner
     getCurrentQuestionCorrectButtonIndex: function(button_type) {
         let music_item = this.ctx.musicItems[this.ctx.current_question_index];
-        let correct_answner = music_item.TargetValue;
-
-        let button_index = -1;
 
         // 特殊处理: 和弦转位基本练习按钮只包含转位0/1/2数字，不含和弦名称, 而和弦转位值被编码在答案的第一个字节
-        if (button_type == BTs.CI)
-            button_index = parseInt(correct_answner[0]);   // 转换成0开头的按钮索引
-        // 特殊处理: 双音度数判断基本练习里只包含度数，不含度数的类型(大小纯等)
-        else if (button_type == BTs.Degree)
-            button_index = parseInt(correct_answner[0])-2; // 转换成0开头的按钮索引
-        // 其他类型correct_answner都是一个音符值，把其转换为RN值，以便和answner(是0开头的按钮索引，亦即RN值)做比较
-        else {
-            let keysigAcc = Keysigs.getKeysigAcc(this.ctx.staveKeysig);
-            let keysigAccPitchs = Keysigs.getKeysigAccPitchs(this.ctx.staveKeysig);
-
-            // 如果当前调式包含升降号，而音符不带升降号，但音符属于调式包含的升降音，则用户必须点击带升降号的按钮才算正确。
-            if (keysigAcc.length == 1 && correct_answner.length == 1 && keysigAccPitchs.indexOf(correct_answner) >= 0)
-                correct_answner = correct_answner + keysigAcc;
-
-                button_index = PKs.NoteToRN(correct_answner);
+        switch(button_type) {
+            case BTs.Any:
+                return 0;
+            case BTs.CI:
+                return parseInt(music_item.TargetValue[0]);   // 转换成0开头的按钮索引
+            case BTs.Degree:
+                return parseInt(music_item.TargetValue[0])-2; // 转换成0开头的按钮索引
+            // 其他类型correct_answner都是一个音符值，把其转换为RN值，以便和answner(是0开头的按钮索引，亦即RN值)做比较
+            default: {
+                logger.assert(BTs.IsPK(button_type));
+                let note = this.getCurrentQuestionCorrectNote(button_type);
+                return PKs.NoteToRN(note);
+            }
         }
-        return button_index;
     },
 
     playSoundEffect: function(name) { 
@@ -151,6 +183,7 @@ return {
         //logger.debug("Your Answner to Question[" + this.ctx.current_question_index + "] = " + answner);
 
         // get the correct answner of current question
+        let correct_note = (BTs.IsPK(button_type) ? this.getCurrentQuestionCorrectNote(button_type) : "");
         let correct_button_index = this.getCurrentQuestionCorrectButtonIndex(button_type);
 
         //logger.debug("The Correct Answner " + this.ctx.current_question_index + " = " + correct_button_index);
@@ -159,25 +192,15 @@ return {
         let result = (answner === correct_button_index);
         logger.debug("Question[" + this.ctx.current_question_index + "] = " + (result ? "Right" : "Wrong") + answner + "/" + correct_button_index);
 
-        switch(button_type) {
-            case BTs.Syllable:
-            case BTs.SyllableWithSF:
-            case BTs.Pitch:
-            case BTs.PitchWithSF: {
-                logger.assert(this.ctx.ac);
-                if (result) {
-                    // play note sound if user answner is correct, or error sound if user answner is incorrect
-                    let music_item = this.ctx.musicItems[this.ctx.current_question_index];
-                    this.tryPlayNoteSoundEffect(music_item.SourceValue);
-                } else {
-                    this.playSoundEffect("incorrect");
-                }
-                break;
-            }
-            default:
-                this.playSoundEffect(result ? "correct" : "incorrect");
-                break;
-        }
+        logger.assert(this.ctx.ac);
+        if (BTs.IsPK(button_type)) {
+            // play note sound if user answner is correct, or error sound if user answner is incorrect
+            if (result)
+                this.tryPlayNoteSoundEffect(correct_note);
+            else
+                this.playSoundEffect("incorrect");
+        } else
+            this.playSoundEffect(result ? "correct" : "incorrect");
 
         // update progress
         game_progress.CompletedItemCount ++;
@@ -365,9 +388,7 @@ return {
         logger.assert(music_items && music_items.length > 0 && vfStaveNotes && vfStaveNotes.length == 0);
         logger.debug("Enter convertMusicItemsToStaveNotes", music_items);
 
-        let keysigAcc = Keysigs.getKeysigAcc(stave_keysig);
-        let keysigAccPitchs = Keysigs.getKeysigAccPitchs(stave_keysig);
-        //logger.debug(stave_keysig, " = ", keysigAccPitchs.toString());
+        let ks = Keysigs.getKeysigInfo(stave_keysig);
 
         for(let i=0; i<music_items.length; i++) {
             let music_item = music_items[i];
@@ -377,9 +398,9 @@ return {
                 case MITs.Note: {
                         let note = new VF.StaveNote({ keys: [ value ], clef: stave_clef, duration: stave_duration });
                         // if has accidental, only draw it if not matched with default accidentals of current key signature. 
-                        if (value.includes("b") && !(keysigAcc == "b" && keysigAccPitchs.includes(value[0])))
+                        if (value.includes("b") && !(ks.acc == "b" && ks.accPitchs.includes(value[0])))
                             note = note.addAccidental(0, new VF.Accidental("b"));
-                        if (value.includes("#") && !(keysigAcc == "#" && keysigAccPitchs.includes(value[0])))
+                        if (value.includes("#") && !(ks.acc == "#" && ks.accPitchs.includes(value[0])))
                             note = note.addAccidental(0, new VF.Accidental("#"));
                         vfStaveNotes.push(note);
                     }

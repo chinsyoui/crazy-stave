@@ -42,6 +42,7 @@ export const PKs = { // PKs = PianoKeys
 
     // 转换表：键的相对位置->音名，黑键用#或者为b
     RNtoPitchs: {
+        "@" : ['C',' ','D',' ','E','F',' ','G',' ','A',' ','B'],
         "#" : ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],
         "b" : ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']
     },
@@ -60,8 +61,8 @@ export const PKs = { // PKs = PianoKeys
     // 七个白键的RN值
     WhiteRNs: [0,2,4,5,7,9,11],
 
-    // get the note part (remove / and after)
-    getNotePart: function(note) {
+    // get the pitch name part of standard note notation (eg. Db/4 -> Db)
+    getPitchName: function(note) {
         return note.substring(0,note.indexOf('/'));
     },
 
@@ -78,7 +79,7 @@ export const PKs = { // PKs = PianoKeys
         return AN;
     },
 
-    // 将音符(C/Db等)转换为其RN值
+    // 将音符(C/Db等)转换为其RN值, 音符可选包含八度编号(eg. Db Db/2都行)
     NoteToRN: function(note) {
         logger.assert(note && (note.length > 0));
         let RN = PKs.PitchToRNs[note[0]];
@@ -89,10 +90,9 @@ export const PKs = { // PKs = PianoKeys
     },
 
     // 将AN值转换为音符的标准音名表示法，因为会出现同音多名，因此需要时会采用符合指定升降号的名称。
-    // accidental: "#","b"
+    // accidental: "#","b","@"(at符号表示不期望出现升降号)
     ANtoNote: function(AN, accidental) {
         logger.assert(AN >=10 && AN <=97);
-        logger.assert(accidental && accidental.length==1 && (accidental=="#" || accidental=="b"));
 
         let ON = PKs.ON(AN);
         let RN = PKs.RN(AN);
@@ -112,24 +112,51 @@ export const PKs = { // PKs = PianoKeys
     }
 };
 
+// 谱号
 export const Keysigs = {
+    // 大调音阶的RN值递进关系(距前一个音)
+    majorDistances: [ 2,2,1,2,2,2,1 ],  // 全全半全全全半
+    // 大调音阶的RN值递进关系(距根音)
+    majorDistancesToRootPitch: [ 2,4,5,7,9,11,12 ], 
+    // 小调音阶的RN值递进关系(距前一个音)
+    minorDistances: [ 2,1,2,2,1,2,2 ],  // 全半全全半全全
+    // 小调音阶的RN值递进关系(距根音)
+    minorDistancesToRootPitch: [ 2,3,5,7,8,10,12 ], 
+
+    // 带#号的大调
     sMajors: ["G","D","A","E","B","F#","C#"],
+    // 带b号的大调
     fMajors: ["F","Bb","Eb","Ab","Db","Gb","Cb"],
 
+    // 带#号的小调
     sMinors: ["Dm","Gm","Cm","Fm","Bbm","Ebm","Abm"],
+    // 带b号的小调
     fMinors: ["Em","Bm","F#m","C#m","G#m","D#m","A#m"],
 
+    // 获取所有大调的调号
     getAllMajorKeysigs: function() {
         return ["C", ...this.sMajors, ...this.fMajors];
     },
 
+    // 获取所有小调的调号
     getAllMinorKeysigs: function() {
         return ["Am", ...this.sMinors, ...this.fMinors];
     },
 
+    // 获取某个调式的信息: 大调还是小调, 根音名，升降号，升降音名的数组
+    getKeysigInfo: function(keysig) {
+        return {
+            isMinor: (keysig.indexOf("m") >= 0),
+            rootPitch: (keysig.indexOf("m") >= 0) ? keysig.substring(0, keysig.length - 1) : keysig,
+            acc: this.getKeysigAcc(keysig),
+            accPitchs: this.getKeysigAccPitchs(keysig)
+        }
+    },
+
+    // 获取某个调号的升降号: #或b, @表示无升降号
     getKeysigAcc: function(keysig) {
         if (keysig == "C" || keysig == "Am")
-            return "";
+            return "@"; // 表示无升降号
 
         let isMinor = (keysig[keysig.length-1] == "m");
         if (isMinor) {
@@ -141,6 +168,14 @@ export const Keysigs = {
         }
     },
 
+    // 获取某个调号的根音的音名
+    getKeysigRootPitch(keysig) {
+        let isMinor = (keysig.indexOf("m") >= 0);
+        let startPitch = isMinor ? keysig.substring(0, keysig.length - 1) : keysig;
+        return startPitch;
+    },
+
+    // 获取某个调号对应的升降音的音名的字符串数组，空数组表示该调无升降音。
     getKeysigAccPitchs: function(keysig) {
         // Vex.Flow.getKeySignatures() -> { F: { acc: 'b', num: 1 } ... }
         // Vex.Flow.keySignature("F") -> { acc: "b", num: 1 }
@@ -174,6 +209,86 @@ export const Keysigs = {
 
         logger.assert(false,"invalid keysig");
         return [];
+    },
+
+    // 获取某个调号对应的音名组成的音阶，不含八度编号. 
+    // eg. F -> F G A Bb C D E
+    getKeysigScalePitchs: function(keysig) {
+        let acc = this.getKeysigAcc(keysig);
+        let isMinor = (keysig.indexOf("m") >= 0);
+        let startPitch = isMinor ? keysig.substring(0, keysig.length - 1) : keysig;
+
+        let pitchs = new Array();
+        let an = PKs.NoteToAN(startPitch + "/4");  // 随便用一个八度编号做为开始
+        for(let i=0;i<7;i++) {
+            pitchs.push(PKs.getPitchName(PKs.ANtoNote(an,acc)));
+            an += (isMinor ? this.minorDistances[i] : this.majorDistances[i]);
+        }
+        return pitchs;
+    },
+
+    // 获取某个调号对应的音阶，包含八度编号，以指定的八度编号开始
+    // eg. F,2 -> F/2 G/2 A/2 Bb/2 C/3 D/3 E/3
+    getKeysigScaleNotes: function(keysig, octave) {
+        let acc = this.getKeysigAcc(keysig);
+        let isMinor = (keysig.indexOf("m") >= 0);
+        let startPitch = isMinor ? keysig.substring(0, keysig.length - 1) : keysig;
+
+        let notes = new Array();
+        let an = PKs.NoteToAN(startPitch + "/" + octave);
+        for(let i=0;i<7;i++) {
+            notes.push(PKs.ANtoNote(an,acc));
+            an += (isMinor ? this.minorDistances[i] : this.majorDistances[i]);
+        }
+        return notes;
+    }
+};
+
+// TCT = TraidChordType
+// type: can be maj,min,aug,dim
+export const TCTs = {
+    // 各个和弦中音的距离关系(RN值)
+    distances: {
+        compact: {    // 紧凑型,三个键
+            '0' : {   // 原位
+                maj: [0,4,7],
+                min: [0,3,7],
+                aug: [0,4,8],
+                dim: [0,3,6]
+            },
+            '1' : {   // 第一转位
+                maj: [4,7,12],
+                min: [3,7,12],
+                aug: [4,8,12],
+                dim: [3,6,12]
+            },
+            '2' : {   // 第二转位
+                maj: [7,12,16],
+                min: [7,12,15],
+                aug: [8,12,16],
+                dim: [6,12,15]
+            }
+        },
+        octave: {    // 紧凑型,四个键(第四音为最低音的高八度音)
+            '0' : {
+                maj: [0,4,7,12],
+                min: [0,3,7,12],
+                aug: [0,4,8,12],
+                dim: [0,3,6,12]
+            },
+            '1' : {
+                maj: [4,7,12,16],
+                min: [3,7,12,15],
+                aug: [4,8,12,16],
+                dim: [3,6,12,15]
+            },
+            '2' : {
+                maj: [7,12,16,19],
+                min: [7,12,15,19],
+                aug: [8,12,16,20],
+                dim: [6,12,15,18]
+            }
+        }
     }
 };
 
@@ -192,25 +307,30 @@ export const MITs = {
 // @enum 注释掉的是已经设计好但当前不支持的
 export const BTs = {
 	Any: 0,							 // 任意按钮，用于介绍性界面
-	Syllable: 2,					 // 7个唱名按钮
-	SyllableWithSF : 3,		 		 // 七个数字，每个包括升降号，一共21个按钮，两行排列
-	Pitch: 5,						 // 7个音名按钮
-	PitchWithSF: 6,			 		 // 七个音名，每个包括升降号，一共21个按钮，两行排列
+	Syllable: 2,					 // 钢琴键盘一组12个，7个白键上显示唱名
+	SyllableWithSF : 3,		 		 // 钢琴键盘一组12个，12个键上都显示唱名
+	Pitch: 5,						 // 钢琴键盘一组12个，7个白键上显示音名
+	PitchWithSF: 6,			 		 // 钢琴键盘一组12个，12个键上都显示音名
 	Degree: 10,						 // 两个音符之间的度数，常用的有2/3/4/5/6/7/8度(不分大小度)
-	CI: 11,				 			 // 三和弦转位, 常见的有0/1/2三种
-	WKOnlyTC: 20,      				 // 7个只包含白键的三和弦钮,不带转位: C,Dm,Em,F,G,Am,Bsus
-	WKOnlyWithCI: 21,      			 // 21个只包含白键的三和弦钮,以及转位
-	WKRootMajTC: 22, 				 // 7个以白键为根音的大三和弦按钮,不带转位: C,D,E,F,G,A,B
-	WKRootMajTCWithCI: 23, 			 // 21个以白键为根音的大三和弦,以及转位
-	WKRootMinTC: 24, 			     // 7个以白键为根音的小三和弦,不带转位: Cm,Dm,Em,Fm,Gm,Am,Bm
-	WKRootMinTCWithCI: 25, 			 // 21个以白键为根音的小三和弦,以及转位
-	FKRootMajTC: 26,   				 // 12个大三和弦,不带转位: C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab,A,A#/Bb,B/Cb
-	FKRootMajTCWithCI: 27,   		 // 36个大三和弦,带转位: C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab,A,A#/Bb,B/Cb
-	FKRootMinTC: 28,   			     // 12个小三和弦按钮,不带转位: Cm,C#m/Dbm,Dm,D#m/Ebm,Em,Fm,F#m/Gbm,Gm,G#m/Abm,Am,A#m/Bbm,Bm/Cbm
-	WKRootMajTCWithCI: 30, 			// 所有以白键位根音的大三和弦按钮，带转位，共21个
+	CI: 11,				 			 // 三和弦转位, 有0/1/2三种
+	WKOnlyTC: 20,      				 // 钢琴键盘一组12个，7个白键上显示三和弦名称(不带转位): C,Dm,Em,F,G,Am,B°
+	// WKOnlyWithCI: 21,      			 // 21个只包含白键的三和弦钮,以及转位
+	WKRootMajTC: 22, 				 // 钢琴键盘一组12个，7个白键上显示三和弦名称(不带转位): C,D,E,F,G,A,B
+	// WKRootMajTCWithCI: 23, 			 // 21个以白键为根音的大三和弦,以及转位
+	// WKRootMinTC: 24, 			     // 7个以白键为根音的小三和弦,不带转位: Cm,Dm,Em,Fm,Gm,Am,Bm
+	// WKRootMinTCWithCI: 25, 			 // 21个以白键为根音的小三和弦,以及转位
+	// FKRootMajTC: 26,   				 // 12个大三和弦,不带转位: C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab,A,A#/Bb,B/Cb
+	// FKRootMajTCWithCI: 27,   		 // 36个大三和弦,带转位: C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab,A,A#/Bb,B/Cb
+	// FKRootMinTC: 28,   			     // 12个小三和弦按钮,不带转位: Cm,C#m/Dbm,Dm,D#m/Ebm,Em,Fm,F#m/Gbm,Gm,G#m/Abm,Am,A#m/Bbm,Bm/Cbm
+	// WKRootMajTCWithCI: 30, 			// 所有以白键位根音的大三和弦按钮，带转位，共21个
 	// FKRootMajTCWithCI: 31,   	// 所有大三和弦按钮，带转位，共36个
 	// FingeringType: 50,			// 12个指法按钮(三和弦的紧凑型及八度型): 左手531/521/542/532/321, 右手135/125/123/124/245
-	EOF: 99
+	EOF: 99,
+
+    // check if button type is one of 12 piano key.
+    IsPK: function(button_type) {
+        return button_type in [ BTs.Syllable, BTs.SyllableWithSF, BTs.Pitch, BTs.PitchWithSF, BTs.WKOnlyTC, BTs.WKRootMajTC ];
+    }
 };
 
 // a music item is a question that user can answner.
