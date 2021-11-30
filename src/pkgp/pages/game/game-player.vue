@@ -37,7 +37,7 @@
                     'ps' : ['C','','D','','E','F','','G','','A','','B'],
                     'nl' : ['1','1#/2b','2','2#/3b','3','4','4#/5b','5','5#/6b','6','6#/7b','7'],
                     'pl' : ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'],
-                    'WKOnlyTCs' : ['C','','Dm','','Em','F','','G','','Am','','Bsus'],
+                    'WKOnlyTCs' : ['C','','Dm','','Em','F','','G','','Am','','B°'],
                     'WKRootMajTCs' : ['C','','D','','E','F','','G','','A','','B']
                 }
 			}
@@ -71,7 +71,7 @@
 
         methods: {
 			onEntireViewRendered: function() {
-				logger.info("onEntireViewRendered: CurrentGame = ", this.CurrentGame);
+				//logger.info("onEntireViewRendered: CurrentGame = ", this.CurrentGame);
 				logger.assert(this.CGBT != BTs.Any);
                 this.$options.ge.initGame(this, this.CurrentGame, this.onTimer);
 			},
@@ -109,6 +109,7 @@
                 if (eof) {
                     sleep(1000).then(()=>{
                     // game finished, record final progress
+                    logger.info('onGameFinished', this.CurrentGameProgress);
     				this.$store.commit('onGameFinished', this.CurrentGameProgress);
 
                     this.GameResultText = this.getGameResultDisplayString(this.CurrentGameProgress);
@@ -129,7 +130,6 @@
 			},
 
             onModalDlgClick: function(e) {
-				logger.debug("onModalDlgClick", e);
                 this.ShowModalDlg = false;
 
                 switch(e) {
@@ -137,9 +137,11 @@
         				this.navigateBack();
                         break;
                     case "again":
+                        logger.info('PostGameAction', "again");
                         this.$store.dispatch("replayCurrentGame");
                         break;
                     case "next":
+                        logger.info('PostGameAction', "next");
                         this.$store.dispatch("navigateToNextGame");
                         break;
                 }
@@ -152,6 +154,7 @@
 			},
 
             navigateBack: function() {
+                logger.info('PostGameAction', "back");
                 uni.navigateBack();
 			}
 		}

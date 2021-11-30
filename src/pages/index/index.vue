@@ -58,8 +58,8 @@
         <view style="display:flex; flex-direction:column; justify-content:center; align-items:center; width: 100%; height: 80%" @click="onItemClick()">
             <image class="logo" src="/static/logo.png"></image>
             <view class="text-area">
-                <text class="title" style="font: 1.3rem bold;">
-                    零基础轻松学会五线谱，让您像母语一样熟练阅读五线谱。
+                <text class="title" style="font: 1.3rem bold; white-sapce:pre-wrap; text-align: center">
+                    零基础轻松学会五线谱，让您像母语一样熟练阅读五线谱。\n这样您学习钢琴时可以更专注于乐曲弹奏。
                 </text>
             </view>
 

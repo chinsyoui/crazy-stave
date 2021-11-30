@@ -58,7 +58,7 @@
 		},
 
         onUnload() {
-            //logger.debug("onUnload", this);
+            logger.info('PostGameAction', "back");
             this.onGameFinished();
         },
 
@@ -66,20 +66,23 @@
 
 		methods: {
 			onEntireViewRendered: function() {
-				logger.debug("CurrentGame = ", this.CurrentGame);
+				logger.info("CurrentGame = ", this.CurrentGame);
 			},
 
 			onPrevButtonClick: function(value) {
+                logger.info('PostGameAction', "prev");
 				this.onGameFinished();
                 this.$store.dispatch("navigateToPrevGame");
 			},
 
             onNextButtonClick: function(value) {
+                logger.info('PostGameAction', "next");
 				this.onGameFinished();
                 this.$store.dispatch("navigateToNextGame");
 			},
 
 			onBackClick: function() {
+                logger.info('PostGameAction', "back");
 				this.onGameFinished(); // 返回就认为学完了
                 uni.navigateBack();
 			},

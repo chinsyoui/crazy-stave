@@ -7,14 +7,8 @@ import { PredefinedGameCollections } from './game-content.js'
 // save app state to persistent storage
 function save(state) {
     //logger.debug("saving state: ", state);
-
     uni.setStorageSync("Users", state.Users);
 	uni.setStorageSync("CurrentUserId",state.CurrentUser.Id);
-
-    //logger.debug("Users", uni.getStorageSync("Users"));
-	//logger.debug("CurrentUserId", uni.getStorageSync("CurrentUserId"));
-
-    //logger.debug("app state saved: ", state);
 };
 
 // #ifndef VUE3
@@ -67,7 +61,6 @@ const store = createStore({
                     users = new Array();
                     _users.forEach((_user) => { 
                         let user = GameModel.NewUserFromJo(_user);
-                        //logger.debug("@@@@@ user = ", user);
                         users.push(user);
                     });
                 }

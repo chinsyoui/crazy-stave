@@ -3,31 +3,31 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "欢迎使用"
+				"navigationBarTitleText": "简单钢琴 - 欢迎使用"
 			}
 		},
 		{
 			"path": "pages/game/user-list",
 			"style": {
-				"navigationBarTitleText": "选择用户"
+				"navigationBarTitleText": "简单钢琴 - 选择用户"
 			}
 		},
 		{
 			"path": "pages/game/game-collection-list",
 			"style": {
-				"navigationBarTitleText": "选择章节"
+				"navigationBarTitleText": "简单钢琴 - 选择章节"
 			}
 		},
 		{
 			"path": "pages/game/game-list",
 			"style": {
-				"navigationBarTitleText": "选择练习"
+				"navigationBarTitleText": "简单钢琴 - 选择练习"
 			}
 		},
 		{
 			"path": "pages/game/add-new-user",
 			"style": {
-				"navigationBarTitleText": "创建新用户"
+				"navigationBarTitleText": "简单钢琴 - 创建新用户"
 			}
 		}
 	],
@@ -37,7 +37,7 @@
             {
                 "path": "pages/game/game-intro",
                 "style": {
-                    "navigationBarTitleText": "知识学习"
+                    "navigationBarTitleText": "简单钢琴 - 乐理学习"
                 }
             }
         ]
@@ -48,7 +48,7 @@
             {
                 "path": "pages/game/game-player",
                 "style": {
-                    "navigationBarTitleText": "实战练习"
+                    "navigationBarTitleText": "简单钢琴 - 五线谱练习"
                 }
             }
         ]
