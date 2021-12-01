@@ -3,7 +3,7 @@ import logger from '@/utils/logger.js'
 // CanvasRenderingContext2D crc2d
 export function WeixinRenderContext(crc2d, width, height) {
     logger.assert(crc2d);
-    logger.debug("new WeixinRenderContext: ", crc2d, width, height);
+    //logger.debug("new WeixinRenderContext: ", crc2d, width, height);
 
     this.context2D = crc2d;
     this.canvasWidth = width;

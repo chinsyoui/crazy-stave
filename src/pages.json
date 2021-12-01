@@ -48,7 +48,7 @@
             {
                 "path": "pages/game/game-player",
                 "style": {
-                    "navigationBarTitleText": "简单钢琴 - 五线谱练习"
+                    "navigationBarTitleText": "简单钢琴 - 练习"
                 }
             }
         ]

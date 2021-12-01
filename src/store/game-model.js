@@ -34,7 +34,7 @@ import { ObjectMap } from "@/utils/ObjectMap.js"
 // 键的八度内相对编号[0~11] RN(relative number) = AN 'mod' 12
 // 键的绝对位置编号[9~96]   AN(absolute number) = (ON-1)*12+RN
 // 音符的标准音名表示法: C/4, D#/3, Fb/2  (斜杠/的后面为八度编号)
-// 度数表示法: 5x, 其中x为: p=纯, m=减/小, M=增/大
+// 度数表示法: 5x, 其中x为: p=纯, m=减/小, M=增/大, 值: 1p,2m,2M,3m,3M,4m,4M,5m,5p,6m,6M,7m,7M,8p
 export const PKs = { // PKs = PianoKeys
     // TODO: 理论上，每个大小调的转换表都不一样
     PitchToSyllables: { "C": 1, "D": 2, "E": 3, "F": 4, "G": 5, "A": 6, "B": 7 },
@@ -52,8 +52,11 @@ export const PKs = { // PKs = PianoKeys
     DegreeToDistances: { '1p' : 0, '2m' : 1, '2M' : 2, '3m' : 3, '3M' :  4, '4m' :  5, '4M' :  6,
                          '5m' : 6, '5p' : 7, '6m' : 8, '6M' : 9, '7m' : 10, '7M' : 11, '8p' : 12 },
 
+    // 提取八度编号
     ON: function(AN) { return Math.floor(AN/12); },
+    // 提取键相对位置(RN值)
     RN: function(AN) { return AN % 12; },
+    // 组合键的绝对编号
     AN: function(ON,RN) { return ON*12+RN; },
 
     // 五个黑键的RN值
@@ -61,12 +64,12 @@ export const PKs = { // PKs = PianoKeys
     // 七个白键的RN值
     WhiteRNs: [0,2,4,5,7,9,11],
 
-    // get the pitch name part of standard note notation (eg. Db/4 -> Db)
+    // 从音符表示法中提取音名 (eg. Db/4 -> Db)
     getPitchName: function(note) {
         return note.substring(0,note.indexOf('/'));
     },
 
-    // 将音符(标准音名表示法)转换为其AN值
+    // 将音符表示法转换为其AN值
     NoteToAN: function(note) {
         logger.assert(note && (note.length == 3 || note.length == 4));
         let RN = PKs.PitchToRNs[note[0]];
@@ -79,7 +82,7 @@ export const PKs = { // PKs = PianoKeys
         return AN;
     },
 
-    // 将音符(C/Db等)转换为其RN值, 音符可选包含八度编号(eg. Db Db/2都行)
+    // 从音符中提取音名的RN值, 音符可选包含八度编号(eg. Db Db/2都行)
     NoteToRN: function(note) {
         logger.assert(note && (note.length > 0));
         let RN = PKs.PitchToRNs[note[0]];
@@ -89,30 +92,31 @@ export const PKs = { // PKs = PianoKeys
         return (RN + accidental + 12) % 12;
     },
 
-    // 将AN值转换为音符的标准音名表示法，因为会出现同音多名，因此需要时会采用符合指定升降号的名称。
+    // 将AN值转换为音符的标准表示法，因为会出现同音多名，因此需要时会采用符合指定升降号的名称。
     // accidental: "#","b","@"(at符号表示不期望出现升降号)
-    ANtoNote: function(AN, accidental) {
+    ANtoNote: function(AN, acc) {
         logger.assert(AN >=10 && AN <=97);
 
         let ON = PKs.ON(AN);
         let RN = PKs.RN(AN);
-        let baseWithAccidental = PKs.RNtoPitchs[accidental][RN];
+        let baseWithAcc = PKs.RNtoPitchs[acc][RN];
         let octave = String.fromCharCode(ON + 48); // '0' = 48
-        let note = baseWithAccidental + "/" + octave;
-        //logger.debug("ANtoNote", AN, ON, RN, baseWithAccidental, octave, note);
+        let note = baseWithAcc + "/" + octave;
+        //logger.debug("ANtoNote", AN, ON, RN, baseWithAcc, octave, note);
         return note;
     },
 
     // 以一个音符为基础，生成指定度数(向上)的新的音符。
     // 音符均使用用标准音名表示法, 度数使用标准度数表示法。
-    // accidental 表示如果遇到同音多名时使用哪个名称。
-    NewNote: function(base_note, degree, accidental) {
+    // acc 表示如果遇到同音多名时使用哪个名称。
+    NewNote: function(base_note, degree, acc) {
         let AN = PKS.NoteToAN(base_note) + PKs.DegreeToDistances[degree];
-        return PKs.ANtoNote(AN, accidental);
+        return PKs.ANtoNote(AN, acc);
     }
 };
 
-// 谱号
+// 调式相关，如谱号等
+// 调式表示法：用根音的音名表示，小调加后缀m。如: D, A#, Fb, C#m
 export const Keysigs = {
     // 大调音阶的RN值递进关系(距前一个音)
     majorDistances: [ 2,2,1,2,2,2,1 ],  // 全全半全全全半
@@ -146,9 +150,13 @@ export const Keysigs = {
     // 获取某个调式的信息: 大调还是小调, 根音名，升降号，升降音名的数组
     getKeysigInfo: function(keysig) {
         return {
-            isMinor: (keysig.indexOf("m") >= 0),
-            rootPitch: (keysig.indexOf("m") >= 0) ? keysig.substring(0, keysig.length - 1) : keysig,
+            // 小调还是大调
+            isMinor: keysig.endsWith("m"),
+            // 根音的音名, eg. D -> D, Dm -> D, Db -> Db, Dbm -> Db
+            rootPitch: (keysig.endsWith("m") ? keysig.substring(0, keysig.length - 1) : keysig),
+            // 升降符号
             acc: this.getKeysigAcc(keysig),
+            // 哪些音名是升降的
             accPitchs: this.getKeysigAccPitchs(keysig)
         }
     },
@@ -157,96 +165,56 @@ export const Keysigs = {
     getKeysigAcc: function(keysig) {
         if (keysig == "C" || keysig == "Am")
             return "@"; // 表示无升降号
-
-        let isMinor = (keysig[keysig.length-1] == "m");
-        if (isMinor) {
-            let index = this.sMinors.indexOf(keysig);
-            return (index >= 0 ? "#" : "b");
-        } else {
-            let index = this.sMajors.indexOf(keysig);
-            return (index >= 0 ? "#" : "b");
-        }
-    },
-
-    // 获取某个调号的根音的音名
-    getKeysigRootPitch(keysig) {
-        let isMinor = (keysig.indexOf("m") >= 0);
-        let startPitch = isMinor ? keysig.substring(0, keysig.length - 1) : keysig;
-        return startPitch;
+        let isMinor = keysig.endsWith("m");
+        let keysigs = isMinor ? this.sMinors : this.sMajors;
+        let index = keysigs.indexOf(keysig);
+        return (index >= 0 ? "#" : "b");
     },
 
     // 获取某个调号对应的升降音的音名的字符串数组，空数组表示该调无升降音。
     getKeysigAccPitchs: function(keysig) {
-        // Vex.Flow.getKeySignatures() -> { F: { acc: 'b', num: 1 } ... }
-        // Vex.Flow.keySignature("F") -> { acc: "b", num: 1 }
-        // Vex.Flow.keySignature("Ebm") -> { acc: "b", num: 5 }
-
-        const keysigAccs = { 
+        const keysigAccs = {
             '#' : [ "F","C","G","D","A","E","B" ],
             'b' : [ "B","E","A","D","G","C","F" ]
         };
 
-        if (keysig == "C" || keysig == "Am")
+        let acc = this.getKeysigAcc(keysig);
+        if (acc != "#" && acc != "b")
             return [];
 
-        let isMinor = (keysig[keysig.length-1] == "m");
-        let index = -1;
-        if (isMinor) {
-            index = this.sMinors.indexOf(keysig);
-            if (index >= 0)
-                return keysigAccs['#'].slice(0,index+1);
-            index = this.fMinors.indexOf(keysig);
-            if (index >= 0)
-                return keysigAccs['b'].slice(0,index+1);
-        } else {
-            index = this.sMajors.indexOf(keysig);
-            if (index >= 0)
-                return keysigAccs['#'].slice(0,index+1);
-            index = this.fMajors.indexOf(keysig);
-            if (index >= 0)
-                return keysigAccs['b'].slice(0,index+1);
-        }
+        let isMinor = keysig.endsWith("m");
+        let keysigs = isMinor ? 
+            (acc == "#" ? this.sMinors : this.fMinors) : 
+            (acc == "#" ? this.sMajors : this.fMajors);
 
-        logger.assert(false,"invalid keysig");
-        return [];
+        let index = keysigs.indexOf(keysig);
+        logger.assert(index >= 0, "invalid keysig");
+        return keysigAccs[acc].slice(0,index+1);
     },
 
-    // 获取某个调号对应的音名组成的音阶，不含八度编号. 
-    // eg. F -> F G A Bb C D E
-    getKeysigScalePitchs: function(keysig) {
-        let acc = this.getKeysigAcc(keysig);
-        let isMinor = (keysig.indexOf("m") >= 0);
-        let startPitch = isMinor ? keysig.substring(0, keysig.length - 1) : keysig;
-
-        let pitchs = new Array();
-        let an = PKs.NoteToAN(startPitch + "/4");  // 随便用一个八度编号做为开始
-        for(let i=0;i<7;i++) {
-            pitchs.push(PKs.getPitchName(PKs.ANtoNote(an,acc)));
-            an += (isMinor ? this.minorDistances[i] : this.majorDistances[i]);
-        }
-        return pitchs;
-    },
-
-    // 获取某个调号对应的音阶，包含八度编号，以指定的八度编号开始
-    // eg. F,2 -> F/2 G/2 A/2 Bb/2 C/3 D/3 E/3
+    // 获取某个调号对应的音阶
+    // 如果有octave参数，则返回包含八度编号的绝对音符数组，否则返回音名数组
+    // eg. 
+    //    F,2 -> F/2 G/2 A/2 Bb/2 C/3 D/3 E/3
+    //    F -> F G A Bb C D E
     getKeysigScaleNotes: function(keysig, octave) {
-        let acc = this.getKeysigAcc(keysig);
-        let isMinor = (keysig.indexOf("m") >= 0);
-        let startPitch = isMinor ? keysig.substring(0, keysig.length - 1) : keysig;
+        let ks = this.getKeysigInfo(keysig);
+        let distances = ks.isMinor ? this.minorDistances : this.majorDistances;
 
         let notes = new Array();
-        let an = PKs.NoteToAN(startPitch + "/" + octave);
+        let an = PKs.NoteToAN(ks.rootPitch + "/" + (octave == undefined ? "4" : octave));
         for(let i=0;i<7;i++) {
-            notes.push(PKs.ANtoNote(an,acc));
-            an += (isMinor ? this.minorDistances[i] : this.majorDistances[i]);
+            let note = PKs.ANtoNote(an,ks.acc);
+            notes.push((octave == undefined ? PKs.getPitchName(note) : note));
+            an += distances[i];
         }
         return notes;
     }
 };
 
-// TCT = TraidChordType
+// 三和弦
 // type: can be maj,min,aug,dim
-export const TCTs = {
+export const Traids = {
     // 各个和弦中音的距离关系(RN值)
     distances: {
         compact: {    // 紧凑型,三个键
@@ -292,6 +260,7 @@ export const TCTs = {
     }
 };
 
+// 五线谱的上音乐项的类型，一个MusicItem是一个Question(对应一个Answner)，可能包含一个或多个音符。
 // MIT = Music Item Type
 export const MITs = {
 	Note: 4,        // one stave note
@@ -329,7 +298,7 @@ export const BTs = {
 
     // check if button type is one of 12 piano key.
     IsPK: function(button_type) {
-        return button_type in [ BTs.Syllable, BTs.SyllableWithSF, BTs.Pitch, BTs.PitchWithSF, BTs.WKOnlyTC, BTs.WKRootMajTC ];
+        return [BTs.Syllable, BTs.SyllableWithSF, BTs.Pitch, BTs.PitchWithSF, BTs.WKOnlyTC, BTs.WKRootMajTC].includes(button_type);
     }
 };
 

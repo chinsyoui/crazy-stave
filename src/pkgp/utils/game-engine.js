@@ -102,7 +102,7 @@ return {
                 let value = music_item.TargetValue;
                 let digit_first = (value[0] >= "0" && value[0] <= "9");
                 let ci = digit_first ? value[0] : 0; // 转位
-                note = music_item.SourceValue.split(",")[ci];
+                note = music_item.SourceValue.split(",")[(3-ci)%3];
                 break;
             }
             default:
@@ -117,7 +117,6 @@ return {
         // 如果当前调式包含升降号，而音符不带升降号，但音符属于调式包含的升降音，则用户必须点击带升降号的按钮才算正确。
         if (ks.acc != "@" && pitch.length == 1 && ks.accPitchs.indexOf(pitch) >= 0)
             note = pitch + ks.acc + "/" + PKs.ON(PKs.NoteToAN(note));
-        logger.info(note);
         return note;
     },
 
@@ -142,7 +141,7 @@ return {
         }
     },
 
-    playSoundEffect: function(name) { 
+    playSoundEffect: function(name) {
         logger.assert(this.ctx.ac);
         try {
             this.ctx.ac.stop();
@@ -311,7 +310,7 @@ return {
 
         // 把MusicItems转换为StaveNotes
         _this.ctx.vfStaveNotes = new Array();
-        _this.convertMusicItemsToStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.staveDuration, _this.ctx.vfStaveNotes);
+        _this.createStaveNotes(_this.ctx.musicItems, _this.ctx.staveClef, _this.ctx.staveKeysig, _this.ctx.staveDuration, _this.ctx.vfStaveNotes);
         _this.ctx.notes_per_music_item = _this.ctx.vfStaveNotes.length / _this.ctx.musicItems.length;
         logger.assert(Number.isInteger(_this.ctx.notes_per_music_item)); // must be integer
 
@@ -384,9 +383,9 @@ return {
 
     // convert music items to vexflow's stave note objects and append them to vfStaveNotes.
     // <Array,String,String,String,Array>
-    convertMusicItemsToStaveNotes: function(music_items, stave_clef, stave_keysig, stave_duration, vfStaveNotes) {
+    createStaveNotes: function(music_items, stave_clef, stave_keysig, stave_duration, vfStaveNotes) {
         logger.assert(music_items && music_items.length > 0 && vfStaveNotes && vfStaveNotes.length == 0);
-        logger.debug("Enter convertMusicItemsToStaveNotes", music_items);
+        logger.info("Game.MusicItems = ", music_items);
 
         let ks = Keysigs.getKeysigInfo(stave_keysig);
 
@@ -424,7 +423,7 @@ return {
             }
         }
 
-        logger.debug("Leave convertMusicItemsToStaveNotes", vfStaveNotes);
+        logger.info("Game.StaveNotes = ", vfStaveNotes);
     }
 };
 };

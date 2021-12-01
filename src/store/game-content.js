@@ -1,5 +1,5 @@
 import logger from '@/utils/logger.js'
-import { PKs, Keysigs, TCTs, BTs, MITs, MusicItem as MI, GameType as GT, Game, GameCollection as GC } from './game-model.js'
+import { PKs, Keysigs, Traids, BTs, MITs, MusicItem as MI, GameType as GT, Game, GameCollection as GC } from './game-model.js'
 
 // @func return integer in [min, max)
 function RandomInt(min, max) {
@@ -32,7 +32,7 @@ const MICGs = {
     // 注：[startNote,endNote]为音符的范围
     genNotesByKeysig: function(keysig, startNote, endNote) {
         let ks = Keysigs.getKeysigInfo(keysig);
-        let scale_pitchs = Keysigs.getKeysigScalePitchs(keysig);
+        let scale_pitchs = Keysigs.getKeysigScaleNotes(keysig);
 
         let startAN = PKs.NoteToAN(startNote);
         let endAN = PKs.NoteToAN(endNote);
@@ -56,21 +56,24 @@ const MICGs = {
 
     // 生成指定调式下的三和弦音阶
     // 注意：[startNote,endNote]为和弦根音的范围, 生成的其他音符可能超过此范围
-    // compact_or_octave: true = 紧凑型(三个键), false = 八度型(四个键)
-    // pillar_or_arpeggio: true = 柱式和弦, false = 分解和弦
-    // traid_chord_type: 允许的和弦类型, 值有 maj, min, aug, dim
+    // compact_or_octave: 'compact' = 紧凑型(三个键), 'octave' = 八度型(四个键)
+    // pillar_or_arpeggio: 'PC' = 柱式和弦, 'AC' = 分解和弦
+    // traid_chord_type: 允许的和弦类型, 值有 'maj', 'min', 'aug', 'dim'
     // allow_ci: 是否生成转位和弦
+    // add_ci_to_target_value: 是否将转位号码做为MusicItem.TargetValue的前缀
     genTraidChords: function(keysig, startNote, endNote, traid_chord_type,
         compact_or_octave, pillar_or_arpeggio, allow_ci, add_ci_to_target_value) 
     {
         let ks = Keysigs.getKeysigInfo(keysig);
-        let scale_pitchs = Keysigs.getKeysigScalePitchs(keysig);
+        let scale_pitchs = Keysigs.getKeysigScaleNotes(keysig);
 
         let startAN = PKs.NoteToAN(startNote);
         let endAN = PKs.NoteToAN(endNote);
 
-        let mit = pillar_or_arpeggio ? MITs.PC : MITs.AC;
-        let width = compact_or_octave ? 'compact' : 'octave';
+        logger.assert(pillar_or_arpeggio == 'PC' || pillar_or_arpeggio == 'AC');
+        let mit = (pillar_or_arpeggio == 'PC' ? MITs.PC : MITs.AC);
+        logger.assert(compact_or_octave == 'compact' || compact_or_octave == 'octave');
+        let width = compact_or_octave;
         let shape = traid_chord_type;
         let cis = allow_ci ? [0,1,2] : [0];
 
@@ -78,7 +81,7 @@ const MICGs = {
 
         for(let i=startAN; i<=endAN; i++) {
             for(let ci=0;ci<=cis.length;ci++) {
-                let rns = TCTs.distances[width][ci.toString()][shape]; // RNs
+                let rns = Traids.distances[width][ci.toString()][shape]; // RNs
 
                 let chord = "";
                 for(let k=0;k<=rns.length;k++) {
@@ -96,27 +99,35 @@ const MICGs = {
     },
 
     // 生成C大调全部由白键组成的三和弦。
+    // compact_or_octave: 'compact' = 紧凑型(三个键), 'octave' = 八度型(四个键)
+    // pillar_or_arpeggio: 'PC' = 柱式和弦, 'AC' = 分解和弦
+    // traid_chord_type: 允许的和弦类型, 值有 'maj', 'min', 'aug', 'dim'
+    // allow_ci: 是否生成转位和弦
+    // add_ci_to_target_value: 是否将转位号码做为MusicItem.TargetValue的前缀
     genCMajWKOnlyTraidChords(octave, 
         compact_or_octave, pillar_or_arpeggio, allow_ci, add_ci_to_target_value) 
     {
         const distances = {
             'compact' : {
-                '0' : [ "C/0,E/0,G/0", "D/0,F/0,A/0", "E/0,G/0,B/0", "F/0,A/0,C/1", "G/0,B/0,D/1", "A/0,C/1,E/1", "B/0,D/1,F/1" ],
-                '1' : [ "E/0,G/0,C/1", "F/0,A/0,D/1", "G/0,B/0,E/1", "A/0,C/1,F/1", "B/0,D/1,G/1", "C/1,E/1,A/1", "D/1,F/1,B/1" ],
-                '2' : [ "G/0,C/1,E/1", "A/0,D/1,F/1", "B/0,E/1,G/1", "C/1,F/1,A/1", "D/1,G/1,B/1", "E/1,A/1,C/2", "F/1,B/1,D/2" ]
+                '0' : [ "C/{0},E/{0},G/{0}", "D/{0},F/{0},A/{0}", "E/{0},G/{0},B/{0}", "F/{0},A/{0},C/{1}", "G/{0},B/{0},D/{1}", "A/{0},C/{1},E/{1}", "B/{0},D/{1},F/{1}" ],
+                '1' : [ "E/{0},G/{0},C/{1}", "F/{0},A/{0},D/{1}", "G/{0},B/{0},E/{1}", "A/{0},C/{1},F/{1}", "B/{0},D/{1},G/{1}", "C/{1},E/{1},A/{1}", "D/{1},F/{1},B/{1}" ],
+                '2' : [ "G/{0},C/{1},E/{1}", "A/{0},D/{1},F/{1}", "B/{0},E/{1},G/{1}", "C/{1},F/{1},A/{1}", "D/{1},G/{1},B/{1}", "E/{1},A/{1},C/{2}", "F/{1},B/{1},D/{2}" ]
             },
-            'octave' : { // FIXME 
-                '0' : [ "C/0,E/0,G/0", "D/0,F/0,A/0", "E/0,G/0,B/0", "F/0,A/0,C/1", "G/0,B/0,D/1", "A/0,C/1,E/1", "B/0,D/1,F/1" ],
-                '1' : [ "E/0,G/0,C/1", "F/0,A/0,D/1", "G/0,B/0,E/1", "A/0,C/1,F/1", "B/0,D/1,G/1", "C/1,E/1,A/1", "D/1,F/1,B/1" ],
-                '2' : [ "G/0,C/1,E/1", "A/0,D/1,F/1", "B/0,E/1,G/1", "C/1,F/1,A/1", "D/1,G/1,B/1", "E/1,A/1,C/2", "F/1,B/1,D/2" ]
+            'octave' : {
+                '0' : [ "C/{0},E/{0},G/{0},C/{1}", "D/{0},F/{0},A/{0},D/{1}", "E/{0},G/{0},B/{0},E/{1}", "F/{0},A/{0},C/{1},F/{1}", "G/{0},B/{0},D/{1},G/{1}", "A/{0},C/{1},E/{1},A/{1}", "B/{0},D/{1},F/{1},B/{1}" ],
+                '1' : [ "E/{0},G/{0},C/{1},E/{1}", "F/{0},A/{0},D/{1},F/{1}", "G/{0},B/{0},E/{1},G/{1}", "A/{0},C/{1},F/{1},A/{1}", "B/{0},D/{1},G/{1},B/{1}", "C/{1},E/{1},A/{1},C/{2}", "D/{1},F/{1},B/{1},D/{2}" ],
+                '2' : [ "G/{0},C/{1},E/{1},G/{1}", "A/{0},D/{1},F/{1},A/{1}", "B/{0},E/{1},G/{1},B/{1}", "C/{1},F/{1},A/{1},C/{2}", "D/{1},G/{1},B/{1},D/{2}", "E/{1},A/{1},C/{2},E/{2}", "F/{1},B/{1},D/{2},F/{2}" ]
             }
         };
 
         let startAN = octave * 12;
         let endAN = startAN + 12;
 
-        let mit = pillar_or_arpeggio ? MITs.PC : MITs.AC;
-        let width = compact_or_octave ? 'compact' : 'octave';
+        logger.assert(pillar_or_arpeggio == 'PC' || pillar_or_arpeggio == 'AC');
+        let mit = (pillar_or_arpeggio == 'PC' ? MITs.PC : MITs.AC);
+        logger.assert(compact_or_octave == 'compact' || compact_or_octave == 'octave');
+        let width = compact_or_octave;
+
         let cis = allow_ci ? [0,1,2] : [0];
 
         let music_items = new Array();
@@ -128,10 +139,11 @@ const MICGs = {
 
                 for(let k=0; k<chords.length; k++) {
                     let chord = chords[k];
-                    chord = chord.replaceAll("2", (octave+2).toString());
-                    chord = chord.replaceAll("1", (octave+1).toString());
-                    chord = chord.replaceAll("0", (octave+0).toString());
-                    let mi = new MI(mit, chord, ci_prefix + PKs.getPitchName(chord));
+                    chord = chord.replaceAll("{2}", (octave+2).toString());
+                    chord = chord.replaceAll("{1}", (octave+1).toString());
+                    chord = chord.replaceAll("{0}", (octave+0).toString());
+                    let rootPitch = distances[width]['0'][k][0];
+                    let mi = new MI(mit, chord, ci_prefix + rootPitch);
                     music_items.push(mi);
                 }
             }
@@ -290,23 +302,23 @@ const O45WKs = [ ...O4WKs,  ...O5WKs ];
 // 高音谱，两个八度，上下再加两个音符，白键
 const O45WKsEx = [ new MI(MITs.Note, "A/3", "A"),new MI(MITs.Note, "B/3", "B"),new MI(MITs.Note, "C/6", "C"),new MI(MITs.Note, "D/6", "D"), ...O45WKs ];
 
-const O2WKOnlyCPTChords = MICGs.genCMajWKOnlyTraidChords(2, true, true, false, false);
-const O2WKOnlyCATChords = MICGs.genCMajWKOnlyTraidChords(2, true, false, false, false);
-const O2WKOnlyCPTChordsWithCI = MICGs.genCMajWKOnlyTraidChords(2, true, true, true, true);
-const O2WKOnlyCATChordsWithCI = MICGs.genCMajWKOnlyTraidChords(2, true, false, true, true);
-const O2WKOnlyOPTChords = MICGs.genCMajWKOnlyTraidChords(2, false, true, false, false);
-const O2WKOnlyOPTChordsWithCI = MICGs.genCMajWKOnlyTraidChords(2, false, true, true, true);
-const O2WKOnlyOATChords = MICGs.genCMajWKOnlyTraidChords(2, false, false, false, false);
-const O2WKOnlyOATChordsWithCI = MICGs.genCMajWKOnlyTraidChords(2, false, false, true, true);
+const O2WKOnlyCPTChords = MICGs.genCMajWKOnlyTraidChords(2, 'compact', 'PC', false, false);
+const O2WKOnlyCATChords = MICGs.genCMajWKOnlyTraidChords(2, 'compact', 'AC', false, false);
+const O2WKOnlyCPTChordsWithCI = MICGs.genCMajWKOnlyTraidChords(2, 'compact', 'PC', true, true);
+const O2WKOnlyCATChordsWithCI = MICGs.genCMajWKOnlyTraidChords(2, 'compact', 'AC', true, true);
+const O2WKOnlyOPTChords = MICGs.genCMajWKOnlyTraidChords(2, 'octave', 'PC', 'AC', false, false);
+const O2WKOnlyOPTChordsWithCI = MICGs.genCMajWKOnlyTraidChords(2, 'octave', 'PC', true, true);
+const O2WKOnlyOATChords = MICGs.genCMajWKOnlyTraidChords(2, 'octave', 'AC', false, false);
+const O2WKOnlyOATChordsWithCI = MICGs.genCMajWKOnlyTraidChords(2, 'octave', 'AC', true, true);
 
-const O4WKOnlyCPTChords = MICGs.genCMajWKOnlyTraidChords(4, true, true, false, false);
-const O4WKOnlyCATChords = MICGs.genCMajWKOnlyTraidChords(4, true, false, false, false);
-const O4WKOnlyCPTChordsWithCI = MICGs.genCMajWKOnlyTraidChords(4, true, true, true, true);
-const O4WKOnlyCATChordsWithCI = MICGs.genCMajWKOnlyTraidChords(4, true, false, true, true);
-const O4WKOnlyOPTChords = MICGs.genCMajWKOnlyTraidChords(4, false, true, false, false);
-const O4WKOnlyOPTChordsWithCI = MICGs.genCMajWKOnlyTraidChords(4, false, true, true, true);
-const O4WKOnlyOATChords = MICGs.genCMajWKOnlyTraidChords(4, false, false, false, false);
-const O4WKOnlyOATChordsWithCI = MICGs.genCMajWKOnlyTraidChords(4, false, false, true, true);
+const O4WKOnlyCPTChords = MICGs.genCMajWKOnlyTraidChords(4, 'compact', 'PC', false, false);
+const O4WKOnlyCATChords = MICGs.genCMajWKOnlyTraidChords(4, 'compact', 'AC', false, false);
+const O4WKOnlyCPTChordsWithCI = MICGs.genCMajWKOnlyTraidChords(4, 'compact', 'PC', true, true);
+const O4WKOnlyCATChordsWithCI = MICGs.genCMajWKOnlyTraidChords(4, 'compact', 'AC', true, true);
+const O4WKOnlyOPTChords = MICGs.genCMajWKOnlyTraidChords(4, 'octave', 'PC', false, false);
+const O4WKOnlyOPTChordsWithCI = MICGs.genCMajWKOnlyTraidChords(4, 'octave', 'PC', true, true);
+const O4WKOnlyOATChords = MICGs.genCMajWKOnlyTraidChords(4, 'octave', 'AC', false, false);
+const O4WKOnlyOATChordsWithCI = MICGs.genCMajWKOnlyTraidChords(4, 'octave', 'AC', true, true);
 
 const O2FKs = MICGs.genNotes(2);
 const O3FKs = MICGs.genNotes(3);
@@ -387,31 +399,31 @@ export const PredefinedGameCollections = [
 	),
 	new GC(51,"第五章 多音练习","学会一次看多个音(和弦)","",
 		[
-			new Game(5100, GTs.Intro, "第一节 学习", "认识三和弦及转位", "treble", "C", "1", 0, []),
+			new Game(5100, GTs.Intro, "第一节 学习", "认识三和弦及其转位", "treble", "C", "1", 0, []),
 
-			new Game(5111, GTs.TCCI, "第二节 练习", "三和弦转位（紧凑柱式型), 高音谱", "treble", "C", "4", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5112, GTs.TCCI, "第三节 练习", "三和弦转位（紧凑分解型), 高音谱", "treble", "C", "4", 8, MIGs.NewST(O4WKOnlyCATChordsWithCI)),
-			new Game(5113, GTs.TCCI, "第四节 练习", "三和弦转位（紧凑柱式型), 低音谱", "bass", "C", "4", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
-			new Game(5114, GTs.TCCI, "第五节 练习", "三和弦转位（紧凑分解型), 低音谱", "bass", "C", "4", 8, MIGs.NewST(O2WKOnlyCATChordsWithCI)),
+			new Game(5111, GTs.TCCI, "第二节 练习", "三和弦转位 (紧凑柱式型), 高音谱", "treble", "C", "4", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
+			new Game(5112, GTs.TCCI, "第三节 练习", "三和弦转位 (紧凑分解型), 高音谱", "treble", "C", "4", 8, MIGs.NewST(O4WKOnlyCATChordsWithCI)),
+			new Game(5113, GTs.TCCI, "第四节 练习", "三和弦转位 (紧凑柱式型), 低音谱", "bass", "C", "4", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
+			new Game(5114, GTs.TCCI, "第五节 练习", "三和弦转位 (紧凑分解型), 低音谱", "bass", "C", "4", 8, MIGs.NewST(O2WKOnlyCATChordsWithCI)),
 
 			// TODO 八度型, 四个键
-			new Game(5115, GTs.TCCI, "第六节 练习", "三和弦转位（八度柱式型), 高音谱", "treble", "C", "4", 12, MIGs.NewST(O4WKOnlyOPTChordsWithCI)),
-			new Game(5116, GTs.TCCI, "第七节 练习", "三和弦转位（八度分解型), 高音谱", "treble", "C", "4", 8, MIGs.NewST(O4WKOnlyOATChordsWithCI)),
-			new Game(5117, GTs.TCCI, "第八节 练习", "三和弦转位（八度柱式型), 低音谱", "bass", "C", "4", 12, MIGs.NewST(O2WKOnlyOPTChordsWithCI)),
-			new Game(5118, GTs.TCCI, "第九节 练习", "三和弦转位（八度分解型), 低音谱", "bass", "C", "4", 8, MIGs.NewST(O2WKOnlyOATChordsWithCI)),
+			new Game(5115, GTs.TCCI, "第六节 练习", "三和弦转位 (八度柱式型), 高音谱", "treble", "C", "4", 12, MIGs.NewST(O4WKOnlyOPTChordsWithCI)),
+			new Game(5116, GTs.TCCI, "第七节 练习", "三和弦转位 (八度分解型), 高音谱", "treble", "C", "4", 8, MIGs.NewST(O4WKOnlyOATChordsWithCI)),
+			new Game(5117, GTs.TCCI, "第八节 练习", "三和弦转位 (八度柱式型), 低音谱", "bass", "C", "4", 12, MIGs.NewST(O2WKOnlyOPTChordsWithCI)),
+			new Game(5118, GTs.TCCI, "第九节 练习", "三和弦转位 (八度分解型), 低音谱", "bass", "C", "4", 8, MIGs.NewST(O2WKOnlyOATChordsWithCI)),
 
 			new Game(5200, GTs.Intro, "第十节 学习", "识别三和弦的根音", "treble", "C", "1", 0, []),
 
-			new Game(5211, GTs.TCRootPitch, "第十一节 练习", "三和弦根音（紧凑柱式型), 高音谱", "treble", "C", "4", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
-			new Game(5212, GTs.TCRootPitch, "第十二节 练习", "三和弦根音（紧凑分解型), 高音谱", "treble", "C", "4", 8, MIGs.NewST(O4WKOnlyCATChordsWithCI)),
-			new Game(5213, GTs.TCRootPitch, "第十三节 练习", "三和弦根音（紧凑柱式型), 低音谱", "bass", "C", "4", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
-			new Game(5214, GTs.TCRootPitch, "第十四节 练习", "三和弦根音（紧凑分解型), 低音谱", "bass", "C", "4", 8, MIGs.NewST(O2WKOnlyCATChordsWithCI)),
+			new Game(5211, GTs.TCRootPitch, "第十一节 练习", "三和弦根音 (紧凑柱式型), 高音谱", "treble", "C", "4", 12, MIGs.NewST(O4WKOnlyCPTChordsWithCI)),
+			new Game(5212, GTs.TCRootPitch, "第十二节 练习", "三和弦根音 (紧凑分解型), 高音谱", "treble", "C", "4", 8, MIGs.NewST(O4WKOnlyCATChordsWithCI)),
+			new Game(5213, GTs.TCRootPitch, "第十三节 练习", "三和弦根音 (紧凑柱式型), 低音谱", "bass", "C", "4", 12, MIGs.NewST(O2WKOnlyCPTChordsWithCI)),
+			new Game(5214, GTs.TCRootPitch, "第十四节 练习", "三和弦根音 (紧凑分解型), 低音谱", "bass", "C", "4", 8, MIGs.NewST(O2WKOnlyCATChordsWithCI)),
 
 			// TODO 八度型, 四个键
-			new Game(5215, GTs.TCRootPitch, "第十五节 练习", "三和弦根音（八度柱式型), 高音谱", "treble", "C", "4", 12, MIGs.NewST(O4WKOnlyOPTChordsWithCI)),
-			new Game(5216, GTs.TCRootPitch, "第十六节 练习", "三和弦根音（八度分解型), 高音谱", "treble", "C", "4", 8, MIGs.NewST(O4WKOnlyOATChordsWithCI)),
-			new Game(5217, GTs.TCRootPitch, "第十七节 练习", "三和弦根音（八度柱式型), 低音谱", "bass", "C", "4", 12, MIGs.NewST(O2WKOnlyOPTChordsWithCI)),
-			new Game(5218, GTs.TCRootPitch, "第十八节 练习", "三和弦根音（八度分解型), 低音谱", "bass", "C", "4", 8, MIGs.NewST(O2WKOnlyOATChordsWithCI))
+			new Game(5215, GTs.TCRootPitch, "第十五节 练习", "三和弦根音 (八度柱式型), 高音谱", "treble", "C", "4", 12, MIGs.NewST(O4WKOnlyOPTChordsWithCI)),
+			new Game(5216, GTs.TCRootPitch, "第十六节 练习", "三和弦根音 (八度分解型), 高音谱", "treble", "C", "4", 8, MIGs.NewST(O4WKOnlyOATChordsWithCI)),
+			new Game(5217, GTs.TCRootPitch, "第十七节 练习", "三和弦根音 (八度柱式型), 低音谱", "bass", "C", "4", 12, MIGs.NewST(O2WKOnlyOPTChordsWithCI)),
+			new Game(5218, GTs.TCRootPitch, "第十八节 练习", "三和弦根音 (八度分解型), 低音谱", "bass", "C", "4", 8, MIGs.NewST(O2WKOnlyOATChordsWithCI))
         ]
 	),
 	new GC(31,"第六章 调式变化","认识大小调及升降号","",

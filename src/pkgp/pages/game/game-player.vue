@@ -71,6 +71,7 @@
 
         methods: {
 			onEntireViewRendered: function() {
+                wx.setNavigationBarTitle({ title: "简单钢琴 - 练习 - " + this.CurrentGameCollection.DisplayName });
 				//logger.info("onEntireViewRendered: CurrentGame = ", this.CurrentGame);
 				logger.assert(this.CGBT != BTs.Any);
                 this.$options.ge.initGame(this, this.CurrentGame, this.onTimer);
@@ -171,7 +172,7 @@
         <view style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 100%;">
             <view class="left-bar" style="width: 46px; height: 100%;"/>
             <view class="title-wrapper" style="" @click="onBackClick()">
-                <text class="title">{{ CurrentGameCollection.DisplayName }} - {{ CurrentGame.DisplayName }} - {{ CurrentGame.Description }}</text>
+                <text class="title">{{ CurrentGame.DisplayName }} - {{ CurrentGame.Description }}</text>
             </view>
             <view class="middle-bar" style="flex-grow: 1; width: 50px; height: 100%;"/>
             <view class="game-progress-bar" @click="onBackClick()">

@@ -21,7 +21,8 @@
                 if (um && um.onCheckForUpdate && um.onUpdateReady) {
                     um.onCheckForUpdate(function(res) {
                         // 请求完新版本信息的回调
-                        logger.debug(res.hasUpdate);
+                        if (res.hasUpdate)
+                            logger.info("Has Update");
                     });
 
                     um.onUpdateReady(function() {
