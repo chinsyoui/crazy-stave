@@ -312,27 +312,18 @@ export function MusicItem(type, source_value, target_value) {
 	this.TargetValue = target_value;
 };
 
-// a game is one collection of simillar questions (music items),
-// user answner each question by same set of buttons.
-// each type of game contains a unique id, a display name and zeor to multiple buttons.
-// note some special games are introduction usage which don't have any buttons.
-//@class <String, String, Number>
-export function GameType(id, display_name, button_type) {
-	this.Id = id;
-	this.DisplayName = display_name;
-	this.ButtonType = button_type;
-};
-
 // 一个五线谱练习游戏，有:
 //   一个ID/名称,
-//   一个类型，同时关联指定了MusicItem的类型及按钮的类型ButtonType
+//   一个按钮类型,
 //   一个谱号，一个调号，一个音符时长(1/2/4/8/16/32)
 //   一个MusicItem的总个数，以及一个用来生成MusicItem的生成器
 // 当练习游戏开始时，将用该生成器来随机生成实际游戏中的音乐项。
-//@class <Number, GameType, String, String, String, String, String, Number, String>
-export function Game(id, type, display_name, description, stave_clef, stave_keysig, stave_duration, music_items_count, music_items_generaor) {
+//@class <Number, Number, String, String, String, String, String, Number, String>
+export function Game(id, button_type, display_name, description, 
+    stave_clef, stave_keysig, stave_duration, music_items_count, music_items_generaor) 
+{
 	this.Id = id;
-	this.Type = type;
+	this.ButtonType = button_type;
 	this.DisplayName = display_name;
     this.Description = description;
 	this.StaveClef = stave_clef;

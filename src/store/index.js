@@ -225,7 +225,7 @@ const store = createStore({
         // must called inside a game page.
         redirectToGamePage(state, game) {
             let page_url = "";
-            if (game.Type.ButtonType == BTs.Any)
+            if (game.ButtonType == BTs.Any)
                 page_url = "/pkgi/pages/game/game-intro";
             else
                 page_url = "/pkgp/pages/game/game-player";

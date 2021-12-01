@@ -12,7 +12,7 @@
 		computed: {
             isIntroGame() {
                 return function(game) {
-                    return (game.Type.ButtonType == BTs.Any);
+                    return (game.ButtonType == BTs.Any);
                 }
             },
 			getGameCollectionState() {
@@ -68,7 +68,7 @@
 				this.$store.commit('setCurrentGame', { game : game, index : index } );
 
 				let page_url = "";
-				if (game.Type.ButtonType == BTs.Any)
+				if (game.ButtonType == BTs.Any)
 					page_url = "/pkgi/pages/game/game-intro";
 				else
 					page_url = "/pkgp/pages/game/game-player";

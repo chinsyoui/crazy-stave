@@ -60,7 +60,6 @@ return {
         this.ctx.staveDuration = game.StaveDuration;
 
         this.ctx.musicItems = GenerateMusicItemsForGameInstance(game.MusicItemsCount, game.MusicItemsGenerator);
-        logger.info("music items: ", this.ctx.musicItems);
 
         if (!this.ctx.ac) {
             this.ctx.ac = wx.createInnerAudioContext({ useWebAudioImplement : false });

@@ -51,7 +51,7 @@
                 CurrentGame: state => state.CurrentGame,
                 CurrentGameIndex: state => state.CurrentGameIndex,
                 CurrentGameProgress: state => state.CurrentGameProgress,
-                CGBT: state => state.CurrentGame.Type.ButtonType,
+                CGBT: state => state.CurrentGame.ButtonType,
                 TheBTs: state => BTs,
     		})
         },
